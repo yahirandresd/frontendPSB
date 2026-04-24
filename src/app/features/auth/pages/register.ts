@@ -6,10 +6,10 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 
 @Component({
-    selector: 'app-login',
+    selector: 'app-register',
     standalone: true,
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
     template: `
@@ -36,28 +36,32 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                     />
                                 </g>
                             </svg>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
-                            <span class="text-muted-color font-medium">Sign in to continue</span>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Create Account</div>
+                            <span class="text-muted-color font-medium">Join PrimeLand today</span>
                         </div>
 
                         <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+                            <label for="fullname" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Full Name</label>
+                            <input pInputText id="fullname" type="text" placeholder="Your full name" class="w-full md:w-120 mb-8" [(ngModel)]="fullName" />
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                            <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                            <input pInputText id="email" type="email" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
 
-                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Remember me</label>
-                                </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
+                            <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
+                            <p-password id="password" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-8" [fluid]="true" [feedback]="false"></p-password>
+
+                            <label for="confirmPassword" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Confirm Password</label>
+                            <p-password id="confirmPassword" [(ngModel)]="confirmPassword" placeholder="Confirm password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+
+                            <div class="flex items-center gap-2 mb-8">
+                                <p-checkbox [(ngModel)]="acceptTerms" id="acceptTerms" binary class="mr-2"></p-checkbox>
+                                <label for="acceptTerms" class="text-sm">I agree to the <span class="font-medium no-underline cursor-pointer text-primary">Terms of Service</span> and <span class="font-medium no-underline cursor-pointer text-primary">Privacy Policy</span></label>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full mb-4" routerLink="/"></p-button>
-                            
+
+                            <p-button label="Create Account" styleClass="w-full mb-4" [disabled]="!isFormValid()"></p-button>
+
                             <div class="text-center">
-                                <span class="text-muted-color">Don't have an account? <span class="font-medium no-underline ml-2 cursor-pointer text-primary" routerLink="/auth/register">Create one</span></span>
+                                <span class="text-muted-color">Already have an account? <span class="font-medium no-underline ml-2 cursor-pointer text-primary" routerLink="/auth/login">Sign in</span></span>
                             </div>
                         </div>
                     </div>
@@ -66,10 +70,21 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
         </div>
     `
 })
-export class Login {
+export class Register {
+    fullName: string = '';
     email: string = '';
-
     password: string = '';
+    confirmPassword: string = '';
+    acceptTerms: boolean = false;
 
-    checked: boolean = false;
+    isFormValid(): boolean {
+        return (
+            this.fullName.trim() !== '' &&
+            this.email.trim() !== '' &&
+            this.password.trim() !== '' &&
+            this.confirmPassword.trim() !== '' &&
+            this.password === this.confirmPassword &&
+            this.acceptTerms
+        );
+    }
 }
