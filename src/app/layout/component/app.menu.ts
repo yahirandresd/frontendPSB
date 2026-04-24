@@ -50,7 +50,7 @@ export class AppMenu {
             {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
-                path: '/pages',
+                path: '/features',
                 items: [
                     {
                         label: 'Landing',
@@ -82,17 +82,17 @@ export class AppMenu {
                     {
                         label: 'Crud',
                         icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud']
+                        routerLink: ['/features/crud']
                     },
                     {
                         label: 'Not Found',
                         icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/pages/notfound']
+                        routerLink: ['/features/notfound']
                     },
                     {
                         label: 'Empty',
                         icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
+                        routerLink: ['/features/empty']
                     }
                 ]
             },
