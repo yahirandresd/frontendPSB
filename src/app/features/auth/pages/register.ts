@@ -1,26 +1,21 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
+
 @Component({
-    selector: 'app-login',
+    selector: 'app-register',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, ReactiveFormsModule, CommonModule],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
     template: `
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
             <div class="flex flex-col items-center justify-center">
-              <div class="w-full max-w-md">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="text-center mb-8">
@@ -41,75 +36,55 @@ import { Router } from '@angular/router';
                                     />
                                 </g>
                             </svg>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
-                            <span class="text-muted-color font-medium">Sign in to continue</span>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Create Account</div>
+                            <span class="text-muted-color font-medium">Join PrimeLand today</span>
                         </div>
 
-                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+                        <div>
+                            <label for="fullname" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Full Name</label>
+                            <input pInputText id="fullname" type="text" placeholder="Your full name" class="w-full md:w-120 mb-8" [(ngModel)]="fullName" />
 
-                           <!-- EMAIL -->
-                           <div class="flex flex-col gap-1">
-                              <label>Email</label>
-                              <input pInputText type="email" formControlName="email" />
+                            <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
+                            <input pInputText id="email" type="email" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
 
-                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Remember me</label>
-                                </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
+                            <label for="password" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
+                            <p-password id="password" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-8" [fluid]="true" [feedback]="false"></p-password>
+
+                            <label for="confirmPassword" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Confirm Password</label>
+                            <p-password id="confirmPassword" [(ngModel)]="confirmPassword" placeholder="Confirm password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+
+                            <div class="flex items-center gap-2 mb-8">
+                                <p-checkbox [(ngModel)]="acceptTerms" id="acceptTerms" binary class="mr-2"></p-checkbox>
+                                <label for="acceptTerms" class="text-sm">I agree to the <span class="font-medium no-underline cursor-pointer text-primary">Terms of Service</span> and <span class="font-medium no-underline cursor-pointer text-primary">Privacy Policy</span></label>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full mb-4" (click)="login()"></p-button>
-                            
+
+                            <p-button label="Create Account" styleClass="w-full mb-4" [disabled]="!isFormValid()"></p-button>
+
                             <div class="text-center">
-                                <span class="text-muted-color">Don't have an account? <span class="font-medium no-underline ml-2 cursor-pointer text-primary" routerLink="/auth/register">Create one</span></span>
+                                <span class="text-muted-color">Already have an account? <span class="font-medium no-underline ml-2 cursor-pointer text-primary" routerLink="/auth/login">Sign in</span></span>
                             </div>
                         </div>
                     </div>
                 </div>
-              </div>
             </div>
         </div>
     `
 })
-
-export class LoginComponent {
-    loginForm: FormGroup;
-
-    constructor(private fb: FormBuilder, private router: Router) {
-        this.loginForm = this.fb.group({
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [
-                Validators.required,
-                Validators.minLength(6),
-                Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)
-            ]]
-        });
-    }
-
-    onSubmit() {
-        if (this.loginForm.invalid) {
-            this.loginForm.markAllAsTouched();
-            return;
-        }
-
-        console.log(this.loginForm.value);
-        this.router.navigate(['/home']); // 👈 redirige
-        // aquí llamas tu authService
-    }
-}
-export class Login {
+export class Register {
+    fullName: string = '';
     email: string = '';
-
     password: string = '';
+    confirmPassword: string = '';
+    acceptTerms: boolean = false;
 
-    checked: boolean = false;
-
-    constructor(private router: Router) {}
-
-    login() {
-        if (this.email.trim() && this.password.trim()) {
-            this.router.navigate(['/dashboard']);
-        }
+    isFormValid(): boolean {
+        return (
+            this.fullName.trim() !== '' &&
+            this.email.trim() !== '' &&
+            this.password.trim() !== '' &&
+            this.confirmPassword.trim() !== '' &&
+            this.password === this.confirmPassword &&
+            this.acceptTerms
+        );
     }
 }
