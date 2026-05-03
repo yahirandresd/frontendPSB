@@ -1,168 +1,124 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { AppMenuitem } from './app.menuitem';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, AppMenuitem, RouterModule],
-    template: `<ul class="layout-menu">
-        @for (item of model; track item.label) {
-            @if (!item.separator) {
-                <li app-menuitem [item]="item" [root]="true"></li>
-            } @else {
-                <li class="menu-separator"></li>
-            }
-        }
-    </ul> `,
-})
-export class AppMenu {
-    model: MenuItem[] = [];
+    template: `
+        <ul class="menu-list">
+            <li>
+                <a routerLink="/dashboard" routerLinkActive="active">
+                    <i class="pi pi-home"></i>
+                    <span>Inicio</span>
+                </a>
+            </li>
 
-    ngOnInit() {
-        this.model = [
-            {
-                label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-            },
-            {
-                label: 'UI Components',
-                items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/uikit/timeline'] },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                ]
-            },
-            {
-                label: 'Pages',
-                icon: 'pi pi-fw pi-briefcase',
-                path: '/features',
-                items: [
-                    {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
-                        label: 'Auth',
-                        icon: 'pi pi-fw pi-user',
-                        path: '/auth',
-                        items: [
-                            {
-                                label: 'Login',
-                                icon: 'pi pi-fw pi-sign-in',
-                                routerLink: ['/auth/login']
-                            },
-                            {
-                                label: 'Error',
-                                icon: 'pi pi-fw pi-times-circle',
-                                routerLink: ['/auth/error']
-                            },
-                            {
-                                label: 'Access Denied',
-                                icon: 'pi pi-fw pi-lock',
-                                routerLink: ['/auth/access']
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Crud',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/features/crud']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/features/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/features/empty']
-                    }
-                ]
-            },
-            {
-                label: 'Hierarchy',
-                path: '/hierarchy',
-                items: [
-                    {
-                        label: 'Submenu 1',
-                        icon: 'pi pi-fw pi-bookmark',
-                        path: '/hierarchy/submenu_1',
-                        items: [
-                            {
-                                label: 'Submenu 1.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_1/submenu_1_1',
-                                items: [
-                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_1/submenu_1_2',
-                                items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2',
-                        icon: 'pi pi-fw pi-bookmark',
-                        path: '/hierarchy/submenu_2',
-                        items: [
-                            {
-                                label: 'Submenu 2.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_2/submenu_2_1',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                path: '/hierarchy/submenu_2/submenu_2_2',
-                                items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                label: 'Get Started',
-                items: [
-                    {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-book',
-                        routerLink: ['/documentation']
-                    },
-                    {
-                        label: 'View Source',
-                        icon: 'pi pi-fw pi-github',
-                        url: 'https://github.com/primefaces/sakai-ng',
-                        target: '_blank'
-                    }
-                ]
-            }
-        ];
-    }
-}
+            <li>
+                <a routerLink="/plan" routerLinkActive="active">
+                    <i class="pi pi-check-square"></i>
+                    <span>Mi Plan de Saneamiento</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/registros" routerLinkActive="active">
+                    <i class="pi pi-folder"></i>
+                    <span>Registros diarios</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/documentos" routerLinkActive="active">
+                    <i class="pi pi-file"></i>
+                    <span>Documentos</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/reportes" routerLinkActive="active">
+                    <i class="pi pi-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+            </li>
+        </ul>
+    `,
+    styles: [`
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-list li {
+            margin-bottom: 6px;
+        }
+
+        /* ITEM */
+        .menu-list a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 10px 12px;
+            border-radius: 10px;
+
+            color: #374151;
+            text-decoration: none;
+            font-weight: 500;
+
+            position: relative;
+            overflow: hidden;
+
+            transition: all 0.25s ease;
+        }
+
+        /* ICONO */
+        .menu-list a i {
+            font-size: 1rem;
+            transition: all 0.25s ease;
+        }
+
+        /* 🔥 HOVER */
+        .menu-list a:hover {
+            background: linear-gradient(90deg, #eef2ff, #f8fafc);
+            transform: translateX(6px);
+        }
+
+        /* ICONO EN HOVER */
+        .menu-list a:hover i {
+            transform: scale(1.2);
+            color: #2563eb;
+        }
+
+        /* TEXTO EN HOVER */
+        .menu-list a:hover span {
+            color: #111827;
+        }
+
+        /* 🔥 ACTIVO */
+        .menu-list a.active {
+            background-color: #e8f0fe;
+            color: #2563eb;
+            font-weight: 600;
+
+            transform: translateX(4px);
+        }
+
+        /* BARRA LATERAL ACTIVA */
+        .menu-list a.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background-color: #2563eb;
+            border-radius: 4px;
+        }
+
+        /* EFECTO SUAVE DE CLICK */
+        .menu-list a:active {
+            transform: scale(0.98);
+        }
+    `]
+})
+export class AppMenu { }
