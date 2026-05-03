@@ -1,13 +1,43 @@
-.layout-main-container {
+/* WRAPPER GENERAL */
+.layout-wrapper {
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    justify-content: space-between;
-    padding: 6rem 2rem 0 2rem;
-    transition: margin-left var(--layout-section-transition-duration);
+    height: 100vh;
+    overflow: hidden;
 }
 
+/* SIDEBAR */
+.layout-sidebar {
+    width: 280px;
+    min-width: 280px;
+    height: 100vh;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #e5e7eb;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.layout-main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    /* quitar estilos por defecto de Sakai */
+    padding: 0 !important;
+
+    /* 🔥 SOLO controlamos el margen superior */
+    margin-top: 55px;
+    margin-left: 0 !important;
+    min-height: 100vh;
+}
+
+/* CONTENIDO */
 .layout-main {
-    flex: 1 1 auto;
-    padding-bottom: 2rem;
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+
+    /* padding controlado */
+    padding: 1.5rem;
+
+    background: #f9fafb;
 }

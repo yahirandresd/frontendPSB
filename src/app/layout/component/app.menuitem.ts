@@ -101,6 +101,8 @@ export class AppMenuitem {
 
     root = input<boolean>(false);
 
+    index = input<number>(0);
+
     parentPath = input<string | null>(null);
 
     isVisible = computed(() => this.item()?.visible !== false);
