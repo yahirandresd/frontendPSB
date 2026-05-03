@@ -1,21 +1,26 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, ReactiveFormsModule, CommonModule],
     template: `
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
             <div class="flex flex-col items-center justify-center">
+              <div class="w-full max-w-md">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="text-center mb-8">
@@ -40,12 +45,12 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                             <span class="text-muted-color font-medium">Sign in to continue</span>
                         </div>
 
-                        <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
-                            <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                            <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                           <!-- EMAIL -->
+                           <div class="flex flex-col gap-1">
+                              <label>Email</label>
+                              <input pInputText type="email" formControlName="email" />
 
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                                 <div class="flex items-center">
@@ -62,10 +67,37 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                         </div>
                     </div>
                 </div>
+              </div>
             </div>
         </div>
     `
 })
+
+export class LoginComponent {
+    loginForm: FormGroup;
+
+    constructor(private fb: FormBuilder, private router: Router) {
+        this.loginForm = this.fb.group({
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [
+                Validators.required,
+                Validators.minLength(6),
+                Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)
+            ]]
+        });
+    }
+
+    onSubmit() {
+        if (this.loginForm.invalid) {
+            this.loginForm.markAllAsTouched();
+            return;
+        }
+
+        console.log(this.loginForm.value);
+        this.router.navigate(['/home']); // 👈 redirige
+        // aquí llamas tu authService
+    }
+}
 export class Login {
     email: string = '';
 
