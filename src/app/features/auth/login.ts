@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -54,7 +54,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full mb-4" routerLink="/"></p-button>
+                            <p-button label="Sign In" styleClass="w-full mb-4" (click)="login()"></p-button>
                             
                             <div class="text-center">
                                 <span class="text-muted-color">Don't have an account? <span class="font-medium no-underline ml-2 cursor-pointer text-primary" routerLink="/auth/register">Create one</span></span>
@@ -72,4 +72,12 @@ export class Login {
     password: string = '';
 
     checked: boolean = false;
+
+    constructor(private router: Router) {}
+
+    login() {
+        if (this.email.trim() && this.password.trim()) {
+            this.router.navigate(['/dashboard']);
+        }
+    }
 }
