@@ -1,115 +1,161 @@
-import { Component, computed, effect, ElementRef, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    inject,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
+
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
+
 import { AppMenu } from './app.menu';
-import { LayoutService } from '@/app/layout/service/layout.service';
+
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
-    imports: [AppMenu, RouterModule],
+    imports: [
+        AppMenu,
+        RouterModule,
+        ButtonModule,
+        RippleModule
+    ],
     template: `
-        <div class="layout-sidebar">
-            <app-menu></app-menu>
+        <div class="layout-sidebar flex flex-column h-full">
+
+            <!-- LOGO -->
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i class="pi pi-shield"></i>
+                </div>
+
+                <div class="logo-text">
+                    <span class="main-title">iPSB Generator</span>
+                    <span class="subtitle">Gestión Sanitaria</span>
+                </div>
+            </div>
+
+            <!-- MENÚ -->
+            <div class="sidebar-menu flex-1 overflow-y-auto">
+                <app-menu></app-menu>
+            </div>
+
+            <!-- BOTÓN INFERIOR -->
+            <div class="sidebar-footer">
+                <button
+                    pButton
+                    pRipple
+                    label="Nuevo Registro"
+                    icon="pi pi-plus-circle"
+                    class="new-button p-button-rounded"
+                ></button>
+            </div>
+
         </div>
-    `
+    `,
+    styles: [`
+        .layout-sidebar {
+            width: 280px;        /* 🔥 ESTO ES LO IMPORTANTE */
+            min-width: 280px;
+            height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        /* HEADER */
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: #eef4ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .logo-icon i {
+            color: #2563eb;
+            font-size: 1.4rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .main-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* MENÚ */
+        .sidebar-menu {
+            padding: 0 0.75rem;
+        }
+
+        /* FOOTER */
+        .sidebar-footer {
+            padding: 1rem 1rem 0.5rem 1rem;
+            margin-top: auto;
+        }
+
+        .new-button {
+            background-color: #2563eb !important;
+            border: none !important;
+            min-height: 48px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .new-button:hover {
+            background-color: #1d4ed8 !important;
+        }
+    `]
 })
 export class AppSidebar implements OnInit, OnDestroy {
-    layoutService = inject(LayoutService);
 
     router = inject(Router);
-
     el = inject(ElementRef);
 
-    private outsideClickListener: ((event: MouseEvent) => void) | null = null;
-
     private destroy$ = new Subject<void>();
-
-    constructor() {
-        effect(() => {
-            const state = this.layoutService.layoutState();
-
-            if (this.layoutService.isDesktop()) {
-                if (state.overlayMenuActive) {
-                    this.bindOutsideClickListener();
-                } else {
-                    this.unbindOutsideClickListener();
-                }
-            } else {
-                if (state.mobileMenuActive) {
-                    this.bindOutsideClickListener();
-                } else {
-                    this.unbindOutsideClickListener();
-                }
-            }
-        });
-    }
 
     ngOnInit() {
         this.router.events
             .pipe(
-                filter((event) => event instanceof NavigationEnd),
+                filter(event => event instanceof NavigationEnd),
                 takeUntil(this.destroy$)
             )
-            .subscribe((event) => {
-                const navEvent = event as NavigationEnd;
-                this.onRouteChange(navEvent.urlAfterRedirects);
+            .subscribe(() => {
+                // no necesitas lógica aquí por ahora
             });
-
-        this.onRouteChange(this.router.url);
     }
 
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
-        this.unbindOutsideClickListener();
-    }
-
-    private onRouteChange(path: string) {
-        this.layoutService.layoutState.update((val) => ({
-            ...val,
-            activePath: path,
-            overlayMenuActive: false,
-            staticMenuMobileActive: false,
-            mobileMenuActive: false,
-            menuHoverActive: false
-        }));
-    }
-
-    private bindOutsideClickListener() {
-        if (!this.outsideClickListener) {
-            this.outsideClickListener = (event: MouseEvent) => {
-                if (this.isOutsideClicked(event)) {
-                    this.layoutService.layoutState.update((val) => ({
-                        ...val,
-                        overlayMenuActive: false,
-                        staticMenuMobileActive: false,
-                        mobileMenuActive: false,
-                        menuHoverActive: false
-                    }));
-                }
-            };
-
-            document.addEventListener('click', this.outsideClickListener);
-        }
-    }
-
-    private unbindOutsideClickListener() {
-        if (this.outsideClickListener) {
-            document.removeEventListener('click', this.outsideClickListener);
-            this.outsideClickListener = null;
-        }
-    }
-
-    private isOutsideClicked(event: MouseEvent): boolean {
-        const topbarButtonEl = document.querySelector('.topbar-start > button');
-        const sidebarEl = this.el.nativeElement;
-
-        return !(
-            sidebarEl?.isSameNode(event.target as Node) ||
-            sidebarEl?.contains(event.target as Node) ||
-            topbarButtonEl?.isSameNode(event.target as Node) ||
-            topbarButtonEl?.contains(event.target as Node)
-        );
     }
 }
