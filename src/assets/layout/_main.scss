@@ -20,14 +20,10 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-
-    /* quitar estilos por defecto de Sakai */
     padding: 0 !important;
-
-    /* 🔥 SOLO controlamos el margen superior */
     margin-top: 55px;
     margin-left: 0 !important;
-    min-height: 100vh;
+    min-height: 0;
 }
 
 /* CONTENIDO */
@@ -35,9 +31,34 @@
     flex: 1;
     width: 100%;
     overflow-y: auto;
-
-    /* padding controlado */
     padding: 1.5rem;
-
     background: #f9fafb;
+    transition: background 0.2s ease;
+}
+
+/* =========================================
+   MODO OSCURO
+   ========================================= */
+html.app-dark .layout-main {
+    background: #121212 !important;
+}
+
+html.app-dark .layout-sidebar {
+    background: #1e1e1e !important;
+    border-right: 1px solid #3f3f46 !important;
+}
+
+html.app-dark .card {
+    background: #1e1e1e !important;
+    border: 1px solid #3f3f46 !important;
+}
+
+html.app-dark .card-header h2,
+html.app-dark .card h2,
+html.app-dark .card h3 {
+    color: rgba(255, 255, 255, 0.87) !important;
+}
+
+html.app-dark label {
+    color: rgba(255, 255, 255, 0.6) !important;
 }
