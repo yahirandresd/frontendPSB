@@ -13,7 +13,13 @@ export const appRoutes: Routes = [
             { path: '', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
-            { path: 'features', loadChildren: () => import('./app/features/pages.routes') }
+            { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
+            // 🔥 Aquí adentro del AppLayout
+            {
+                path: 'registros',
+                loadChildren: () =>
+                    import('./app/features/registros/registros.router').then(m => m.REGISTROS_ROUTES)
+            }
         ]
     },
     { path: 'landing', component: Landing },
