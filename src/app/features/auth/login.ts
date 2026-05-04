@@ -121,7 +121,7 @@ export class LoginComponent {
         }
 
         console.log(this.loginForm.value);
-        this.router.navigate(['/home']); // 👈 redirige
+        this.router.navigate(['/dashboard']); // 👈 redirige
         // aquí llamas tu authService
     }
 }
