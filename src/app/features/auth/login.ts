@@ -49,19 +49,48 @@ import { CommonModule } from '@angular/common';
                               <label>Email</label>
                               <input pInputText type="email" formControlName="email" />
 
-                            <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                                <div class="flex items-center">
-                                    <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Remember me</label>
-                                </div>
-                                <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
-                            </div>
-                            <p-button label="Sign In" styleClass="w-full mb-4" (click)="login()"></p-button>
-                            
-                            <div class="text-center">
-                                <span class="text-muted-color">Don't have an account? <span class="font-medium no-underline ml-2 cursor-pointer text-primary" routerLink="/auth/register">Create one</span></span>
-                            </div>
-                        </div>
+                              <small class="p-error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+                                <span *ngIf="loginForm.get('email')?.errors?.['required']">
+                                   El email es obligatorio
+                                </span>
+                                <span *ngIf="loginForm.get('email')?.errors?.['email']">
+                                   Formato inválido
+                                </span>
+                              </small>
+                           </div>
+
+                           <!-- PASSWORD -->
+                           <div class="flex flex-col gap-1">
+                              <label>Contraseña</label>
+                              <p-password 
+                                  formControlName="password" 
+                                  [toggleMask]="true"
+                                  [feedback]="false">
+                              </p-password>
+
+                              <small class="p-error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+                              <span *ngIf="loginForm.get('password')?.errors?.['required']">
+                                   La contraseña es obligatoria
+                              </span>
+                              <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
+                                   Mínimo 6 caracteres
+                              </span>
+                              <span *ngIf="loginForm.get('password')?.errors?.['pattern']">
+                                   Debe contener al menos una mayúscula y un número
+                              </span>
+                              </small>
+                           </div>
+
+                           <!-- BOTÓN -->
+                           <button 
+                              pButton 
+                              type="submit" 
+                              label="Iniciar sesión" 
+                              [disabled]="loginForm.invalid"
+                              class="w-full">
+                           </button>
+
+                        </form>
                     </div>
                 </div>
               </div>
@@ -91,7 +120,7 @@ export class LoginComponent {
         }
 
         console.log(this.loginForm.value);
-        this.router.navigate(['/home']); // 👈 redirige
+        this.router.navigate(['/dashboard']); // 👈 redirige
         // aquí llamas tu authService
     }
 }
@@ -101,12 +130,4 @@ export class Login {
     password: string = '';
 
     checked: boolean = false;
-
-    constructor(private router: Router) {}
-
-    login() {
-        if (this.email.trim() && this.password.trim()) {
-            this.router.navigate(['/dashboard']);
-        }
-    }
 }
