@@ -1,14 +1,23 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
+    imports: [RouterModule],
     template: `
         <ul class="menu-list">
             <li>
                 <a routerLink="/dashboard" routerLinkActive="active">
                     <i class="pi pi-home"></i>
                     <span>Inicio</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/configuracion-inicial" routerLinkActive="active">
+                    <i class="pi pi-cog"></i>
+                    <span>Configuración Inicial</span>
                 </a>
             </li>
 

@@ -1,0 +1,18 @@
+<div class="card">
+    @if (state$ | async; as state) {
+        <p-steps [model]="pasos" [activeIndex]="state.pasoActual" [readonly]="true" styleClass="mb-8" />
+
+        @if (state.pasoActual === 0) {
+            <app-step-empresa (next)="onNext()" />
+        }
+        @if (state.pasoActual === 1) {
+            <app-step-tipo-alimento (next)="onNext()" (back)="onBack()" />
+        }
+        @if (state.pasoActual === 2) {
+            <app-step-plan-psb (next)="onNext()" (back)="onBack()" />
+        }
+        @if (state.pasoActual === 3) {
+            <app-step-confirmacion (back)="onBack()" />
+        }
+    }
+</div>
