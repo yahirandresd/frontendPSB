@@ -69,18 +69,114 @@ Dark mode is toggled by adding/removing the `.app-dark` class on `<html>`. The P
 ### Routing
 
 ```
-/                   → redirects to /auth/login
-/auth/login         → LoginComponent (ReactiveFormsModule, no backend yet)
-/auth/access        → Access
-/auth/error         → Error
+/                         → redirects to /auth/login
+/auth/login               → LoginComponent
+/auth/access, /auth/error → Auth utility pages
 / (AppLayout shell)
-  /dashboard        → Dashboard (PSB widgets)
-  /uikit/*          → PrimeNG component demos
-  /features/crud    → Crud demo
-  /features/empty   → Empty page template
+  /dashboard              → Dashboard (PSB widgets)
+  /configuracion-inicial  → Wizard PSB (lazy → plan-psb.routes.ts)
+  /uikit/*                → PrimeNG component demos
+  /features/crud          → Crud demo
+  /features/empty         → Empty page template
 ```
 
-The sidebar menu (`AppMenu`) links to `/plan`, `/registros`, `/documentos`, `/reportes` — these routes are **not yet defined** in the router and will show the 404 page.
+Sidebar menu (`AppMenu`) also links to `/plan`, `/registros`, `/documentos`, `/reportes` — **not yet registered** in the router.
+
+To add a new protected route, insert it inside the `AppLayout` children in `src/app.routes.ts` and add the menu item in `src/app/layout/component/app.menu.ts`.
+
+---
+
+## Feature structure convention
+
+Every new domain feature lives under `src/app/features/configuracion/<entidad>/` and follows this layout strictly:
+
+```
+<entidad>/
+  components/
+    <entidad>-form/           ← formulario reutilizable (crear Y editar)
+      <entidad>-form.component.ts
+      <entidad>-form.component.html
+      <entidad>-form.component.scss
+  pages/
+    <entidad>-list/           ← tabla con todos los registros
+    <entidad>-create/         ← instancia el form sin datos
+    <entidad>-edit/           ← carga el registro por :id y lo pasa al form
+  services/
+    <entidad>.service.ts      ← getAll, getById, create, update vía HttpClient
+  models/
+    <entidad>.interface.ts
+    create-<entidad>.dto.ts
+    update-<entidad>.dto.ts
+  store/
+    <entidad>.store.ts
+  utils/
+    <entidad>.mapper.ts       ← transforma API response → interface
+  index.ts                    ← barrel, exporta solo lo público
+```
+
+### Routes per entity
+
+```typescript
+// <entidad>.routes.ts
+export default [
+    { path: '',           component: EntidadListComponent   },
+    { path: 'crear',      component: EntidadCreateComponent },
+    { path: ':id/editar', component: EntidadEditComponent   }
+] as Routes;
+```
+
+### Create vs Edit pattern (mandatory)
+
+- **`<entidad>-form`** — componente puro, sin lógica de navegación ni llamadas HTTP.  
+  Recibe `@Input() entidad?: Entidad` (undefined = crear) y emite `@Output() formSubmit`.
+- **`<entidad>-create`** — instancia el form sin `@Input`. Llama a `service.create()` al recibir `formSubmit`.
+- **`<entidad>-edit`** — lee `:id` de la URL, llama a `service.getById(id)`, pasa el resultado como `@Input` al form. Llama a `service.update()` al recibir `formSubmit`.
+- **Never** put create/edit logic in the same page component with an `if (modoEdicion)`.
+
+### Component file rule
+
+Every component uses **3 separate files** — never inline `template:` or `styles:` in the decorator:
+
+```typescript
+@Component({
+    selector: 'app-<name>',
+    standalone: true,
+    imports: [...],
+    templateUrl: './<name>.component.html',
+    styleUrls: ['./<name>.component.scss']
+})
+```
+
+### Service pattern
+
+```typescript
+@Injectable({ providedIn: 'root' })
+export class EntidadService {
+    private http = inject(HttpClient);
+    private readonly url = `${environment.apiUrl}/entidades`;
+
+    getAll(): Observable<Entidad[]>         { return this.http.get<Entidad[]>(this.url); }
+    getById(id: string): Observable<Entidad>{ return this.http.get<Entidad>(`${this.url}/${id}`); }
+    create(dto: CreateDto): Observable<Entidad>            { return this.http.post<Entidad>(this.url, dto); }
+    update(id: string, dto: UpdateDto): Observable<Entidad>{ return this.http.patch<Entidad>(`${this.url}/${id}`, dto); }
+}
+```
+
+Use `firstValueFrom()` for one-shot calls in event handlers. Use `async` pipe in templates.
+
+### Mapper pattern
+
+```typescript
+// <entidad>.mapper.ts
+export function toCreateDto(form: Partial<Entidad>): CreateEntidadDto { ... }
+export function toUpdateDto(form: Partial<Entidad>): UpdateEntidadDto { ... }
+```
+
+Mappers live in `utils/`. Services never transform data — they only call HTTP.
+
+### Backend URL
+
+Configured in `src/environments/environment.ts` → `apiUrl: 'http://localhost:3000/api'`.
 
 ### Auth
 
