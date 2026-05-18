@@ -6,20 +6,16 @@ import { Landing } from './app/features/landing/landing';
 import { Notfound } from './app/features/notfound/notfound';
 
 export const appRoutes: Routes = [
+    { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
     {
         path: '',
         component: AppLayout,
         children: [
-            { path: '', component: Dashboard },
+            { path: 'dashboard', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
-            // 🔥 Aquí adentro del AppLayout
-            {
-                path: 'registros',
-                loadChildren: () =>
-                    import('./app/features/registros/registros.router').then(m => m.REGISTROS_ROUTES)
-            }
+            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') }
         ]
     },
     { path: 'landing', component: Landing },
