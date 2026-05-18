@@ -3,10 +3,11 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-error',
-    imports: [ButtonModule, RippleModule, RouterModule, AppFloatingConfigurator, ButtonModule],
+    imports: [ButtonModule, RippleModule, RouterModule, AppFloatingConfigurator, ButtonModule, ReactiveFormsModule],
     standalone: true,
     template: ` <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
