@@ -1,0 +1,34 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="md:col-span-2">
+        <label class="block font-medium mb-2" for="nombre">Nombre del programa</label>
+        <input pInputText id="nombre" formControlName="nombre" class="w-full" />
+    </div>
+    <div class="md:col-span-2">
+        <label class="block font-medium mb-2" for="descripcion">Descripción</label>
+        <textarea pTextarea id="descripcion" formControlName="descripcion" rows="2" class="w-full"></textarea>
+    </div>
+    <div>
+        <label class="block font-medium mb-2" for="responsable">Responsable</label>
+        <input pInputText id="responsable" formControlName="responsable" class="w-full" />
+    </div>
+    <div>
+        <label class="block font-medium mb-2" for="frecuencia">Frecuencia</label>
+        <p-select inputId="frecuencia" formControlName="frecuencia" [options]="frecuencias" optionLabel="label" optionValue="value" class="w-full" />
+    </div>
+    <div class="md:col-span-2">
+        <label class="block font-medium mb-2" for="objetivo">Objetivo</label>
+        <textarea pTextarea id="objetivo" formControlName="objetivo" rows="2" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2">
+        <label class="block font-medium mb-2" for="alcance">Alcance</label>
+        <textarea pTextarea id="alcance" formControlName="alcance" rows="2" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2">
+        <label class="block font-medium mb-2" for="procedimiento_general">Procedimiento General</label>
+        <textarea pTextarea id="procedimiento_general" formControlName="procedimiento_general" rows="3" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2 flex gap-2 justify-end">
+        <p-button type="submit" label="Guardar" icon="pi pi-check" />
+    </div>
+</form>
+

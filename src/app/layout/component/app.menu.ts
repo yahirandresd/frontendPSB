@@ -29,6 +29,13 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
+                <a routerLink="/programa-residuos" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }">
+                    <i class="pi pi-box"></i>
+                    <span>Programa Residuos</span>
+                </a>
+            </li>
+
+            <li>
                 <a routerLink="/registros" routerLinkActive="active">
                     <i class="pi pi-folder"></i>
                     <span>Registros diarios</span>
