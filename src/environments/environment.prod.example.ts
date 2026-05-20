@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:3000/api',
+    apiUrl: 'https://tu-api-en-produccion.com/api',
     supabaseUrl: 'TU_SUPABASE_URL',
     supabaseAnonKey: 'TU_SUPABASE_ANON_KEY'
 };
