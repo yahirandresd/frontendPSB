@@ -46,14 +46,14 @@
                             </small>
                         </div>
 
-                        <small class="p-error text-center" *ngIf="errorMessage">{{ errorMessage }}</small>
+                        <small class="p-error text-center" *ngIf="errorMessage()">{{ errorMessage() }}</small>
 
                         <button
                             pButton
                             type="submit"
                             label="Iniciar sesión"
-                            [loading]="loading"
-                            [disabled]="loginForm.invalid || loading"
+                            [loading]="loading()"
+                            [disabled]="loginForm.invalid || loading()"
                             class="w-full">
                         </button>
 
