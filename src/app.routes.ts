@@ -4,12 +4,14 @@ import { Dashboard } from './app/features/dashboard/dashboard';
 import { Documentation } from './app/features/documentation/documentation';
 import { Landing } from './app/features/landing/landing';
 import { Notfound } from './app/features/notfound/notfound';
+import { authGuard } from './app/features/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
     { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
     {
         path: '',
         component: AppLayout,
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
