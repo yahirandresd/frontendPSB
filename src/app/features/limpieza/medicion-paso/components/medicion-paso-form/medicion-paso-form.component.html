@@ -1,0 +1,41 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Parámetro <span class="text-red-500">*</span></label>
+            <input pInputText formControlName="parametro" placeholder="Ej: Temperatura, pH, Concentración" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Unidad</label>
+            <input pInputText formControlName="unidad" placeholder="Ej: °C, ppm, %" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Valor obtenido <span class="text-red-500">*</span></label>
+            <input pInputText formControlName="valorObtenido" placeholder="Valor medido" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Valor esperado</label>
+            <input pInputText formControlName="valorEsperado" placeholder="Valor de referencia" />
+        </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+        <p-checkbox formControlName="cumple" [binary]="true" inputId="cumple" />
+        <label for="cumple" class="font-medium text-sm cursor-pointer">Cumple con el valor esperado</label>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Observaciones</label>
+        <textarea pTextarea formControlName="observaciones" rows="3" placeholder="Observaciones adicionales..."></textarea>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button
+            type="submit"
+            [label]="medicion ? 'Actualizar' : 'Guardar'"
+            [disabled]="form.invalid" />
+    </div>
+</form>

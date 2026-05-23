@@ -25,7 +25,7 @@ ng test --include="**/my-component.spec.ts"
 
 ## Architecture
 
-This is an **Angular 21** admin dashboard (Sakai NG template) for managing **PSB (Plan de Saneamiento Básico)** — Colombian food safety compliance plans (Resolución 2674 de 2013). The domain is a dairy company management system.
+This is **Sanify** — an **Angular 21** admin dashboard for managing **PSB (Plan de Saneamiento Básico)** — Colombian food safety compliance plans (Resolución 2674 de 2013). The domain is a dairy company management system.
 
 ### Key Angular patterns
 

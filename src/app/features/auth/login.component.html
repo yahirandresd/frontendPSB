@@ -1,0 +1,125 @@
+<app-floating-configurator />
+<div class="login-wrapper">
+
+    <!-- PANEL IZQUIERDO — Branding -->
+    <div class="login-panel-left">
+        <div class="login-bg-gradient"></div>
+        <div class="login-bg-pattern"></div>
+
+        <div class="login-panel-content">
+
+            <div class="login-brand">
+                <div class="login-logo-icon">
+                    <i class="pi pi-shield"></i>
+                </div>
+                <div>
+                    <div class="login-brand-name">PSB</div>
+                    <div class="login-brand-sub">Plan de Saneamiento Básico</div>
+                </div>
+            </div>
+
+            <div class="login-headline">
+                <h1>Control de inocuidad<br />alimentaria</h1>
+                <p>Administra y da seguimiento a tu Plan de Saneamiento Básico conforme a la normativa colombiana vigente.</p>
+            </div>
+
+            <div class="login-features">
+                <div class="login-feature-item">
+                    <span class="login-feature-icon"><i class="pi pi-check"></i></span>
+                    <span>Registro de limpieza y desinfección</span>
+                </div>
+                <div class="login-feature-item">
+                    <span class="login-feature-icon"><i class="pi pi-chart-bar"></i></span>
+                    <span>Monitoreo de indicadores PSB</span>
+                </div>
+                <div class="login-feature-item">
+                    <span class="login-feature-icon"><i class="pi pi-file-check"></i></span>
+                    <span>Generación de reportes y documentos</span>
+                </div>
+                <div class="login-feature-item">
+                    <span class="login-feature-icon"><i class="pi pi-bell"></i></span>
+                    <span>Alertas de vencimiento y tareas</span>
+                </div>
+            </div>
+
+            <div class="login-panel-footer">
+                Resolución 2674 de 2013 &middot; INVIMA &middot; Industria láctea
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL DERECHO — Formulario -->
+    <div class="login-panel-right">
+
+        <!-- Logo móvil (solo visible en pantallas pequeñas) -->
+        <div class="login-mobile-logo">
+            <div class="login-logo-icon login-logo-icon--primary">
+                <i class="pi pi-shield"></i>
+            </div>
+            <div>
+                <div class="login-brand-name login-brand-name--dark">PSB</div>
+                <div class="login-brand-sub login-brand-sub--dark">Plan de Saneamiento Básico</div>
+            </div>
+        </div>
+
+        <div class="login-form-container">
+
+            <div class="login-form-header">
+                <h2>Bienvenido</h2>
+                <p>Ingresa tus credenciales para continuar</p>
+            </div>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+                <div class="login-field">
+                    <label class="login-label">Correo electrónico</label>
+                    <p-iconfield>
+                        <p-inputicon class="pi pi-envelope" />
+                        <input
+                            pInputText
+                            type="email"
+                            formControlName="email"
+                            placeholder="correo@empresa.com"
+                            class="w-full" />
+                    </p-iconfield>
+                    <small class="p-error" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+                        <span *ngIf="loginForm.get('email')?.errors?.['required']">El correo es obligatorio</span>
+                        <span *ngIf="loginForm.get('email')?.errors?.['email']">Formato de correo inválido</span>
+                    </small>
+                </div>
+
+                <div class="login-field">
+                    <label class="login-label">Contraseña</label>
+                    <p-password
+                        formControlName="password"
+                        [toggleMask]="true"
+                        [feedback]="false"
+                        placeholder="••••••••"
+                        styleClass="w-full" />
+                    <small class="p-error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+                        <span *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+                        <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</span>
+                    </small>
+                </div>
+
+                <p-message
+                    *ngIf="errorMessage()"
+                    severity="error"
+                    [text]="errorMessage()"
+                    styleClass="w-full" />
+
+                <button
+                    pButton
+                    type="submit"
+                    label="Iniciar sesión"
+                    icon="pi pi-sign-in"
+                    iconPos="right"
+                    [loading]="loading()"
+                    [disabled]="loginForm.invalid || loading()"
+                    class="w-full login-submit-btn">
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
