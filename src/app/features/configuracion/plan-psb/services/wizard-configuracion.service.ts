@@ -4,14 +4,12 @@ import { WizardState } from '../models/wizard-state.interface';
 
 const INITIAL_STATE: WizardState = {
     empresa: {},
-    tiposAlimento: [],
-    planPsb: {},
     pasoActual: 0
 };
 
 @Injectable()
 export class WizardConfiguracionService {
-    private state$ = new BehaviorSubject<WizardState>({ ...INITIAL_STATE, tiposAlimento: [] });
+    private state$ = new BehaviorSubject<WizardState>({ ...INITIAL_STATE });
 
     getState(): Observable<WizardState> {
         return this.state$.asObservable();
@@ -25,19 +23,11 @@ export class WizardConfiguracionService {
         this.state$.next({ ...this.state$.getValue(), empresa });
     }
 
-    setTiposAlimento(tiposAlimento: WizardState['tiposAlimento']): void {
-        this.state$.next({ ...this.state$.getValue(), tiposAlimento });
-    }
-
-    setPlanPsb(planPsb: WizardState['planPsb']): void {
-        this.state$.next({ ...this.state$.getValue(), planPsb });
-    }
-
     setPasoActual(pasoActual: number): void {
         this.state$.next({ ...this.state$.getValue(), pasoActual });
     }
 
     resetWizard(): void {
-        this.state$.next({ ...INITIAL_STATE, tiposAlimento: [] });
+        this.state$.next({ ...INITIAL_STATE });
     }
 }
