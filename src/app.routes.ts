@@ -21,7 +21,7 @@ export const appRoutes: Routes = [
                 path: 'registros',
                 loadChildren: () =>
                     import('./app/features/registros/registros.router').then(m => m.REGISTROS_ROUTES)
-            }
+            },
                         // ── Módulo control de plagas ──
             {
                 path: 'control-plagas',
@@ -30,7 +30,6 @@ export const appRoutes: Routes = [
                         .then(m => m.CONTROL_PLAGAS_ROUTES)
             },
             { path: 'limpieza', loadChildren: () => import('./app/features/limpieza/limpieza.routes') },
-            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') }
         ]
     },
     { path: 'landing', component: Landing },
