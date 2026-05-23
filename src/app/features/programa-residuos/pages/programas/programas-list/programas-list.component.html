@@ -1,0 +1,82 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template #start>
+            <p-button label="Nuevo programa" icon="pi pi-plus" routerLink="/programa-residuos/programas/crear" />
+        </ng-template>
+        <ng-template #end>
+            <p-button label="Exportar CSV" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+        </ng-template>
+    </p-toolbar>
+
+    <div class="flex flex-wrap gap-3 mb-4">
+        <p-iconfield iconPosition="left" class="flex-1 min-w-64">
+            <p-inputicon class="pi pi-search" />
+            <input pInputText type="text" placeholder="Buscar..." (input)="onGlobalFilter($event)" class="w-full" />
+        </p-iconfield>
+        <p-select
+            [options]="frecuenciaOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Filtrar por frecuencia"
+            [showClear]="true"
+            (onChange)="filtroFrecuencia.set($event.value)"
+            class="w-56"
+        />
+    </div>
+
+    <p-table
+        #dt
+        [value]="programas()"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['nombre', 'responsable', 'frecuencia']"
+        [rowHover]="true"
+        dataKey="id"
+        [tableStyle]="{ 'min-width': '60rem' }"
+    >
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre" /></th>
+                <th>Responsable</th>
+                <th>Frecuencia</th>
+                <th>Estado Último Registro</th>
+                <th>Progreso checklist</th>
+                <th style="width: 10rem">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-p>
+            <tr>
+                <td>
+                    <a [routerLink]="['/programa-residuos/programas', p.id]" class="text-primary font-medium no-underline">
+                        {{ p.nombre }}
+                    </a>
+                </td>
+                <td>{{ p.responsable }}</td>
+                <td>{{ labelFrecuencia(p.frecuencia) }}</td>
+                <td>
+                    <p-tag [value]="labelEstado(programaEstado(p))" [severity]="severityEstado(programaEstado(p))" />
+                </td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <p-progressbar [value]="progreso(p)" [showValue]="false" class="flex-1" styleClass="h-2" />
+                        <span class="text-sm text-muted-color">{{ progreso(p) }}%</span>
+                    </div>
+                </td>
+                <td>
+                    <p-button icon="pi pi-eye" [rounded]="true" [text]="true" (onClick)="verDetalle(p.id)" />
+                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" [routerLink]="['/programa-residuos/programas', p.id, 'editar']" />
+                    <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="eliminar(p.id, p.nombre)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="6" class="text-center text-muted-color py-6">No hay programas registrados.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+

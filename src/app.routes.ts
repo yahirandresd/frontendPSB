@@ -17,7 +17,6 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
-            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') },
                         // ── Módulo control de plagas ──
             {
                 path: 'control-plagas',
@@ -25,7 +24,8 @@ export const appRoutes: Routes = [
                     import('./app/features/programa-plagas/control-plagas.routes')
                         .then(m => m.CONTROL_PLAGAS_ROUTES)
             },
-            { path: 'limpieza', loadChildren: () => import('./app/features/limpieza/limpieza.routes') }
+            { path: 'limpieza', loadChildren: () => import('./app/features/limpieza/limpieza.routes') },
+            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') }
         ]
     },
     { path: 'landing', component: Landing },
