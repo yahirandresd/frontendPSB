@@ -152,6 +152,35 @@ import { RouterModule } from '@angular/router';
         .menu-list a:active {
             transform: scale(0.98);
         }
+
+        /* =========================================
+           MODO OSCURO
+           ========================================= */
+        :host-context(html.app-dark) .menu-list a {
+            color: rgba(255, 255, 255, 0.87);
+        }
+
+        :host-context(html.app-dark) .menu-list a:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        :host-context(html.app-dark) .menu-list a:hover i,
+        :host-context(html.app-dark) .menu-list a:hover span {
+            color: #ffffff;
+        }
+
+        :host-context(html.app-dark) .menu-list a.active {
+            background-color: #1d3a6e !important;
+            color: #60a5fa !important;
+        }
+
+        :host-context(html.app-dark) .menu-list a.active::before {
+            background-color: #60a5fa !important;
+        }
+
+        :host-context(html.app-dark) .menu-list a i {
+            color: rgba(255, 255, 255, 0.6);
+        }
     `]
 })
 export class AppMenu { }

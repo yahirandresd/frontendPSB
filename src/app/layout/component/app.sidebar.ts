@@ -142,25 +142,25 @@ import { RippleModule } from 'primeng/ripple';
         /* =========================================
            MODO OSCURO
            ========================================= */
-        :host-context(.app-dark) .layout-sidebar {
-            background: #1e1e1e;
-            border-right: 1px solid #3f3f46;
+        :host-context(html.app-dark) .layout-sidebar {
+            background: #1e1e1e !important;
+            border-right: 1px solid #3f3f46 !important;
         }
 
-        :host-context(.app-dark) .sidebar-header {
-            border-bottom-color: #3f3f46;
+        :host-context(html.app-dark) .sidebar-header {
+            border-bottom-color: #3f3f46 !important;
         }
 
-        :host-context(.app-dark) .logo-icon {
-            background: #1d3a6e;
+        :host-context(html.app-dark) .logo-icon {
+            background: #1d3a6e !important;
         }
 
-        :host-context(.app-dark) .main-title {
-            color: rgba(255, 255, 255, 0.87);
+        :host-context(html.app-dark) .main-title {
+            color: rgba(255, 255, 255, 0.87) !important;
         }
 
-        :host-context(.app-dark) .subtitle {
-            color: rgba(255, 255, 255, 0.5);
+        :host-context(html.app-dark) .subtitle {
+            color: rgba(255, 255, 255, 0.5) !important;
         }
 
     `]
