@@ -1,0 +1,81 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Programa ID -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                ID del Programa PSB <span class="text-red-500">*</span>
+            </label>
+            <input pInputText formControlName="programaId" placeholder="UUID del programa PSB" class="w-full" />
+            @if (f['programaId'].touched && f['programaId'].errors?.['required']) {
+                <small class="text-red-500">El ID del programa es obligatorio</small>
+            }
+            @if (programa) {
+                <small class="text-muted-color">No se puede modificar una vez creado</small>
+            }
+        </div>
+
+        <!-- Equipo / Área -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                ID Equipo / Área
+            </label>
+            <input pInputText formControlName="equipoAreaId" placeholder="UUID del equipo o área (opcional)" class="w-full" />
+        </div>
+
+        <!-- Objetivo -->
+        <div class="flex flex-col gap-1 md:col-span-2">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Objetivo <span class="text-red-500">*</span>
+            </label>
+            <textarea
+                pTextarea
+                formControlName="objetivo"
+                placeholder="Describir el objetivo del programa de limpieza..."
+                rows="3"
+                class="w-full resize-none">
+            </textarea>
+            @if (f['objetivo'].touched && f['objetivo'].errors?.['required']) {
+                <small class="text-red-500">El objetivo es obligatorio</small>
+            }
+        </div>
+
+        <!-- Alcance -->
+        <div class="flex flex-col gap-1 md:col-span-2">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Alcance <span class="text-red-500">*</span>
+            </label>
+            <textarea
+                pTextarea
+                formControlName="alcance"
+                placeholder="Describir el alcance del programa de limpieza..."
+                rows="3"
+                class="w-full resize-none">
+            </textarea>
+            @if (f['alcance'].touched && f['alcance'].errors?.['required']) {
+                <small class="text-red-500">El alcance es obligatorio</small>
+            }
+        </div>
+
+        <!-- Procedimiento general -->
+        <div class="flex flex-col gap-1 md:col-span-2">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Procedimiento general
+            </label>
+            <textarea
+                pTextarea
+                formControlName="procedimientoGeneral"
+                placeholder="Describir el procedimiento general (opcional)..."
+                rows="4"
+                class="w-full resize-none">
+            </textarea>
+        </div>
+
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <button pButton type="submit" [label]="programa ? 'Guardar cambios' : 'Crear programa'" icon="pi pi-check"></button>
+    </div>
+
+</form>
