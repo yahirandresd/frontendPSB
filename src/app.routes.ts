@@ -21,7 +21,7 @@ export const appRoutes: Routes = [
                 path: 'registros',
                 loadChildren: () =>
                     import('./app/features/registros/registros.router').then(m => m.REGISTROS_ROUTES)
-            }
+            },
                         // ── Módulo control de plagas ──
             {
                 path: 'control-plagas',
