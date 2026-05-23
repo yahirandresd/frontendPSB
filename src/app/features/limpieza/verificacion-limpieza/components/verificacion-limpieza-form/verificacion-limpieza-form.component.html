@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Verificado por <span class="text-red-500">*</span></label>
+            <input pInputText formControlName="verificadoPor" placeholder="Nombre del verificador" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Fecha <span class="text-red-500">*</span></label>
+            <input pInputText formControlName="fecha" type="date" />
+        </div>
+
+        <div class="flex flex-col gap-1 md:col-span-2">
+            <label class="font-medium text-sm">Resultado <span class="text-red-500">*</span></label>
+            <p-select formControlName="resultado" [options]="resultadoOpciones" optionLabel="label" optionValue="value" placeholder="Selecciona resultado" />
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Observaciones</label>
+        <textarea pTextarea formControlName="observaciones" rows="3" placeholder="Observaciones de la verificación..."></textarea>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Acción correctiva</label>
+        <textarea pTextarea formControlName="accionCorrectiva" rows="3" placeholder="Acción correctiva si aplica..."></textarea>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button
+            type="submit"
+            [label]="verificacion ? 'Actualizar' : 'Guardar'"
+            [disabled]="form.invalid" />
+    </div>
+</form>
