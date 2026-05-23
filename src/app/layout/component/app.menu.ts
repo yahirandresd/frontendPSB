@@ -22,6 +22,27 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
+                <a routerLink="/programa-agua" routerLinkActive="active">
+                    <i class="fa-solid fa-droplet menu-icon-blue"></i>
+                    <span>Programa Agua</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/programas" routerLinkActive="active">
+                    <i class="pi pi-list"></i>
+                    <span>Programas</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/registro" routerLinkActive="active">
+                    <i class="pi pi-book"></i>
+                    <span>Registro</span>
+                </a>
+            </li>
+
+            <li>
                 <a routerLink="/plan" routerLinkActive="active">
                     <i class="pi pi-check-square"></i>
                     <span>Mi Plan de Saneamiento</span>
@@ -122,6 +143,11 @@ import { RouterModule } from '@angular/router';
             color: #2563eb;
         }
 
+        /* ICONO AZUL PERMANENTE */
+        .menu-list a i.menu-icon-blue {
+            color: #2563eb;
+        }
+
         /* TEXTO EN HOVER */
         .menu-list a:hover span {
             color: #111827;
@@ -151,35 +177,6 @@ import { RouterModule } from '@angular/router';
         /* EFECTO SUAVE DE CLICK */
         .menu-list a:active {
             transform: scale(0.98);
-        }
-
-        /* =========================================
-           MODO OSCURO
-           ========================================= */
-        :host-context(html.app-dark) .menu-list a {
-            color: rgba(255, 255, 255, 0.87);
-        }
-
-        :host-context(html.app-dark) .menu-list a:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        :host-context(html.app-dark) .menu-list a:hover i,
-        :host-context(html.app-dark) .menu-list a:hover span {
-            color: #ffffff;
-        }
-
-        :host-context(html.app-dark) .menu-list a.active {
-            background-color: #1d3a6e !important;
-            color: #60a5fa !important;
-        }
-
-        :host-context(html.app-dark) .menu-list a.active::before {
-            background-color: #60a5fa !important;
-        }
-
-        :host-context(html.app-dark) .menu-list a i {
-            color: rgba(255, 255, 255, 0.6);
         }
     `]
 })

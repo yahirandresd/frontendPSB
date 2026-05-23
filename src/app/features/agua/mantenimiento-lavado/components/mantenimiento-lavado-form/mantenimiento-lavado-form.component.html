@@ -1,0 +1,62 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ mantenimientoLavado ? 'Editar' : 'Nuevo' }} Mantenimiento Lavado
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Fuente Agua</label>
+                <p-select name="fuenteAguaId" [(ngModel)]="model.fuenteAguaId" [options]="fuenteAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Programada</label>
+                <p-datepicker name="fechaProgramada" [(ngModel)]="model.fechaProgramada" [showIcon]="true" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Ejecución</label>
+                <p-datepicker name="fechaEjecucion" [(ngModel)]="model.fechaEjecucion" [showIcon]="true" class="w-full" />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Método Limpieza</label>
+                <input pInputText name="metodoLimpieza" [(ngModel)]="model.metodoLimpieza" class="w-full" required />
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Observaciones</label>
+                <textarea pTextarea name="observaciones" [(ngModel)]="model.observaciones" rows="3" class="w-full"></textarea>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Estado</label>
+                <p-select name="estado" [(ngModel)]="model.estado" [options]="estadoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label class="block font-medium mb-1">Foto de evidencia</label>
+            <p-fileUpload
+                [url]="uploadUrl"
+                name="file"
+                accept="image/*"
+                maxFileSize="5000000"
+                chooseLabel="Seleccionar foto"
+                [auto]="false"
+                mode="basic"
+                (onUpload)="onUpload($event)">
+            </p-fileUpload>
+            @if (model.evidenciaFoto) {
+                <div class="mt-2">
+                    <img [src]="model.evidenciaFoto" class="w-32 h-32 object-cover rounded-lg shadow-sm" />
+                </div>
+            }
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>
