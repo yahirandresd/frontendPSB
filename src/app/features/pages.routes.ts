@@ -11,7 +11,7 @@ export default [
     {
         path: 'control-plagas',
         loadChildren: () =>
-            import('./control-plagas/control-plagas.routes')
+            import('./programa-plagas/control-plagas.routes')
                 .then(m => m.CONTROL_PLAGAS_ROUTES),
     }
 

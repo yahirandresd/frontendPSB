@@ -1,0 +1,58 @@
+<div class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Año de Vigencia <span class="text-red-500">*</span></label>
+            <p-inputnumber [(ngModel)]="form.anioVigencia" [useGrouping]="false"
+                           placeholder="2025" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Responsable <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.responsable" placeholder="Nombre del responsable" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Frecuencia de Control</label>
+            <p-select [(ngModel)]="form.frecuenciaControl" [options]="frecuencias"
+                      placeholder="Seleccione la frecuencia" styleClass="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Método de Control</label>
+            <p-select [(ngModel)]="form.metodoControl" [options]="metodos"
+                      placeholder="Seleccione el método" styleClass="w-full" />
+        </div>
+    </div>
+
+    <!-- Actividades -->
+    <div class="border border-surface-200 dark:border-surface-700 rounded-lg p-4">
+        <h6 class="font-semibold mb-3"><i class="pi pi-calendar mr-2"></i>Actividades</h6>
+        <div class="flex gap-2 mb-3">
+            <p-select [(ngModel)]="nuevaActividad.mes" [options]="meses"
+                      optionLabel="label" optionValue="value"
+                      placeholder="Mes" styleClass="w-36" />
+            <input pInputText [(ngModel)]="nuevaActividad.descripcion"
+                   placeholder="Descripción de la actividad" class="flex-1" />
+            <p-button icon="pi pi-plus" severity="secondary" [outlined]="true" (onClick)="agregarActividad()" />
+        </div>
+        @if (form.actividades?.length) {
+            <div class="flex flex-col gap-2">
+                @for (act of form.actividades; track act.id) {
+                    <div class="flex items-center justify-between bg-surface-50 dark:bg-surface-800 rounded p-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-primary w-16">{{ getNombreMes(act.mes) }}</span>
+                            <span class="text-sm">{{ act.descripcion }}</span>
+                        </div>
+                        <p-button icon="pi pi-times" severity="danger" [text]="true" size="small"
+                                  (onClick)="quitarActividad(act.id)" />
+                    </div>
+                }
+            </div>
+        } @else {
+            <p class="text-sm text-muted-color text-center py-2">Sin actividades añadidas</p>
+        }
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando" (onClick)="onGuardar()" />
+    </div>
+</div>

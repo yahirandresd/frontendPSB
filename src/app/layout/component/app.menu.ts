@@ -1,14 +1,23 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
+    imports: [RouterModule],
     template: `
         <ul class="menu-list">
             <li>
                 <a routerLink="/dashboard" routerLinkActive="active">
                     <i class="pi pi-home"></i>
                     <span>Inicio</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/configuracion-inicial" routerLinkActive="active">
+                    <i class="pi pi-cog"></i>
+                    <span>Configuración Inicial</span>
                 </a>
             </li>
 
@@ -37,6 +46,12 @@ import { Component } from '@angular/core';
                 <a routerLink="/reportes" routerLinkActive="active">
                     <i class="pi pi-chart-bar"></i>
                     <span>Reportes</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/control-plagas" routerLinkActive="active">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span>Control de Plagas</span>
                 </a>
             </li>
         </ul>

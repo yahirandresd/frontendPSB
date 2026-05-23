@@ -1,0 +1,91 @@
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-search mr-2"></i>Diagnóstico de Plagas
+        </h5>
+        <p-button label="Nuevo Diagnóstico" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="diagnosticos" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Fecha</th>
+                <th>Nivel de Riesgo</th>
+                <th>Áreas Evaluadas</th>
+                <th>Plagas Identificadas</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-d>
+            <tr>
+                <td>{{ d.fecha | date:'dd/MM/yyyy' }}</td>
+                <td><p-tag [value]="d.nivelRiesgo" [severity]="getSeveridadRiesgo(d.nivelRiesgo)" /></td>
+                <td>{{ d.areasEvaluadas?.length ?? 0 }} área(s)</td>
+                <td>{{ d.plagasIdentificadas?.length ?? 0 }} plaga(s)</td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(d)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(d)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(d)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="5" class="text-center text-muted-color py-6">No hay diagnósticos registrados.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Dialog formulario -->
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="diagnosticoSeleccionado ? 'Editar Diagnóstico' : 'Nuevo Diagnóstico'"
+          [modal]="true" [style]="{ width: '600px' }" [closable]="true">
+    <app-diagnostico-plagas-form
+        [diagnostico]="diagnosticoSeleccionado"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<!-- Dialog detalle -->
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle del Diagnóstico"
+          [modal]="true" [style]="{ width: '520px' }">
+    @if (diagnosticoSeleccionado) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">Fecha</span>
+            <span class="font-medium">{{ diagnosticoSeleccionado.fecha | date:'dd/MM/yyyy' }}</span>
+
+            <span class="text-muted-color">Nivel de Riesgo</span>
+            <p-tag [value]="diagnosticoSeleccionado.nivelRiesgo"
+                   [severity]="getSeveridadRiesgo(diagnosticoSeleccionado.nivelRiesgo)" />
+
+            <span class="text-muted-color">Áreas Evaluadas</span>
+            <div class="flex flex-wrap gap-1">
+                @for (area of diagnosticoSeleccionado.areasEvaluadas; track area) {
+                    <p-chip [label]="area" />
+                }
+            </div>
+
+            <span class="text-muted-color">Plagas Identificadas</span>
+            <div class="flex flex-wrap gap-1">
+                @for (plaga of diagnosticoSeleccionado.plagasIdentificadas; track plaga) {
+                    <p-chip [label]="plaga" />
+                }
+            </div>
+
+            <span class="text-muted-color">Observaciones</span>
+            <span>{{ diagnosticoSeleccionado.observaciones || '—' }}</span>
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />
