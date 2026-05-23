@@ -1,0 +1,98 @@
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-map-marker mr-2"></i>Áreas de Control de Plagas
+        </h5>
+        <p-button label="Nueva Área" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <!-- Tabla de áreas -->
+    <p-table
+        [value]="areas"
+        [loading]="cargando"
+        [paginator]="true"
+        [rows]="10"
+        styleClass="p-datatable-gridlines"
+        responsiveLayout="scroll">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Nivel de Riesgo</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-area>
+            <tr>
+                <td class="font-medium">{{ area.nombre }}</td>
+                <td class="text-muted-color">{{ area.descripcion || '—' }}</td>
+                <td>
+                    <p-tag [value]="area.nivelRiesgo | titlecase"
+                           [severity]="getSeveridadRiesgo(area.nivelRiesgo)" />
+                </td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(area)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(area)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(area)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="text-center text-muted-color py-6">
+                    No hay áreas registradas para este programa.
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!-- Dialog formulario -->
+<p-dialog
+    [(visible)]="mostrarFormulario"
+    [header]="areaSeleccionada ? 'Editar Área' : 'Nueva Área'"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [closable]="true">
+    <app-area-plagas-form
+        [area]="areaSeleccionada"
+        [programaPlagasId]="programaPlagasId"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<!-- Dialog detalle -->
+<p-dialog
+    [(visible)]="mostrarDetalle"
+    header="Detalle del Área"
+    [modal]="true"
+    [style]="{ width: '450px' }">
+    @if (areaSeleccionada) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">Nombre</span>
+            <span class="font-medium">{{ areaSeleccionada.nombre }}</span>
+
+            <span class="text-muted-color">Descripción</span>
+            <span>{{ areaSeleccionada.descripcion || '—' }}</span>
+
+            <span class="text-muted-color">Nivel de Riesgo</span>
+            <p-tag [value]="areaSeleccionada.nivelRiesgo | titlecase"
+                   [severity]="getSeveridadRiesgo(areaSeleccionada.nivelRiesgo)" />
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true"
+                  (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />

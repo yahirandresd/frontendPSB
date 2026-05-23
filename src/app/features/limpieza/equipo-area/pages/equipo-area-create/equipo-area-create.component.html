@@ -1,0 +1,10 @@
+<p-toast />
+
+<div class="card">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo equipo / área</h2>
+        <p class="text-muted-color mt-1">Registra un nuevo equipo, área o utensilio</p>
+    </div>
+
+    <app-equipo-area-form (formSubmit)="onFormSubmit($any($event))" />
+</div>

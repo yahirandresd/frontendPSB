@@ -1,0 +1,32 @@
+<div class="flex flex-col gap-4">
+    <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">NIT <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.nit" placeholder="NIT de la empresa" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Nombre de la Empresa <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.nombreEmpresa" placeholder="Razón social" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">N° Certificado Sanitario <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.numCertSanitario" placeholder="Número del certificado" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Fecha Vencimiento Certificado</label>
+            <input pInputText type="date" [(ngModel)]="form.fechaVencCert" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Registro SDS</label>
+            <input pInputText [(ngModel)]="form.registroSDS" placeholder="Número de registro SDS" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Teléfono de Contacto</label>
+            <input pInputText [(ngModel)]="form.telefonoContacto" placeholder="+57 300 0000000" class="w-full" />
+        </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando" (onClick)="onGuardar()" />
+    </div>
+</div>

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router'; 
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports : [RouterModule],
+    imports: [RouterModule],
     template: `
         <ul class="menu-list">
             <li>
@@ -15,9 +15,34 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
+                <a routerLink="/configuracion-inicial" routerLinkActive="active">
+                    <i class="pi pi-cog"></i>
+                    <span>Configuración Inicial</span>
+                </a>
+            </li>
+
+            <li>
                 <a routerLink="/plan" routerLinkActive="active">
                     <i class="pi pi-check-square"></i>
                     <span>Mi Plan de Saneamiento</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/programa-residuos" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }">
+                    <i class="pi pi-box"></i>
+                    <span>Programa Residuos</span>
+                </a>
+                <a routerLink="/limpieza/programas" routerLinkActive="active">
+                    <i class="pi pi-sparkles"></i>
+                    <span>Programas de Limpieza</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/limpieza/equipos" routerLinkActive="active">
+                    <i class="pi pi-wrench"></i>
+                    <span>Equipos y Áreas</span>
                 </a>
             </li>
 
@@ -39,6 +64,12 @@ import { RouterModule } from '@angular/router';
                 <a routerLink="/reportes" routerLinkActive="active">
                     <i class="pi pi-chart-bar"></i>
                     <span>Reportes</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/control-plagas" routerLinkActive="active">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span>Control de Plagas</span>
                 </a>
             </li>
         </ul>
