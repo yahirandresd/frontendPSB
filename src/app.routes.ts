@@ -17,11 +17,6 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
-            {
-                path: 'registros',
-                loadChildren: () =>
-                    import('./app/features/registros/registros.router').then(m => m.REGISTROS_ROUTES)
-            },
                         // ── Módulo control de plagas ──
             {
                 path: 'control-plagas',

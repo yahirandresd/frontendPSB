@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ registroAgua ? 'Editar' : 'Nuevo' }} Registro Agua
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Registro</label>
+                <input pInputText name="registroId" [(ngModel)]="model.registroId" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Programa Agua</label>
+                <p-select name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Tipo Actividad</label>
+                <p-select name="tipoActividad" [(ngModel)]="model.tipoActividad" [options]="tipoActividadOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Resultado General</label>
+                <p-select name="resultadoGeneral" [(ngModel)]="model.resultadoGeneral" [options]="resultadoGeneralOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>

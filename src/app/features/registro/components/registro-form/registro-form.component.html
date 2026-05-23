@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ registro ? 'Editar' : 'Nuevo' }} Registro
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="fecha" class="font-medium">Fecha</label>
+            <input id="fecha" pInputText type="date" [(ngModel)]="model.fecha" name="fecha" class="w-full" required />
+            @if (submitted && !model.fecha) { <small class="text-red-500">La fecha es requerida</small> }
+        </div>
+        <div class="col-span-12 md:col-span-3 flex flex-col gap-2">
+            <label for="horaInicio" class="font-medium">Hora Inicio</label>
+            <input id="horaInicio" pInputText type="time" [(ngModel)]="model.horaInicio" name="horaInicio" class="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-3 flex flex-col gap-2">
+            <label for="horaFin" class="font-medium">Hora Fin</label>
+            <input id="horaFin" pInputText type="time" [(ngModel)]="model.horaFin" name="horaFin" class="w-full" />
+        </div>
+        <div class="col-span-12 flex flex-col gap-2">
+            <label for="observaciones" class="font-medium">Observaciones</label>
+            <textarea id="observaciones" pInputTextarea [(ngModel)]="model.observaciones" name="observaciones" rows="3" class="w-full"></textarea>
+        </div>
+        <div class="col-span-12 flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>
