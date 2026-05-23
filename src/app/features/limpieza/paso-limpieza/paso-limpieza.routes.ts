@@ -6,5 +6,6 @@ import { PasoLimpiezaEditComponent } from './pages/paso-limpieza-edit/paso-limpi
 export default [
     { path: '',           component: PasoLimpiezaListComponent   },
     { path: 'crear',      component: PasoLimpiezaCreateComponent },
-    { path: ':id/editar', component: PasoLimpiezaEditComponent   }
+    { path: ':id/editar', component: PasoLimpiezaEditComponent   },
+    { path: ':pasoId/productos', loadChildren: () => import('../paso-limpieza-pq/paso-limpieza-pq.routes') }
 ] as Routes;
