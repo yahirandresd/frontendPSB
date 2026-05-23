@@ -1,0 +1,63 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        Datos de la Empresa
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
+
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="nombre" class="font-medium">Nombre de la empresa *</label>
+            <input id="nombre" pInputText formControlName="nombre" class="w-full" placeholder="Razón social" />
+            @if (f['nombre'].touched && f['nombre'].invalid) {
+                <small class="text-red-500">El nombre es requerido</small>
+            }
+        </div>
+
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="nit" class="font-medium">NIT *</label>
+            <input id="nit" pInputText formControlName="nit" class="w-full" placeholder="000000000-0" />
+            @if (f['nit'].touched && f['nit'].invalid) {
+                <small class="text-red-500">El NIT es requerido</small>
+            }
+        </div>
+
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="tipo_negocio" class="font-medium">Tipo de negocio *</label>
+            <input id="tipo_negocio" pInputText formControlName="tipo_negocio" class="w-full" placeholder="Ej: Empresa láctea" />
+            @if (f['tipo_negocio'].touched && f['tipo_negocio'].invalid) {
+                <small class="text-red-500">El tipo de negocio es requerido</small>
+            }
+        </div>
+
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="representante" class="font-medium">Representante legal *</label>
+            <input id="representante" pInputText formControlName="representante" class="w-full" placeholder="Nombre completo" />
+            @if (f['representante'].touched && f['representante'].invalid) {
+                <small class="text-red-500">El representante es requerido</small>
+            }
+        </div>
+
+        <div class="col-span-12 flex flex-col gap-2">
+            <label for="direccion" class="font-medium">Dirección *</label>
+            <input id="direccion" pInputText formControlName="direccion" class="w-full" placeholder="Dirección completa" />
+            @if (f['direccion'].touched && f['direccion'].invalid) {
+                <small class="text-red-500">La dirección es requerida</small>
+            }
+        </div>
+
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="registro_sanitario" class="font-medium">Registro sanitario de funcionamiento</label>
+            <input id="registro_sanitario" pInputText formControlName="registro_sanitario_funcionamiento" class="w-full" placeholder="Número de registro (opcional)" />
+        </div>
+
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="resolucion_invima" class="font-medium">Resolución INVIMA</label>
+            <input id="resolucion_invima" pInputText formControlName="resolucion_invima" class="w-full" placeholder="Número de resolución (opcional)" />
+        </div>
+
+        <div class="col-span-12 flex justify-end mt-4">
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+
+    </form>
+</div>
