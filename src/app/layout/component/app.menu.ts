@@ -36,6 +36,13 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
+                <a routerLink="/limpieza/equipos" routerLinkActive="active">
+                    <i class="pi pi-wrench"></i>
+                    <span>Equipos y Áreas</span>
+                </a>
+            </li>
+
+            <li>
                 <a routerLink="/registros" routerLinkActive="active">
                     <i class="pi pi-folder"></i>
                     <span>Registros diarios</span>
