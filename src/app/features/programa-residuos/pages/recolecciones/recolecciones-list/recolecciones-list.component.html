@@ -1,0 +1,67 @@
+<p-toast />
+
+<div class="card">
+    <h3 class="text-xl font-semibold mt-0 mb-4">Gestión de recolecciones</h3>
+
+    <p-table [value]="recolecciones()" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="id">
+        <ng-template #header>
+            <tr>
+                <th>Fecha</th>
+                <th>Programa</th>
+                <th>Tipo Residuo</th>
+                <th>Cantidad (kg)</th>
+                <th>Responsable</th>
+                <th>Vehículo</th>
+                <th>Observaciones</th>
+                <th>Estado Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-r>
+            <tr>
+                <td>{{ r.fecha }}</td>
+                <td>{{ r.programaNombre }}</td>
+                <td>{{ r.tipoResiduoName }}</td>
+                <td>{{ r.cantidad_recolectada }} kg</td>
+                <td>{{ r.responsable }}</td>
+                <td>{{ r.vehiculo }}</td>
+                <td>{{ r.observaciones }}</td>
+                <td><p-tag [value]="labelEstado(r.estado)" [severity]="severityEstado(r.estado)" /></td>
+                <td>
+                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="abrirEditar(r)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr><td colspan="9" class="text-center py-6 text-muted-color">Sin recolecciones registradas.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog
+    header="Actualizar Recolección"
+    [visible]="editDialog()"
+    (visibleChange)="editDialog.set($event)"
+    [modal]="true"
+    [style]="{ width: '28rem' }"
+>
+    <div class="flex flex-col gap-4 mt-2">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Cantidad Recolectada (kg)</label>
+            <input pInputText type="number" [(ngModel)]="editForm.cantidad_recolectada" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Responsable</label>
+            <input pInputText [(ngModel)]="editForm.responsable" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Observaciones / Detalles</label>
+            <textarea pTextarea [(ngModel)]="editForm.observaciones" rows="3" class="w-full"></textarea>
+        </div>
+    </div>
+    <ng-template #footer>
+        <p-button label="Cancelar" severity="secondary" (onClick)="editDialog.set(false)" />
+        <p-button label="Guardar" (onClick)="guardar()" />
+    </ng-template>
+</p-dialog>
+
