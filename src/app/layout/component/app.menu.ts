@@ -23,7 +23,9 @@ import { RouterModule } from '@angular/router';
 
             <li>
                 <a routerLink="/programa-agua" routerLinkActive="active">
-                    <i class="fa-solid fa-droplet menu-icon-blue"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="menu-svg-icon">
+                        <path d="M12 2C12 2 4 10.5 4 15.5C4 19.64 7.58 23 12 23C16.42 23 20 19.64 20 15.5C20 10.5 12 2 12 2Z"/>
+                    </svg>
                     <span>Programa Agua</span>
                 </a>
             </li>
@@ -126,7 +128,8 @@ import { RouterModule } from '@angular/router';
         }
 
         /* ICONO */
-        .menu-list a i {
+        .menu-list a i,
+        .menu-list a .menu-svg-icon {
             font-size: 1rem;
             transition: all 0.25s ease;
         }
@@ -138,7 +141,8 @@ import { RouterModule } from '@angular/router';
         }
 
         /* ICONO EN HOVER */
-        .menu-list a:hover i {
+        .menu-list a:hover i,
+        .menu-list a:hover .menu-svg-icon {
             transform: scale(1.2);
             color: #2563eb;
         }
