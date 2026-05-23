@@ -1,0 +1,24 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">ID del paso <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="pasoId" placeholder="ID del paso de limpieza" [attr.disabled]="item ? true : null" />
+    </div>
+
+    <div class="flex items-center gap-2">
+        <p-checkbox formControlName="completado" [binary]="true" inputId="completado" />
+        <label for="completado" class="font-medium text-sm cursor-pointer">Paso completado</label>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Observaciones</label>
+        <textarea pTextarea formControlName="observaciones" rows="3" placeholder="Observaciones del paso..."></textarea>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button
+            type="submit"
+            [label]="item ? 'Actualizar' : 'Guardar'"
+            [disabled]="form.invalid" />
+    </div>
+</form>

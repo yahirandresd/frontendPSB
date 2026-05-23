@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
+    imports: [RouterModule],
     template: `
         <ul class="menu-list">
             <li>
@@ -13,9 +15,30 @@ import { Component } from '@angular/core';
             </li>
 
             <li>
+                <a routerLink="/configuracion-inicial" routerLinkActive="active">
+                    <i class="pi pi-cog"></i>
+                    <span>Configuración Inicial</span>
+                </a>
+            </li>
+
+            <li>
                 <a routerLink="/plan" routerLinkActive="active">
                     <i class="pi pi-check-square"></i>
                     <span>Mi Plan de Saneamiento</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/limpieza/programas" routerLinkActive="active">
+                    <i class="pi pi-sparkles"></i>
+                    <span>Programas de Limpieza</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/limpieza/equipos" routerLinkActive="active">
+                    <i class="pi pi-wrench"></i>
+                    <span>Equipos y Áreas</span>
                 </a>
             </li>
 
