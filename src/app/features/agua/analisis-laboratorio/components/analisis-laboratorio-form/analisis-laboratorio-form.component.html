@@ -1,0 +1,116 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ analisisLaboratorio ? 'Editar' : 'Nuevo' }} Análisis Laboratorio
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Fuente Agua</label>
+                <p-select name="fuenteAguaId" [(ngModel)]="model.fuenteAguaId" [options]="fuenteAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">N° Certificado</label>
+                <input pInputText name="numeroCertificado" [(ngModel)]="model.numeroCertificado" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Laboratorio Certificado</label>
+                <input pInputText name="laboratorioCertificado" [(ngModel)]="model.laboratorioCertificado" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Muestreo</label>
+                <p-datepicker name="fechaMuestreo" [(ngModel)]="model.fechaMuestreo" [showIcon]="true" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Entrega Resultado</label>
+                <p-datepicker name="fechaEntregaResultado" [(ngModel)]="model.fechaEntregaResultado" [showIcon]="true" class="w-full" />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Responsable Muestra</label>
+                <input pInputText name="responsableMuestra" [(ngModel)]="model.responsableMuestra" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Punto Muestreo</label>
+                <input pInputText name="puntoMuestreo" [(ngModel)]="model.puntoMuestreo" class="w-full" required />
+            </div>
+        </div>
+
+        <div class="text-surface-900 dark:text-surface-0 text-lg font-semibold mt-6 mb-3">Parámetros Fisicoquímicos</div>
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Cloro Residual (mg/L)</label>
+                <p-inputNumber name="cloroResidual" [(ngModel)]="model.cloroResidual" [min]="0" [max]="5" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">pH</label>
+                <p-inputNumber name="ph" [(ngModel)]="model.ph" [min]="0" [max]="14" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="1" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Turbiedad (UNT)</label>
+                <p-inputNumber name="turbiedad" [(ngModel)]="model.turbiedad" [min]="0" [max]="100" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Color Aparente (UPC)</label>
+                <p-inputNumber name="colorAparente" [(ngModel)]="model.colorAparente" [min]="0" [max]="500" [step]="0.1" [minFractionDigits]="0" [maxFractionDigits]="0" class="w-full" required />
+            </div>
+        </div>
+
+        <div class="text-surface-900 dark:text-surface-0 text-lg font-semibold mt-6 mb-3">Parámetros Microbiológicos</div>
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-3 flex items-center gap-2 mt-6">
+                <p-checkbox name="coliformesTotalesPresentes" [(ngModel)]="model.coliformesTotalesPresentes" [binary]="true" inputId="coliformesTotalesPresentes" />
+                <label for="coliformesTotalesPresentes">Coliformes Totales (+)</label>
+            </div>
+
+            <div class="col-span-3 flex items-center gap-2 mt-6">
+                <p-checkbox name="eColiPresente" [(ngModel)]="model.eColiPresente" [binary]="true" inputId="eColiPresente" />
+                <label for="eColiPresente">E. Coli (+)</label>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Mesófilos (UFC/mL)</label>
+                <p-inputNumber name="mesofilos" [(ngModel)]="model.mesofilos" [min]="0" class="w-full" />
+            </div>
+        </div>
+
+        <div class="text-surface-900 dark:text-surface-0 text-lg font-semibold mt-6 mb-3">Documentación</div>
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Link Documento PDF (certificado)</label>
+                <input pInputText name="linkDocumentoPdf" [(ngModel)]="model.linkDocumentoPdf" class="w-full" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label class="block font-medium mb-1">Foto de evidencia</label>
+            <p-fileUpload
+                [url]="uploadUrl"
+                name="file"
+                accept="image/*"
+                maxFileSize="5000000"
+                chooseLabel="Seleccionar foto"
+                [auto]="false"
+                mode="basic"
+                (onUpload)="onUpload($event)">
+            </p-fileUpload>
+            @if (model.fotoEvidencia) {
+                <div class="mt-2">
+                    <img [src]="model.fotoEvidencia" class="w-32 h-32 object-cover rounded-lg shadow-sm" />
+                </div>
+            }
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>

@@ -1,0 +1,48 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ fuenteAgua ? 'Editar' : 'Nuevo' }} Fuente Agua
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Programa Agua</label>
+                <p-select name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Nombre</label>
+                <input pInputText name="nombre" [(ngModel)]="model.nombre" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Tipo</label>
+                <p-select name="tipo" [(ngModel)]="model.tipo" [options]="tipoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Proveedor</label>
+                <input pInputText name="proveedor" [(ngModel)]="model.proveedor" class="w-full" />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Ubicación</label>
+                <input pInputText name="ubicacion" [(ngModel)]="model.ubicacion" class="w-full" />
+            </div>
+
+            <div class="col-span-3 flex items-center gap-2 mt-6">
+                <p-checkbox name="requiereTanque" [(ngModel)]="model.requiereTanque" [binary]="true" inputId="requiereTanque" />
+                <label for="requiereTanque">Requiere Tanque</label>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Estado</label>
+                <p-select name="estado" [(ngModel)]="model.estado" [options]="estadoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>
