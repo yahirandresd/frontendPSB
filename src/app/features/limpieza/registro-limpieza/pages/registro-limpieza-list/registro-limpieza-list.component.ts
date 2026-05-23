@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -15,7 +16,7 @@ type Severity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast
 @Component({
     selector: 'app-registro-limpieza-list',
     standalone: true,
-    imports: [TableModule, ButtonModule, ToastModule, ConfirmDialogModule, TagModule],
+    imports: [TableModule, ButtonModule, ToastModule, ConfirmDialogModule, TagModule, SlicePipe],
     providers: [MessageService, ConfirmationService],
     templateUrl: './registro-limpieza-list.component.html',
     styleUrls: ['./registro-limpieza-list.component.scss']

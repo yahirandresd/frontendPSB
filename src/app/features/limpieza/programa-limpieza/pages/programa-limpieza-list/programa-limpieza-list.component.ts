@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +13,7 @@ import { ProgramaLimpieza } from '../../models/programa-limpieza.interface';
 @Component({
     selector: 'app-programa-limpieza-list',
     standalone: true,
-    imports: [TableModule, ButtonModule, ConfirmDialogModule, ToastModule],
+    imports: [TableModule, ButtonModule, ConfirmDialogModule, ToastModule, SlicePipe],
     providers: [ConfirmationService, MessageService],
     templateUrl: './programa-limpieza-list.component.html',
     styleUrls: ['./programa-limpieza-list.component.scss']

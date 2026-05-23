@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +13,7 @@ import { PasoLimpieza } from '../../models/paso-limpieza.interface';
 @Component({
     selector: 'app-paso-limpieza-list',
     standalone: true,
-    imports: [TableModule, ButtonModule, ConfirmDialogModule, ToastModule],
+    imports: [TableModule, ButtonModule, ConfirmDialogModule, ToastModule, SlicePipe],
     providers: [ConfirmationService, MessageService],
     templateUrl: './paso-limpieza-list.component.html',
     styleUrls: ['./paso-limpieza-list.component.scss']
