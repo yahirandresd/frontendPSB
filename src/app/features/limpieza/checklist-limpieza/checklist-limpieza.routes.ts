@@ -6,5 +6,6 @@ import { ChecklistLimpiezaEditComponent } from './pages/checklist-limpieza-edit/
 export default [
     { path: '',           component: ChecklistLimpiezaListComponent   },
     { path: 'crear',      component: ChecklistLimpiezaCreateComponent },
-    { path: ':id/editar', component: ChecklistLimpiezaEditComponent   }
+    { path: ':id/editar', component: ChecklistLimpiezaEditComponent   },
+    { path: ':checklistId/mediciones', loadChildren: () => import('../medicion-paso/medicion-paso.routes') }
 ] as Routes;
