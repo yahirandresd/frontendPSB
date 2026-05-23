@@ -1,12 +1,11 @@
 <div>
-    <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0 mb-6">Confirmar y Crear Plan PSB</h5>
+    <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0 mb-6">Confirmar datos de la empresa</h5>
 
-    <!-- Resumen empresa -->
-    <div class="card mb-4">
-        <h6 class="font-semibold text-surface-900 dark:text-surface-0 mb-3">
+    <div class="card mb-6">
+        <h6 class="font-semibold text-surface-900 dark:text-surface-0 mb-4">
             <i class="pi pi-building mr-2"></i>Empresa
         </h6>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             <span class="text-muted-color">Nombre</span>
             <span class="font-medium">{{ empresa.nombre }}</span>
 
@@ -33,66 +32,6 @@
         </div>
     </div>
 
-    <!-- Resumen tipos de alimento -->
-    <div class="card mb-4">
-        <h6 class="font-semibold text-surface-900 dark:text-surface-0 mb-3">
-            <i class="pi pi-list mr-2"></i>Tipos de Alimento ({{ tiposAlimento.length }})
-        </h6>
-        <ul class="flex flex-col gap-2">
-            @for (tipo of tiposAlimento; track tipo.nombre) {
-                <li class="flex items-center gap-2 text-sm">
-                    <i class="pi pi-circle-fill text-xs text-muted-color"></i>
-                    <span>{{ tipo.nombre }}</span>
-                    <p-tag [value]="tipo.nivel_riesgo!" [severity]="getSeverity(tipo.nivel_riesgo)" />
-                    @if (tipo.descripcion) {
-                        <span class="text-muted-color">— {{ tipo.descripcion }}</span>
-                    }
-                </li>
-            }
-        </ul>
-    </div>
-
-    <!-- Resumen plan PSB -->
-    <div class="card mb-4">
-        <h6 class="font-semibold text-surface-900 dark:text-surface-0 mb-3">
-            <i class="pi pi-file-check mr-2"></i>Plan PSB
-        </h6>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            <span class="text-muted-color">Tipo de alimento</span>
-            <div class="flex items-center gap-2">
-                <span>{{ tipoAlimentoSeleccionado?.nombre }}</span>
-                <p-tag
-                    [value]="tipoAlimentoSeleccionado?.nivel_riesgo!"
-                    [severity]="getSeverity(tipoAlimentoSeleccionado?.nivel_riesgo)" />
-            </div>
-
-            <span class="text-muted-color">Versión</span>
-            <span>{{ planPsb.version }}</span>
-
-            <span class="text-muted-color">Fecha de creación</span>
-            <span>{{ planPsb.fecha_creacion }}</span>
-
-            <span class="text-muted-color">Nivel de riesgo</span>
-            <p-tag [value]="planPsb.nivel_riesgo!" [severity]="getSeverity(planPsb.nivel_riesgo)" />
-        </div>
-    </div>
-
-    <!-- Programas a generar -->
-    <div class="border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-5 mb-6">
-        <p class="font-medium text-blue-800 dark:text-blue-300 mb-3">
-            Se generarán automáticamente los 4 programas obligatorios según la Resolución 2674 de 2013:
-        </p>
-        <ul class="flex flex-col gap-2">
-            @for (prog of programas; track prog.nombre) {
-                <li class="flex items-center gap-2 text-blue-700 dark:text-blue-400 text-sm">
-                    <i class="pi {{ prog.icono }}"></i>
-                    <span>{{ prog.nombre }}</span>
-                </li>
-            }
-        </ul>
-    </div>
-
-    <!-- Navegación -->
     <div class="flex justify-between">
         <p-button
             label="Atrás"
@@ -102,7 +41,7 @@
             type="button"
             (onClick)="onBack()" />
         <p-button
-            label="Crear Plan PSB"
+            label="Registrar empresa"
             icon="pi pi-check"
             [loading]="creando"
             (onClick)="onCrear()" />
