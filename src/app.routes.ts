@@ -17,7 +17,8 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
-            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') }
+            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') },
+            { path: 'limpieza', loadChildren: () => import('./app/features/limpieza/limpieza.routes') }
         ]
     },
     { path: 'landing', component: Landing },
