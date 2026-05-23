@@ -4,21 +4,21 @@ import { Dashboard } from './app/features/dashboard/dashboard';
 import { Documentation } from './app/features/documentation/documentation';
 import { Landing } from './app/features/landing/landing';
 import { Notfound } from './app/features/notfound/notfound';
+import { authGuard } from './app/features/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
     { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
     {
         path: '',
         component: AppLayout,
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
             { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') },
-            { path: 'programa-agua', loadChildren: () => import('./app/features/agua/agua.routes').then(m => m.AGUA_ROUTES) },
-            { path: 'programas', loadChildren: () => import('./app/features/programa/programa.routes').then(m => m.PROGRAMA_ROUTES) },
-            { path: 'registro', loadChildren: () => import('./app/features/registro/registro.routes').then(m => m.REGISTRO_ROUTES) }
+            { path: 'limpieza', loadChildren: () => import('./app/features/limpieza/limpieza.routes') }
         ]
     },
     { path: 'landing', component: Landing },
