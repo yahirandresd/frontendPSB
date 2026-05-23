@@ -7,5 +7,6 @@ export default [
     { path: '',           component: RegistroLimpiezaListComponent   },
     { path: 'crear',      component: RegistroLimpiezaCreateComponent },
     { path: ':id/editar', component: RegistroLimpiezaEditComponent   },
-    { path: ':registroId/checklist', loadChildren: () => import('../checklist-limpieza/checklist-limpieza.routes') }
+    { path: ':registroId/checklist',      loadChildren: () => import('../checklist-limpieza/checklist-limpieza.routes')         },
+    { path: ':registroId/verificaciones', loadChildren: () => import('../verificacion-limpieza/verificacion-limpieza.routes') }
 ] as Routes;
