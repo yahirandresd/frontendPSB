@@ -6,5 +6,6 @@ import { ProgramaLimpiezaEditComponent } from './pages/programa-limpieza-edit/pr
 export default [
     { path: '',           component: ProgramaLimpiezaListComponent   },
     { path: 'crear',      component: ProgramaLimpiezaCreateComponent },
-    { path: ':id/editar', component: ProgramaLimpiezaEditComponent   }
+    { path: ':id/editar', component: ProgramaLimpiezaEditComponent   },
+    { path: ':programaId/pasos', loadChildren: () => import('../paso-limpieza/paso-limpieza.routes') }
 ] as Routes;

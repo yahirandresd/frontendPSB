@@ -1,0 +1,85 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Orden -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Orden <span class="text-red-500">*</span>
+            </label>
+            <p-inputnumber formControlName="orden" [min]="1" placeholder="1" styleClass="w-full" />
+            @if (f['orden'].touched && f['orden'].errors?.['required']) {
+                <small class="text-red-500">El orden es obligatorio</small>
+            }
+        </div>
+
+        <!-- Tipo de acción -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Tipo de acción <span class="text-red-500">*</span>
+            </label>
+            <input pInputText formControlName="tipoAccion" placeholder="Ej: Barrer, Lavar, Desinfectar" class="w-full" />
+            @if (f['tipoAccion'].touched && f['tipoAccion'].errors?.['required']) {
+                <small class="text-red-500">El tipo de acción es obligatorio</small>
+            }
+        </div>
+
+        <!-- Descripción -->
+        <div class="flex flex-col gap-1 md:col-span-2">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Descripción <span class="text-red-500">*</span>
+            </label>
+            <textarea pTextarea formControlName="descripcion" rows="3" placeholder="Describe el paso..." class="w-full resize-none"></textarea>
+            @if (f['descripcion'].touched && f['descripcion'].errors?.['required']) {
+                <small class="text-red-500">La descripción es obligatoria</small>
+            }
+        </div>
+
+        <!-- Frecuencia -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">
+                Frecuencia <span class="text-red-500">*</span>
+            </label>
+            <input pInputText formControlName="frecuencia" placeholder="Ej: Diaria, Semanal, Mensual" class="w-full" />
+            @if (f['frecuencia'].touched && f['frecuencia'].errors?.['required']) {
+                <small class="text-red-500">La frecuencia es obligatoria</small>
+            }
+        </div>
+
+        <!-- Concentración -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">Concentración</label>
+            <input pInputText formControlName="concentracion" placeholder="Ej: 200 ppm (opcional)" class="w-full" />
+        </div>
+
+        <!-- Tiempo de contacto -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">Tiempo de contacto</label>
+            <input pInputText formControlName="tiempoContacto" placeholder="Ej: 10 min (opcional)" class="w-full" />
+        </div>
+
+        <!-- Temperatura mínima -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">Temperatura mínima del agua (°C)</label>
+            <p-inputnumber formControlName="temperaturaAguaMinima" placeholder="Ej: 25" styleClass="w-full" />
+        </div>
+
+        <!-- Temperatura máxima -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-surface-900 dark:text-surface-0">Temperatura máxima del agua (°C)</label>
+            <p-inputnumber formControlName="temperaturaAguaMaxima" placeholder="Ej: 60" styleClass="w-full" />
+        </div>
+
+        <!-- Observaciones -->
+        <div class="flex flex-col gap-1 md:col-span-2">
+            <label class="font-medium text-surface-900 dark:text-surface-0">Observaciones</label>
+            <textarea pTextarea formControlName="observaciones" rows="2" placeholder="Observaciones adicionales (opcional)" class="w-full resize-none"></textarea>
+        </div>
+
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <button pButton type="submit" [label]="paso ? 'Guardar cambios' : 'Crear paso'" icon="pi pi-check" />
+    </div>
+
+</form>
