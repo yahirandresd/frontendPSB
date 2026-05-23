@@ -1,0 +1,43 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ insumoQuimico ? 'Editar' : 'Nuevo' }} Insumo Químico
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Mantenimiento</label>
+                <input pInputText name="mantenimientoId" [(ngModel)]="model.mantenimientoId" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Nombre</label>
+                <input pInputText name="nombre" [(ngModel)]="model.nombre" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Registro Sanitario INVIMA</label>
+                <input pInputText name="registroSanitarioInvima" [(ngModel)]="model.registroSanitarioInvima" class="w-full" />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Lote</label>
+                <input pInputText name="lote" [(ngModel)]="model.lote" class="w-full" />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Vencimiento</label>
+                <p-datepicker name="fechaVencimiento" [(ngModel)]="model.fechaVencimiento" [showIcon]="true" class="w-full" />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Concentración</label>
+                <p-inputNumber name="concentracion" [(ngModel)]="model.concentracion" [min]="0" class="w-full" />
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>
