@@ -29,6 +29,9 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
+                <a routerLink="/programa-residuos" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }">
+                    <i class="pi pi-box"></i>
+                    <span>Programa Residuos</span>
                 <a routerLink="/limpieza/programas" routerLinkActive="active">
                     <i class="pi pi-sparkles"></i>
                     <span>Programas de Limpieza</span>
