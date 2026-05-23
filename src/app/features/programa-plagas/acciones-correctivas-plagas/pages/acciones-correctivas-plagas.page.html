@@ -1,0 +1,78 @@
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-wrench mr-2"></i>Acciones Correctivas de Plagas
+        </h5>
+        <p-button label="Nueva Acción" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="acciones" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Fecha</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Responsable</th>
+                <th>Descripción</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-a>
+            <tr>
+                <td>{{ a.fecha | date:'dd/MM/yyyy' }}</td>
+                <td><p-tag [value]="a.prioridad" [severity]="getPrioridadSeverity(a.prioridad)" /></td>
+                <td><p-tag [value]="a.estado" [severity]="getEstadoSeverity(a.estado)" /></td>
+                <td>{{ a.responsable }}</td>
+                <td class="max-w-xs truncate">{{ a.descripcion }}</td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(a)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(a)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(a)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="6" class="text-center text-muted-color py-6">No hay acciones correctivas registradas.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="accionSeleccionada ? 'Editar Acción' : 'Nueva Acción Correctiva'"
+          [modal]="true" [style]="{ width: '580px' }" [closable]="true">
+    <app-accion-correctiva-plagas-form
+        [accion]="accionSeleccionada"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle de la Acción Correctiva"
+          [modal]="true" [style]="{ width: '500px' }">
+    @if (accionSeleccionada) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">Fecha</span>
+            <span class="font-medium">{{ accionSeleccionada.fecha | date:'dd/MM/yyyy' }}</span>
+            <span class="text-muted-color">Prioridad</span>
+            <p-tag [value]="accionSeleccionada.prioridad" [severity]="getPrioridadSeverity(accionSeleccionada.prioridad)" />
+            <span class="text-muted-color">Estado</span>
+            <p-tag [value]="accionSeleccionada.estado" [severity]="getEstadoSeverity(accionSeleccionada.estado)" />
+            <span class="text-muted-color">Responsable</span>
+            <span>{{ accionSeleccionada.responsable }}</span>
+            <span class="text-muted-color">Descripción</span>
+            <span>{{ accionSeleccionada.descripcion }}</span>
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />
