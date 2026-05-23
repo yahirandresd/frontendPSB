@@ -1,16 +1,22 @@
+
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule,  } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
+
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
-import { PasswordModule } from 'primeng/password';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-import { AuthService } from './services/auth.service';
 
+
+import { AuthService } from './services/auth.service';
 @Component({
     selector: 'app-login',
     standalone: true,

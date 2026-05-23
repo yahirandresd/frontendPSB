@@ -1,0 +1,89 @@
+
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-building mr-2"></i>Empresas Fumigadoras
+        </h5>
+        <p-button label="Nueva Empresa" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="empresas" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>NIT</th>
+                <th>Nombre</th>
+                <th>Cert. Sanitario</th>
+                <th>Venc. Certificado</th>
+                <th>Estado Cert.</th>
+                <th>Teléfono</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-e>
+            <tr>
+                <td>{{ e.nit }}</td>
+                <td class="font-medium">{{ e.nombreEmpresa }}</td>
+                <td>{{ e.numCertSanitario }}</td>
+                <td>{{ e.fechaVencCert | date:'dd/MM/yyyy' }}</td>
+                <td>
+                    <p-tag [value]="certificadoVigente(e) ? 'VIGENTE' : 'VENCIDO'"
+                           [severity]="certificadoVigente(e) ? 'success' : 'danger'" />
+                </td>
+                <td>{{ e.telefonoContacto }}</td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(e)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(e)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(e)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="7" class="text-center text-muted-color py-6">No hay empresas fumigadoras registradas.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="empresaSeleccionada ? 'Editar Empresa' : 'Nueva Empresa Fumigadora'"
+          [modal]="true" [style]="{ width: '640px' }" [closable]="true">
+    <app-empresa-fumigadora-form
+        [empresa]="empresaSeleccionada"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle de Empresa Fumigadora"
+          [modal]="true" [style]="{ width: '500px' }">
+    @if (empresaSeleccionada) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">NIT</span>
+            <span class="font-medium">{{ empresaSeleccionada.nit }}</span>
+            <span class="text-muted-color">Nombre</span>
+            <span>{{ empresaSeleccionada.nombreEmpresa }}</span>
+            <span class="text-muted-color">Cert. Sanitario</span>
+            <span>{{ empresaSeleccionada.numCertSanitario }}</span>
+            <span class="text-muted-color">Venc. Certificado</span>
+            <span>{{ empresaSeleccionada.fechaVencCert | date:'dd/MM/yyyy' }}</span>
+            <span class="text-muted-color">Estado Certificado</span>
+            <p-tag [value]="certificadoVigente(empresaSeleccionada) ? 'VIGENTE' : 'VENCIDO'"
+                   [severity]="certificadoVigente(empresaSeleccionada) ? 'success' : 'danger'" />
+            <span class="text-muted-color">Registro SDS</span>
+            <span>{{ empresaSeleccionada.registroSDS || '—' }}</span>
+            <span class="text-muted-color">Teléfono</span>
+            <span>{{ empresaSeleccionada.telefonoContacto || '—' }}</span>
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />

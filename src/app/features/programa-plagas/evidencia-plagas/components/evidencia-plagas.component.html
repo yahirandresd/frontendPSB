@@ -1,0 +1,30 @@
+<div class="flex flex-col gap-4">
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Tipo de Archivo <span class="text-red-500">*</span></label>
+        <p-select [(ngModel)]="form.tipoArchivo" [options]="tiposArchivo"
+                  optionLabel="label" optionValue="value"
+                  placeholder="Seleccione el tipo" styleClass="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">URL del Archivo <span class="text-red-500">*</span></label>
+        <input pInputText [(ngModel)]="form.urlArchivo" placeholder="https://..." class="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Fecha de Carga</label>
+        <input pInputText type="date" [(ngModel)]="form.fechaCarga" class="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Descripción</label>
+        <textarea pTextarea [(ngModel)]="form.descripcion" rows="3"
+                  class="w-full" placeholder="Descripción de la evidencia..."></textarea>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando" (onClick)="onGuardar()" />
+    </div>
+</div>
