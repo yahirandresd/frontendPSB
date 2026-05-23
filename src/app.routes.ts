@@ -15,7 +15,10 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
-            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') }
+            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') },
+            { path: 'programa-agua', loadChildren: () => import('./app/features/agua/agua.routes').then(m => m.AGUA_ROUTES) },
+            { path: 'programas', loadChildren: () => import('./app/features/programa/programa.routes').then(m => m.PROGRAMA_ROUTES) },
+            { path: 'registro', loadChildren: () => import('./app/features/registro/registro.routes').then(m => m.REGISTRO_ROUTES) }
         ]
     },
     { path: 'landing', component: Landing },

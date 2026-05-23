@@ -22,16 +22,30 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
-                <a routerLink="/plan" routerLinkActive="active">
-                    <i class="pi pi-check-square"></i>
-                    <span>Mi Plan de Saneamiento</span>
+                <a routerLink="/programa-agua" routerLinkActive="active">
+                    <i class="fa-solid fa-droplet menu-icon-blue"></i>
+                    <span>Programa Agua</span>
                 </a>
             </li>
 
             <li>
-                <a routerLink="/registros" routerLinkActive="active">
-                    <i class="pi pi-folder"></i>
-                    <span>Registros diarios</span>
+                <a routerLink="/programas" routerLinkActive="active">
+                    <i class="pi pi-list"></i>
+                    <span>Programas</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/registro" routerLinkActive="active">
+                    <i class="pi pi-book"></i>
+                    <span>Registro</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/plan" routerLinkActive="active">
+                    <i class="pi pi-check-square"></i>
+                    <span>Mi Plan de Saneamiento</span>
                 </a>
             </li>
 
@@ -95,6 +109,11 @@ import { RouterModule } from '@angular/router';
         /* ICONO EN HOVER */
         .menu-list a:hover i {
             transform: scale(1.2);
+            color: #2563eb;
+        }
+
+        /* ICONO AZUL PERMANENTE */
+        .menu-list a i.menu-icon-blue {
             color: #2563eb;
         }
 

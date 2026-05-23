@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="flex justify-between items-center mb-6">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">Análisis Laboratorio</div>
+        <p-button label="Nuevo" icon="pi pi-plus" routerLink="crear" />
+    </div>
+    <p-table [value]="items()" [loading]="loading()" [paginator]="true" [rows]="10" stripedRows dataKey="id">
+        <ng-template #header><tr>
+                <th>#</th>
+                <th>Fuente Agua</th>
+                <th>N° Certificado</th>
+                <th>Fecha Muestreo</th>
+                <th>Coliformes Totales</th>
+                <th>E. Coli</th>
+                <th>Mesófilos</th>
+                <th class="w-24">Acciones</th>
+            </tr></ng-template>
+        <ng-template #body let-item>            <tr>
+                <td>{{ item.fuenteAguaId }}</td>
+                <td>{{ item.fuenteAguaId }}</td>
+                <td>{{ item.numeroCertificado }}</td>
+                <td>{{ item.fechaMuestreo }}</td>
+                <td><i [class]="item.coliformesTotales ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i></td>
+                <td><i [class]="item.eColi ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i></td>
+                <td>{{ item.mesofilos }}</td>
+                <td><p-button icon="pi pi-pencil" severity="secondary" rounded [routerLink]="[item.id, 'editar']" /></td>
+            </tr></ng-template>
+        <ng-template #emptymessage>
+            <tr><td colspan="8" class="text-center text-muted-color py-6">No hay registros</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-toast />

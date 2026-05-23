@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="flex justify-between items-center mb-6">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">Insumo Químico</div>
+        <p-button label="Nuevo" icon="pi pi-plus" routerLink="crear" />
+    </div>
+    <p-table [value]="items()" [loading]="loading()" [paginator]="true" [rows]="10" stripedRows dataKey="id">
+        <ng-template #header><tr>
+                <th>#</th>
+                <th>Mantenimiento</th>
+                <th>Nombre</th>
+                <th>Registro Sanitario INVIMA</th>
+                <th>Lote</th>
+                <th>Fecha Vencimiento</th>
+                <th>Concentración</th>
+                <th class="w-24">Acciones</th>
+            </tr></ng-template>
+        <ng-template #body let-item>            <tr>
+                <td>{{ item.mantenimientoId }}</td>
+                <td>{{ item.mantenimientoId }}</td>
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.registroSanitarioInvima }}</td>
+                <td>{{ item.lote }}</td>
+                <td>{{ item.fechaVencimiento }}</td>
+                <td>{{ item.concentracion }}</td>
+                <td><p-button icon="pi pi-pencil" severity="secondary" rounded [routerLink]="[item.id, 'editar']" /></td>
+            </tr></ng-template>
+        <ng-template #emptymessage>
+            <tr><td colspan="8" class="text-center text-muted-color py-6">No hay registros</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+<p-toast />
