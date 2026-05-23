@@ -1,0 +1,84 @@
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-paperclip mr-2"></i>Evidencias de Plagas
+        </h5>
+        <p-button label="Nueva Evidencia" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="evidencias" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Fecha de Carga</th>
+                <th>Enlace</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-e>
+            <tr>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <i class="pi {{ getTipoIcon(e.tipoArchivo) }}"></i>
+                        <span>{{ e.tipoArchivo }}</span>
+                    </div>
+                </td>
+                <td class="max-w-xs truncate">{{ e.descripcion }}</td>
+                <td>{{ e.fechaCarga | date:'dd/MM/yyyy' }}</td>
+                <td>
+                    <a [href]="e.urlArchivo" target="_blank" class="text-primary underline text-sm">Ver archivo</a>
+                </td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(e)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(e)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(e)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="5" class="text-center text-muted-color py-6">No hay evidencias registradas.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="evidenciaSeleccionada ? 'Editar Evidencia' : 'Nueva Evidencia'"
+          [modal]="true" [style]="{ width: '560px' }" [closable]="true">
+    <app-evidencia-plagas-form
+        [evidencia]="evidenciaSeleccionada"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle de la Evidencia"
+          [modal]="true" [style]="{ width: '480px' }">
+    @if (evidenciaSeleccionada) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">Tipo</span>
+            <span class="font-medium flex items-center gap-1">
+                <i class="pi {{ getTipoIcon(evidenciaSeleccionada.tipoArchivo) }}"></i>
+                {{ evidenciaSeleccionada.tipoArchivo }}
+            </span>
+            <span class="text-muted-color">Fecha de Carga</span>
+            <span>{{ evidenciaSeleccionada.fechaCarga | date:'dd/MM/yyyy' }}</span>
+            <span class="text-muted-color">Descripción</span>
+            <span>{{ evidenciaSeleccionada.descripcion || '—' }}</span>
+            <span class="text-muted-color">Archivo</span>
+            <a [href]="evidenciaSeleccionada.urlArchivo" target="_blank" class="text-primary underline">Ver archivo</a>
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />

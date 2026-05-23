@@ -1,0 +1,97 @@
+<div>
+    <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0 mb-6">Tipos de Alimento</h5>
+
+    <!-- Formulario de adición -->
+    <form [formGroup]="form" (ngSubmit)="onAgregar()">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+
+            <div class="flex flex-col gap-1">
+                <label class="font-medium text-surface-900 dark:text-surface-0">
+                    Nombre <span class="text-red-500">*</span>
+                </label>
+                <input pInputText formControlName="nombre" placeholder="Ej: Queso fresco" class="w-full" />
+                @if (f['nombre'].touched && f['nombre'].errors?.['required']) {
+                    <small class="text-red-500">El nombre es obligatorio</small>
+                }
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-medium text-surface-900 dark:text-surface-0">
+                    Nivel de riesgo <span class="text-red-500">*</span>
+                </label>
+                <p-select
+                    formControlName="nivel_riesgo"
+                    [options]="nivelesRiesgo"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Selecciona"
+                    styleClass="w-full" />
+                @if (f['nivel_riesgo'].touched && f['nivel_riesgo'].errors?.['required']) {
+                    <small class="text-red-500">El nivel de riesgo es obligatorio</small>
+                }
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-medium text-surface-900 dark:text-surface-0">Descripción</label>
+                <textarea
+                    pTextarea
+                    formControlName="descripcion"
+                    rows="1"
+                    placeholder="Descripción (opcional)"
+                    class="w-full"></textarea>
+            </div>
+
+        </div>
+
+        <p-button type="submit" label="Agregar" icon="pi pi-plus" severity="secondary" />
+    </form>
+
+    <!-- Tabla de tipos agregados -->
+    <p-table [value]="tiposAlimento" styleClass="p-datatable-sm mt-6 mb-2">
+        <ng-template #header>
+            <tr>
+                <th>Nombre</th>
+                <th style="width: 160px">Nivel de Riesgo</th>
+                <th style="width: 64px"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-tipo let-i="rowIndex">
+            <tr>
+                <td>{{ tipo.nombre }}</td>
+                <td>
+                    <p-tag [value]="tipo.nivel_riesgo" [severity]="getSeverity(tipo.nivel_riesgo)" />
+                </td>
+                <td>
+                    <p-button
+                        icon="pi pi-trash"
+                        severity="danger"
+                        [text]="true"
+                        (onClick)="onEliminar(i)" />
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="3" class="text-center text-muted-color py-6">
+                    Agrega al menos un tipo de alimento para continuar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <!-- Navegación -->
+    <div class="flex justify-between mt-6">
+        <p-button
+            label="Atrás"
+            icon="pi pi-arrow-left"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="onBack()" />
+        <p-button
+            label="Siguiente"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            [disabled]="tiposAlimento.length === 0"
+            (onClick)="onNext()" />
+    </div>
+</div>

@@ -1,0 +1,23 @@
+
+<div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Nombre <span class="text-red-500">*</span></label>
+        <input pInputText [(ngModel)]="form.nombre" placeholder="Nombre de la plaga" class="w-full" />
+    </div>
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Categoría <span class="text-red-500">*</span></label>
+        <p-select [(ngModel)]="form.categoria" [options]="categorias"
+                  optionLabel="label" optionValue="value"
+                  placeholder="Seleccione la categoría" styleClass="w-full" />
+    </div>
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Riesgo Sanitario</label>
+        <p-select [(ngModel)]="form.riesgoSanitario" [options]="nivelesRiesgo"
+                  placeholder="Seleccione el nivel" styleClass="w-full" />
+    </div>
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando" (onClick)="onGuardar()" />
+    </div>
+</div>
+

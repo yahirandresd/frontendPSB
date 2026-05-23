@@ -65,6 +65,12 @@ import { RouterModule } from '@angular/router';
                     <span>Reportes</span>
                 </a>
             </li>
+            <li>
+                <a routerLink="/control-plagas" routerLinkActive="active">
+                    <i class="pi pi-exclamation-circle"></i>
+                    <span>Control de Plagas</span>
+                </a>
+            </li>
         </ul>
     `,
     styles: [`

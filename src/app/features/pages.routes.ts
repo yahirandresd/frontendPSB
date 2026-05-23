@@ -7,5 +7,12 @@ export default [
     { path: 'documentation', component: Documentation },
     { path: 'crud', component: Crud },
     { path: 'empty', component: Empty },
-    { path: '**', redirectTo: '/notfound' }
+    { path: '**', redirectTo: '/notfound' },
+    {
+        path: 'control-plagas',
+        loadChildren: () =>
+            import('./programa-plagas/control-plagas.routes')
+                .then(m => m.CONTROL_PLAGAS_ROUTES),
+    }
+
 ] as Routes;
