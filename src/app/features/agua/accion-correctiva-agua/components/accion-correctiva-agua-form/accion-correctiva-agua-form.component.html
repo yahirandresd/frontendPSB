@@ -1,0 +1,67 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ accionCorrectivaAgua ? 'Editar' : 'Nuevo' }} Acción Correctiva Agua
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Registro Agua</label>
+                <input pInputText name="registroAguaId" [(ngModel)]="model.registroAguaId" class="w-full" required />
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Descripción Desviación</label>
+                <textarea pTextarea name="descripcionDesviacion" [(ngModel)]="model.descripcionDesviacion" rows="3" class="w-full" required></textarea>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Medida Tomada</label>
+                <textarea pTextarea name="medidaTomada" [(ngModel)]="model.medidaTomada" rows="3" class="w-full" required></textarea>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Resultado Verificación</label>
+                <textarea pTextarea name="resultadoVerificacion" [(ngModel)]="model.resultadoVerificacion" rows="3" class="w-full"></textarea>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha</label>
+                <p-datepicker name="fecha" [(ngModel)]="model.fecha" [showIcon]="true" class="w-full" required />
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Responsable</label>
+                <input pInputText name="responsable" [(ngModel)]="model.responsable" class="w-full" required />
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Estado</label>
+                <p-select name="estado" [(ngModel)]="model.estado" [options]="estadoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label class="block font-medium mb-1">Foto de evidencia</label>
+            <p-fileUpload
+                [url]="uploadUrl"
+                name="file"
+                accept="image/*"
+                maxFileSize="5000000"
+                chooseLabel="Seleccionar foto"
+                [auto]="false"
+                mode="basic"
+                (onUpload)="onUpload($event)">
+            </p-fileUpload>
+            @if (model.evidenciaFoto) {
+                <div class="mt-2">
+                    <img [src]="model.evidenciaFoto" class="w-32 h-32 object-cover rounded-lg shadow-sm" />
+                </div>
+            }
+        </div>
+
+        <div class="flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>
