@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Nombre del producto <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="nombreProducto" placeholder="Ej: Hipoclorito de sodio" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Concentración</label>
+            <input pInputText formControlName="concentracion" placeholder="Ej: 200 ppm" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Dosis</label>
+            <input pInputText formControlName="dosis" placeholder="Ej: 5 mL/L" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Unidad de medida</label>
+            <input pInputText formControlName="unidadMedida" placeholder="Ej: mL, g, L" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Tiempo de contacto</label>
+            <input pInputText formControlName="tiempoContacto" placeholder="Ej: 10 minutos" />
+        </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button
+            type="submit"
+            [label]="pq ? 'Actualizar' : 'Guardar'"
+            [disabled]="form.invalid" />
+    </div>
+</form>

@@ -4,19 +4,20 @@ import { Dashboard } from './app/features/dashboard/dashboard';
 import { Documentation } from './app/features/documentation/documentation';
 import { Landing } from './app/features/landing/landing';
 import { Notfound } from './app/features/notfound/notfound';
+import { authGuard } from './app/features/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
     { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
     {
         path: '',
         component: AppLayout,
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
-            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') },
-            { path: 'programa-residuos', loadChildren: () => import('./app/features/programa-residuos/programa-residuos.routes') }
+            { path: 'configuracion-inicial', loadChildren: () => import('./app/features/configuracion/plan-psb/plan-psb.routes') }
         ]
     },
     { path: 'landing', component: Landing },
