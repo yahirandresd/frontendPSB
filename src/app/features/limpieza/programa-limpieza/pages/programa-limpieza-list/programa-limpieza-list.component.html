@@ -1,0 +1,74 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Programas de Limpieza</h2>
+            <p class="text-muted-color mt-1">Gestión de programas del plan de limpieza y desinfección</p>
+        </div>
+        <button pButton label="Nuevo programa" icon="pi pi-plus" (click)="irACrear()"></button>
+    </div>
+
+    <p-table
+        [value]="programas()"
+        [loading]="cargando()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="p-datatable-sm"
+        emptyMessage="No hay programas registrados">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Programa PSB</th>
+                <th>Equipo / Área</th>
+                <th>Objetivo</th>
+                <th>Alcance</th>
+                <th class="w-28">Acciones</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-prog>
+            <tr>
+                <td>
+                    <span class="font-mono text-xs text-muted-color">{{ prog.programaId | slice:0:8 }}...</span>
+                </td>
+                <td>
+                    @if (prog.equipoAreaId) {
+                        <span class="font-mono text-xs text-muted-color">{{ prog.equipoAreaId | slice:0:8 }}...</span>
+                    } @else {
+                        <span class="text-muted-color">—</span>
+                    }
+                </td>
+                <td>
+                    <span class="line-clamp-2 text-sm">{{ prog.objetivo }}</span>
+                </td>
+                <td>
+                    <span class="line-clamp-2 text-sm">{{ prog.alcance }}</span>
+                </td>
+                <td>
+                    <div class="flex gap-2">
+                        <button
+                            pButton
+                            icon="pi pi-pencil"
+                            severity="secondary"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="irAEditar(prog.id)"
+                            pTooltip="Editar"></button>
+                        <button
+                            pButton
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="confirmarEliminar(prog)"
+                            pTooltip="Eliminar"></button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>

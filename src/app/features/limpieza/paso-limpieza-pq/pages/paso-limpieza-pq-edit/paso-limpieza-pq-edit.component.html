@@ -1,0 +1,15 @@
+<p-toast />
+
+<div class="card">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Editar producto químico</h2>
+        <p class="text-muted-color mt-1">Modifica los datos del producto</p>
+    </div>
+
+    @if (pq()) {
+        <app-paso-limpieza-pq-form
+            [pq]="pq()"
+            [pasoId]="pasoId"
+            (formSubmit)="onFormSubmit($any($event))" />
+    }
+</div>
