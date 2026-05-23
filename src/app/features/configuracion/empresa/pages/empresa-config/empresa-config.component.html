@@ -1,0 +1,4 @@
+@if (!loading()) {
+    <app-empresa-form [empresa]="empresa()" [saving]="saving()" (formSubmit)="onSubmit($event)" />
+}
+<p-toast />

@@ -21,6 +21,12 @@ export const appRoutes: Routes = [
                     import('./app/features/documentation/documentation').then(m => m.Documentation)
             },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
+            // ── Configuración inicial (empresa) ──
+            {
+                path: 'configuracion-inicial',
+                loadChildren: () =>
+                    import('./app/features/configuracion/empresa/empresa.routes').then(m => m.EMPRESA_ROUTES)
+            },
             // ── Módulo control de plagas ──
             {
                 path: 'control-plagas',
