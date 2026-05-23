@@ -1,0 +1,106 @@
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-calendar mr-2"></i>Cronogramas de Control de Plagas
+        </h5>
+        <p-button label="Nuevo Cronograma" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="cronogramas" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Año</th>
+                <th>Frecuencia</th>
+                <th>Método</th>
+                <th>Responsable</th>
+                <th>Actividades</th>
+                <th>Cumplimiento</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-c>
+            <tr>
+                <td class="font-semibold">{{ c.anioVigencia }}</td>
+                <td>{{ c.frecuenciaControl }}</td>
+                <td>{{ c.metodoControl }}</td>
+                <td>{{ c.responsable }}</td>
+                <td>{{ c.actividades?.length ?? 0 }} actividad(es)</td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-1 bg-surface-200 dark:bg-surface-700 rounded-full h-2">
+                            <div class="bg-primary h-2 rounded-full"
+                                 [style.width.%]="getCumplimiento(c)"></div>
+                        </div>
+                        <span class="text-xs font-medium w-10 text-right">{{ getCumplimiento(c) }}%</span>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(c)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(c)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(c)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="7" class="text-center text-muted-color py-6">No hay cronogramas registrados.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="cronogramaSeleccionado ? 'Editar Cronograma' : 'Nuevo Cronograma'"
+          [modal]="true" [style]="{ width: '660px' }" [closable]="true">
+    <app-cronograma-form
+        [cronograma]="cronogramaSeleccionado"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle del Cronograma"
+          [modal]="true" [style]="{ width: '640px' }">
+    @if (cronogramaSeleccionado) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm mb-4">
+            <span class="text-muted-color">Año</span>
+            <span class="font-semibold">{{ cronogramaSeleccionado.anioVigencia }}</span>
+            <span class="text-muted-color">Frecuencia</span>
+            <span>{{ cronogramaSeleccionado.frecuenciaControl || '—' }}</span>
+            <span class="text-muted-color">Método</span>
+            <span>{{ cronogramaSeleccionado.metodoControl || '—' }}</span>
+            <span class="text-muted-color">Responsable</span>
+            <span>{{ cronogramaSeleccionado.responsable }}</span>
+            <span class="text-muted-color">Cumplimiento</span>
+            <span class="font-semibold text-primary">{{ getCumplimiento(cronogramaSeleccionado) }}%</span>
+        </div>
+
+        <h6 class="font-semibold mb-2">Actividades</h6>
+        <div class="flex flex-col gap-1 max-h-60 overflow-y-auto">
+            @for (act of cronogramaSeleccionado.actividades; track act.id) {
+                <div class="flex items-center gap-3 p-2 rounded"
+                     [class.bg-green-50]="act.ejecutada"
+                     [class.dark:bg-green-900/20]="act.ejecutada"
+                     [class.bg-surface-50]="!act.ejecutada"
+                     [class.dark:bg-surface-800]="!act.ejecutada">
+                    <i class="pi" [class.pi-check-circle]="act.ejecutada" [class.text-green-500]="act.ejecutada"
+                       [class.pi-circle]="!act.ejecutada" [class.text-muted-color]="!act.ejecutada"></i>
+                    <span class="text-xs font-semibold text-primary w-12">{{ nombresMes[act.mes] }}</span>
+                    <span class="text-sm flex-1">{{ act.descripcion }}</span>
+                </div>
+            } @empty {
+                <p class="text-muted-color text-sm text-center py-2">Sin actividades</p>
+            }
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />
