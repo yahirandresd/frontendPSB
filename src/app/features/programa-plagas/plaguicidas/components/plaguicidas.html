@@ -1,0 +1,38 @@
+<div class="flex flex-col gap-4">
+    <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Código de Registro <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.codigoRegistro" placeholder="Código ICA" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Nombre Comercial <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.nombreComercial" placeholder="Nombre comercial" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Ingrediente Activo <span class="text-red-500">*</span></label>
+            <input pInputText [(ngModel)]="form.ingredienteActivo" placeholder="Principio activo" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Categoría OMS</label>
+            <p-select [(ngModel)]="form.categoriaOMS" [options]="categoriasOMS"
+                      optionLabel="label" optionValue="value"
+                      placeholder="Seleccione la categoría" styleClass="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Dosis de Aplicación</label>
+            <input pInputText [(ngModel)]="form.dosisAplicacion" placeholder="Ej: 2 ml/L" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Registro ICA</label>
+            <input pInputText [(ngModel)]="form.registroICA" placeholder="Número de registro ICA" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1 col-span-2">
+            <label class="font-medium text-sm">URL Ficha Técnica</label>
+            <input pInputText [(ngModel)]="form.fichaTecnicaUrl" placeholder="https://..." class="w-full" />
+        </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando" (onClick)="onGuardar()" />
+    </div>
+</div>

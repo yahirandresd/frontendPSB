@@ -1,0 +1,77 @@
+<div class="flex flex-col gap-4">
+ 
+    <!-- Tipo de Actividad -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Tipo de Actividad <span class="text-red-500">*</span></label>
+        <p-select
+            [(ngModel)]="form.tipoActividad"
+            [options]="tiposActividad"
+            placeholder="Seleccione el tipo"
+            styleClass="w-full" />
+    </div>
+ 
+    <!-- Resultado General -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Resultado General <span class="text-red-500">*</span></label>
+        <p-select
+            [(ngModel)]="form.resultadoGeneral"
+            [options]="resultados"
+            placeholder="Seleccione el resultado"
+            styleClass="w-full" />
+    </div>
+ 
+    <!-- Firmas -->
+    <div class="border border-surface-200 dark:border-surface-700 rounded-lg p-4">
+        <h6 class="font-semibold text-surface-900 dark:text-surface-0 mb-3">
+            <i class="pi pi-pen-to-square mr-2"></i>Firmas
+        </h6>
+ 
+        <!-- Firma 1: Realizado por -->
+        <div class="flex flex-col gap-1 mb-4">
+            <label class="font-medium text-sm">Realizado por <span class="text-red-500">*</span></label>
+            <p-select
+                [(ngModel)]="form.firmadoPorId"
+                [options]="usuarios"
+                optionLabel="nombre"
+                optionValue="id"
+                placeholder="Seleccione el usuario"
+                styleClass="w-full"
+                (onChange)="onSeleccionarFirmante($event, 'firmado')" />
+            @if (firmaRealizadoPor) {
+                <div class="mt-2 flex flex-col gap-1">
+                    <span class="text-xs text-muted-color">Vista previa de firma</span>
+                    <img [src]="firmaRealizadoPor" alt="firma realizado por"
+                         class="h-16 object-contain border rounded bg-white" />
+                </div>
+            }
+        </div>
+ 
+        <!-- Firma 2: Aprobado por -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Aprobado por <span class="text-red-500">*</span></label>
+            <p-select
+                [(ngModel)]="form.aprobadoPorId"
+                [options]="usuarios"
+                optionLabel="nombre"
+                optionValue="id"
+                placeholder="Seleccione el usuario aprobador"
+                styleClass="w-full"
+                (onChange)="onSeleccionarFirmante($event, 'aprobado')" />
+            @if (firmaAprobadoPor) {
+                <div class="mt-2 flex flex-col gap-1">
+                    <span class="text-xs text-muted-color">Vista previa de firma</span>
+                    <img [src]="firmaAprobadoPor" alt="firma aprobado por"
+                         class="h-16 object-contain border rounded bg-white" />
+                </div>
+            }
+        </div>
+    </div>
+ 
+    <!-- Botones -->
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true"
+                  (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando"
+                  (onClick)="onGuardar()" />
+    </div>
+</div>

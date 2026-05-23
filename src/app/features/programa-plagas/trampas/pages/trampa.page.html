@@ -1,0 +1,82 @@
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-map-marker mr-2"></i>Trampas
+        </h5>
+        <p-button label="Nueva Trampa" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="trampas" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Código</th>
+                <th>Tipo</th>
+                <th>Ubicación</th>
+                <th>Estado</th>
+                <th>F. Instalación</th>
+                <th>Última Revisión</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-t>
+            <tr>
+                <td class="font-medium">{{ t.codigo }}</td>
+                <td>{{ t.tipo }}</td>
+                <td>{{ t.ubicacion }}</td>
+                <td><p-tag [value]="t.estado" [severity]="getEstadoSeverity(t.estado)" /></td>
+                <td>{{ t.fechaInstalacion | date:'dd/MM/yyyy' }}</td>
+                <td>{{ t.ultimaRevision | date:'dd/MM/yyyy' }}</td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(t)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(t)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(t)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="7" class="text-center text-muted-color py-6">No hay trampas registradas.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="trampaSeleccionada ? 'Editar Trampa' : 'Nueva Trampa'"
+          [modal]="true" [style]="{ width: '600px' }" [closable]="true">
+    <app-trampa-form
+        [trampa]="trampaSeleccionada"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle de Trampa"
+          [modal]="true" [style]="{ width: '480px' }">
+    @if (trampaSeleccionada) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">Código</span>
+            <span class="font-medium">{{ trampaSeleccionada.codigo }}</span>
+            <span class="text-muted-color">Tipo</span>
+            <span>{{ trampaSeleccionada.tipo }}</span>
+            <span class="text-muted-color">Ubicación</span>
+            <span>{{ trampaSeleccionada.ubicacion }}</span>
+            <span class="text-muted-color">Estado</span>
+            <p-tag [value]="trampaSeleccionada.estado" [severity]="getEstadoSeverity(trampaSeleccionada.estado)" />
+            <span class="text-muted-color">F. Instalación</span>
+            <span>{{ trampaSeleccionada.fechaInstalacion | date:'dd/MM/yyyy' }}</span>
+            <span class="text-muted-color">Última Revisión</span>
+            <span>{{ trampaSeleccionada.ultimaRevision | date:'dd/MM/yyyy' }}</span>
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />

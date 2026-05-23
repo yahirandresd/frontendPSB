@@ -1,0 +1,91 @@
+
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
+            <i class="pi pi-flask mr-2"></i>Plaguicidas
+        </h5>
+        <p-button label="Nuevo Plaguicida" icon="pi pi-plus" (onClick)="abrirFormulario()" />
+    </div>
+
+    <p-table [value]="plaguicidas" [loading]="cargando" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Código Registro</th>
+                <th>Nombre Comercial</th>
+                <th>Ingrediente Activo</th>
+                <th>Cat. OMS</th>
+                <th>Registro ICA</th>
+                <th>Ficha</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-p>
+            <tr>
+                <td>{{ p.codigoRegistro }}</td>
+                <td class="font-medium">{{ p.nombreComercial }}</td>
+                <td>{{ p.ingredienteActivo }}</td>
+                <td><p-tag [value]="p.categoriaOMS" [severity]="getCategoriaSeverity(p.categoriaOMS)" /></td>
+                <td>{{ p.registroICA }}</td>
+                <td>
+                    @if (p.fichaTecnicaUrl) {
+                        <a [href]="p.fichaTecnicaUrl" target="_blank" class="text-primary underline text-sm">Ver</a>
+                    } @else { <span class="text-muted-color text-sm">—</span> }
+                </td>
+                <td class="text-center">
+                    <div class="flex justify-center gap-2">
+                        <p-button icon="pi pi-eye" severity="info" [text]="true"
+                                  (onClick)="verDetalle(p)" pTooltip="Ver detalle" />
+                        <p-button icon="pi pi-pencil" severity="secondary" [text]="true"
+                                  (onClick)="abrirFormulario(p)" pTooltip="Editar" />
+                        <p-button icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="confirmarEliminar(p)" pTooltip="Eliminar" />
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr><td colspan="7" class="text-center text-muted-color py-6">No hay plaguicidas registrados.</td></tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="mostrarFormulario"
+          [header]="plaguicidaSeleccionado ? 'Editar Plaguicida' : 'Nuevo Plaguicida'"
+          [modal]="true" [style]="{ width: '640px' }" [closable]="true">
+    <app-plaguicida-form
+        [plaguicida]="plaguicidaSeleccionado"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>
+
+<p-dialog [(visible)]="mostrarDetalle" header="Detalle del Plaguicida"
+          [modal]="true" [style]="{ width: '520px' }">
+    @if (plaguicidaSeleccionado) {
+        <div class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <span class="text-muted-color">Código Registro</span>
+            <span class="font-medium">{{ plaguicidaSeleccionado.codigoRegistro }}</span>
+            <span class="text-muted-color">Nombre Comercial</span>
+            <span>{{ plaguicidaSeleccionado.nombreComercial }}</span>
+            <span class="text-muted-color">Ingrediente Activo</span>
+            <span>{{ plaguicidaSeleccionado.ingredienteActivo }}</span>
+            <span class="text-muted-color">Categoría OMS</span>
+            <p-tag [value]="plaguicidaSeleccionado.categoriaOMS"
+                   [severity]="getCategoriaSeverity(plaguicidaSeleccionado.categoriaOMS)" />
+            <span class="text-muted-color">Dosis de Aplicación</span>
+            <span>{{ plaguicidaSeleccionado.dosisAplicacion || '—' }}</span>
+            <span class="text-muted-color">Registro ICA</span>
+            <span>{{ plaguicidaSeleccionado.registroICA }}</span>
+            <span class="text-muted-color">Ficha Técnica</span>
+            @if (plaguicidaSeleccionado.fichaTecnicaUrl) {
+                <a [href]="plaguicidaSeleccionado.fichaTecnicaUrl" target="_blank" class="text-primary underline">Ver ficha</a>
+            } @else { <span class="text-muted-color italic">Sin ficha</span> }
+        </div>
+    }
+    <ng-template pTemplate="footer">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
+<p-toast />
