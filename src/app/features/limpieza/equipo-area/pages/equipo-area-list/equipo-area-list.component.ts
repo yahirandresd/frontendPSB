@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -13,7 +14,7 @@ import { EquipoArea, EstadoEquipoArea, TipoEquipoArea } from '../../models/equip
 @Component({
     selector: 'app-equipo-area-list',
     standalone: true,
-    imports: [TableModule, TagModule, ButtonModule, ConfirmDialogModule, ToastModule],
+    imports: [TableModule, TagModule, ButtonModule, ConfirmDialogModule, ToastModule, SlicePipe],
     providers: [ConfirmationService, MessageService],
     templateUrl: './equipo-area-list.component.html',
     styleUrls: ['./equipo-area-list.component.scss']
