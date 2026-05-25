@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -18,13 +18,15 @@ import { CreateProgramaDto } from '../../models/create-programa.dto';
 export class ProgramaCreateComponent {
     private service = inject(ProgramaService);
     private router = inject(Router);
+    private route = inject(ActivatedRoute);
     private messageService = inject(MessageService);
     saving = signal(false);
 
     async onSubmit(form: { tipo: any; nombre: string; responsable: string; frecuencia: any; descripcion: string }) {
+        const planPsbId = this.route.snapshot.queryParamMap.get('planPsbId') ?? '';
         this.saving.set(true);
         try {
-            const dto: CreateProgramaDto = { planPsbId: '', tipo: form.tipo, nombre: form.nombre, responsable: form.responsable, frecuencia: form.frecuencia, descripcion: form.descripcion || undefined };
+            const dto: CreateProgramaDto = { planPsbId, tipo: form.tipo, nombre: form.nombre, responsable: form.responsable, frecuencia: form.frecuencia, descripcion: form.descripcion || undefined };
             await firstValueFrom(this.service.create(dto));
             this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Programa creado correctamente' });
             setTimeout(() => this.router.navigate(['/programas']), 1000);
