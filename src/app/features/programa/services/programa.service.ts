@@ -12,6 +12,7 @@ export class ProgramaService {
     private readonly url = `${environment.apiUrl}/programas`;
 
     getAll(): Observable<Programa[]> { return this.http.get<Programa[]>(this.url); }
+    getByPlanId(planPsbId: string): Observable<Programa[]> { return this.http.get<Programa[]>(`${this.url}?planPsbId=${planPsbId}`); }
     getById(id: string): Observable<Programa> { return this.http.get<Programa>(`${this.url}/${id}`); }
     create(dto: CreateProgramaDto): Observable<Programa> { return this.http.post<Programa>(this.url, dto); }
     update(id: string, dto: UpdateProgramaDto): Observable<Programa> { return this.http.patch<Programa>(`${this.url}/${id}`, dto); }
