@@ -9,7 +9,7 @@ import { UpdateEmpresaDto } from '../models/update-empresa.dto';
 @Injectable({ providedIn: 'root' })
 export class EmpresaService {
     private http = inject(HttpClient);
-    private readonly url = `${environment.apiUrl}/empresas`;
+    private readonly url = `${environment.apiUrl}/empresa`;
 
     getAll(): Observable<Empresa[]> {
         return this.http.get<Empresa[]>(this.url);
