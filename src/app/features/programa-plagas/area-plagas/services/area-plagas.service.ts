@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@/environments/environment';
-const BASE = environment.apiUrl + '/areas-plagas'; // Ajusta la URL base según tu configuración de API
+const BASE = environment.apiUrl + '/area-plagas'; // Ajusta la URL base según tu configuración de API
 import { Area } from '../models/area';
 
 @Injectable({
