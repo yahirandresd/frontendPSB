@@ -1,0 +1,42 @@
+<div class="flex flex-col gap-4">
+
+    <!-- Nombre -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Nombre del Área <span class="text-red-500">*</span></label>
+        <input pInputText
+               [(ngModel)]="form.nombre"
+               placeholder="Ej: Bodega principal"
+               class="w-full" />
+    </div>
+
+    <!-- Descripción -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Descripción</label>
+        <textarea pTextarea
+                  [(ngModel)]="form.descripcion"
+                  placeholder="Descripción del área..."
+                  rows="3"
+                  class="w-full"></textarea>
+    </div>
+
+    <!-- Nivel de Riesgo -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Nivel de Riesgo <span class="text-red-500">*</span></label>
+        <p-select
+            [(ngModel)]="form.nivelRiesgo"
+            [options]="nivelesRiesgo"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Seleccione el nivel de riesgo"
+            styleClass="w-full" />
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true"
+                  (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando"
+                  (onClick)="onGuardar()" />
+    </div>
+
+</div>

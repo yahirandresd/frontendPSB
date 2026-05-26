@@ -1,54 +1,58 @@
-.layout-menu {
-  list-style: none;
-  padding: 1rem;
+/* =========================================
+   WRAPPER
+   ========================================= */
+.layout-wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
-.menu-title {
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+/* =========================================
+   SIDEBAR
+   ========================================= */
+.layout-sidebar {
+    width: 280px;
+    min-width: 280px;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.layout-menu li {
-  margin-bottom: 0.5rem;
+.layout-wrapper.layout-static-inactive .layout-sidebar {
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
 }
 
-.layout-menu a {
-  display: flex;
-  align-items: center;
-  padding: 0.7rem;
-  border-radius: 10px;
-  text-decoration: none;
-  color: #333;
-  transition: 0.2s;
+/* =========================================
+   CONTENIDO
+   ========================================= */
+.layout-main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* 🔥 CLAVE */
+    margin-top: 55px;
 }
 
-.layout-menu a:hover {
-  background-color: #e8f0fe;
+.layout-main {
+    flex: 1;
+    min-height: 0; /* 🔥 CLAVE */
+    overflow-y: auto;
+    padding: 1.5rem;
 }
 
-.layout-menu i {
-  margin-right: 10px;
+/* =========================================
+   MODO OSCURO
+   ========================================= */
+
+.app-dark .layout-sidebar {
+    background: var(--surface-card);
+    border-right: 1px solid var(--surface-border);
 }
 
-/* BOTÓN INFERIOR */
-.menu-footer {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
-  padding: 0 1rem;
-}
-
-.new-button {
-    width: 90%;
-    margin: 0 auto;
-    display: block;
-
-    background-color: #2563eb !important;
-    border: none !important;
-    height: 48px;
-    font-weight: 700;
-    border-radius: 25px;
-
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+.app-dark .layout-main {
+    background: var(--surface-ground);
 }

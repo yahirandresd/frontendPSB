@@ -1,0 +1,12 @@
+<p-toast />
+
+<div class="card">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Agregar paso al checklist</h2>
+        <p class="text-muted-color mt-1">Registra la verificación de un paso de limpieza</p>
+    </div>
+
+    <app-checklist-limpieza-form
+        [registroId]="registroId"
+        (formSubmit)="onFormSubmit($any($event))" />
+</div>

@@ -1,0 +1,41 @@
+<div class="flex flex-col gap-4">
+
+    <!-- Objetivo -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Objetivo <span class="text-red-500">*</span></label>
+        <textarea pTextarea
+                  [(ngModel)]="form.objetivo"
+                  placeholder="Objetivo del programa de control de plagas..."
+                  rows="2"
+                  class="w-full"></textarea>
+    </div>
+
+    <!-- Alcance -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Alcance <span class="text-red-500">*</span></label>
+        <textarea pTextarea
+                  [(ngModel)]="form.alcance"
+                  placeholder="Alcance del programa..."
+                  rows="2"
+                  class="w-full"></textarea>
+    </div>
+
+    <!-- Procedimiento General -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Procedimiento General</label>
+        <textarea pTextarea
+                  [(ngModel)]="form.procedimientoGeneral"
+                  placeholder="Descripción del procedimiento general..."
+                  rows="3"
+                  class="w-full"></textarea>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-2 mt-2">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true"
+                  (onClick)="onCancelar()" />
+        <p-button label="Guardar" icon="pi pi-check" [loading]="guardando"
+                  (onClick)="onGuardar()" />
+    </div>
+
+</div>

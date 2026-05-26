@@ -1,0 +1,106 @@
+<div class="flex flex-col gap-6">
+
+    <!-- Header del programa -->
+    <div class="card">
+        @if (cargando) {
+            <p-skeleton height="2rem" styleClass="mb-2" />
+            <p-skeleton height="1rem" width="60%" styleClass="mb-1" />
+            <p-skeleton height="1rem" width="40%" />
+        } @else if (programa) {
+            <div class="flex flex-col gap-3">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h4 class="text-2xl font-bold text-surface-900 dark:text-surface-0 mb-1">
+                            <i class="pi pi-shield mr-2 text-primary"></i>Programa de Control de Plagas
+                        </h4>
+                        <p class="text-muted-color text-sm">{{ programa.objetivo }}</p>
+                    </div>
+                    <p-button label="Editar programa" icon="pi pi-pencil"
+                              severity="secondary" [outlined]="true"
+                              (onClick)="mostrarFormulario = true" />
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm mt-2">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-muted-color font-medium">Alcance</span>
+                        <span>{{ programa.alcance }}</span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-muted-color font-medium">Procedimiento General</span>
+                        <span>{{ programa.procedimientoGeneral || '—' }}</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Estadísticas -->
+    <div>
+        <h6 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-3">
+            Resumen del módulo
+        </h6>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            @for (stat of estadisticas; track stat.label) {
+                <div class="card flex flex-col items-center gap-2 py-4 text-center">
+                    @if (cargandoStats) {
+                        <p-skeleton shape="circle" size="2.5rem" />
+                        <p-skeleton height="1.5rem" width="3rem" />
+                        <p-skeleton height="0.75rem" width="4rem" />
+                    } @else {
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ stat.color }}">
+                            <i [class]="stat.icono + ' text-lg'"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-surface-900 dark:text-surface-0">
+                            {{ stat.valor ?? '—' }}
+                        </span>
+                        <span class="text-xs text-muted-color">{{ stat.label }}</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Accesos directos a secciones -->
+    <div>
+        <h6 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-3">
+            Secciones del módulo
+        </h6>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (seccion of secciones; track seccion.ruta) {
+                <div
+                    class="card border-2 cursor-pointer transition-all duration-200 {{ seccion.color }}"
+                    (click)="navegarA(seccion.ruta)">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-surface-100 dark:bg-surface-700 flex items-center justify-center flex-shrink-0">
+                            <i [class]="seccion.icono + ' text-xl text-primary'"></i>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <span class="font-semibold text-surface-900 dark:text-surface-0">
+                                {{ seccion.label }}
+                            </span>
+                            <span class="text-xs text-muted-color leading-relaxed">
+                                {{ seccion.descripcion }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<p-toast />
+
+<!-- Dialog editar programa -->
+<p-dialog
+    [(visible)]="mostrarFormulario"
+    header="Editar Programa de Control de Plagas"
+    [modal]="true"
+    [style]="{ width: '700px' }"
+    [closable]="true">
+    <app-programa-plagas-form
+        [programa]="programa"
+        (guardado)="onGuardado()"
+        (cancelado)="mostrarFormulario = false" />
+</p-dialog>

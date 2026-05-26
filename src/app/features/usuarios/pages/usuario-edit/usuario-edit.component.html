@@ -1,0 +1,82 @@
+<p-toast />
+
+@if (cargando()) {
+    <div class="flex justify-center items-center py-24">
+        <p-progressSpinner strokeWidth="4" />
+    </div>
+} @else if (usuario()) {
+
+    <!-- Nav -->
+    <div class="flex items-center justify-between mb-6">
+        <button pButton icon="pi pi-arrow-left" label="Volver al perfil"
+            [text]="true" severity="secondary" (click)="volver()"></button>
+        <span class="text-sm text-muted-color hidden sm:block">
+            Editando: <span class="font-semibold text-surface-900 dark:text-surface-0">{{ usuario()!.nombre }}</span>
+        </span>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+
+        <!-- Sidebar izquierdo: identidad del usuario -->
+        <div class="lg:col-span-1 flex flex-col gap-4">
+
+            <div class="card flex flex-col items-center text-center gap-3">
+                <p-avatar
+                    [label]="iniciales(usuario()!.nombre)"
+                    shape="circle"
+                    [style]="{ width: '4.5rem', height: '4.5rem', fontSize: '1.4rem', fontWeight: '700',
+                               background: 'color-mix(in srgb, var(--p-primary-color) 15%, transparent)',
+                               color: 'var(--p-primary-color)' }" />
+                <div>
+                    <p class="font-bold text-surface-900 dark:text-surface-0 m-0">{{ usuario()!.nombre }}</p>
+                    <p class="text-muted-color text-sm m-0 mt-1">{{ usuario()!.email }}</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <p-tag [value]="usuario()!.rol | titlecase" [severity]="rolSeverity(usuario()!.rol)" />
+                    @if (usuario()!.estado === 'activo') {
+                        <p-tag severity="success" value="Activo" icon="pi pi-check-circle" />
+                    } @else {
+                        <p-tag severity="secondary" value="Inactivo" icon="pi pi-ban" />
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <p class="text-xs font-bold uppercase tracking-widest text-muted-color mb-3">Sobre este formulario</p>
+                <ul class="flex flex-col gap-2 text-sm text-muted-color list-none p-0 m-0">
+                    <li class="flex items-start gap-2">
+                        <i class="pi pi-lock text-xs mt-1 shrink-0"></i>
+                        <span>El correo no se puede cambiar desde aquí</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="pi pi-shield text-xs mt-1 shrink-0"></i>
+                        <span>Deja el PIN vacío para conservar el actual</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="pi pi-info-circle text-xs mt-1 shrink-0"></i>
+                        <span>Los cambios se aplican de inmediato</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Formulario principal -->
+        <div class="lg:col-span-3 card">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="flex items-center justify-center w-10 h-10 rounded-xl"
+                    style="background: color-mix(in srgb, var(--p-primary-color) 12%, transparent);">
+                    <i class="pi pi-pencil" style="color: var(--p-primary-color);"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-surface-900 dark:text-surface-0 m-0">Editar usuario</h2>
+                    <p class="text-muted-color text-sm m-0">Modifica los datos del usuario</p>
+                </div>
+            </div>
+
+            <app-usuario-form [usuario]="usuario()!" (formSubmit)="onSubmit($event)" />
+        </div>
+
+    </div>
+
+}

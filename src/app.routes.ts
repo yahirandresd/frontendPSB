@@ -1,23 +1,72 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
-import { Dashboard } from './app/features/dashboard/dashboard';
-import { Documentation } from './app/features/documentation/documentation';
-import { Landing } from './app/features/landing/landing';
-import { Notfound } from './app/features/notfound/notfound';
+import { authGuard } from './app/features/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
+    { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
     {
         path: '',
         component: AppLayout,
+        canActivate: [authGuard],
         children: [
-            { path: '', component: Dashboard },
+            {
+                path: 'dashboard',
+                loadComponent: () =>
+                    import('./app/features/dashboard/dashboard').then(m => m.Dashboard)
+            },
             { path: 'uikit', loadChildren: () => import('./app/features/uikit/uikit.routes') },
-            { path: 'documentation', component: Documentation },
-            { path: 'features', loadChildren: () => import('./app/features/pages.routes') }
+            {
+                path: 'documentation',
+                loadComponent: () =>
+                    import('./app/features/documentation/documentation').then(m => m.Documentation)
+            },
+            { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
+            // ── Configuración inicial (empresa) ──
+            {
+                path: 'configuracion-inicial',
+                loadChildren: () =>
+                    import('./app/features/configuracion/empresa/empresa.routes').then(m => m.EMPRESA_ROUTES)
+            },
+            // ── Módulo control de plagas ──
+            {
+                path: 'control-plagas',
+                loadChildren: () =>
+                    import('./app/features/programa-plagas/control-plagas.routes')
+                        .then(m => m.CONTROL_PLAGAS_ROUTES)
+            },
+            { path: 'limpieza', loadChildren: () => import('./app/features/limpieza/limpieza.routes') },
+            // ── Módulo programa agua ──
+            {
+                path: 'programa-agua',
+                loadChildren: () =>
+                    import('./app/features/agua/agua.routes').then(m => m.AGUA_ROUTES)
+            },
+            // ── Módulo programa residuos ──
+            {
+                path: 'programa-residuos',
+                loadChildren: () =>
+                    import('./app/features/programa-residuos/programa-residuos.routes')
+            },
+            // ── Planes de Saneamiento (PSB) ──
+            {
+                path: 'planes',
+                loadChildren: () =>
+                    import('./app/features/configuracion/plan-psb/plan-psb.routes')
+            },
+            // ── Usuarios ──
+            { path: 'usuarios', loadChildren: () => import('./app/features/usuarios/usuarios.routes') },
         ]
     },
-    { path: 'landing', component: Landing },
-    { path: 'notfound', component: Notfound },
+    {
+        path: 'landing',
+        loadComponent: () =>
+            import('./app/features/landing/landing').then(m => m.Landing)
+    },
+    {
+        path: 'notfound',
+        loadComponent: () =>
+            import('./app/features/notfound/notfound').then(m => m.Notfound)
+    },
     { path: 'auth', loadChildren: () => import('./app/features/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
 ];

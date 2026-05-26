@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
+        {{ programa ? 'Editar' : 'Nuevo' }} Programa
+    </div>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="tipo" class="font-medium">Tipo</label>
+            <p-select
+                id="tipo"
+                [(ngModel)]="model.tipo"
+                name="tipo"
+                [options]="tipoOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un tipo"
+                class="w-full"
+                required
+            />
+            @if (submitted && !model.tipo) { <small class="text-red-500">El tipo es requerido</small> }
+        </div>
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="frecuencia" class="font-medium">Frecuencia</label>
+            <p-select
+                id="frecuencia"
+                [(ngModel)]="model.frecuencia"
+                name="frecuencia"
+                [options]="frecuenciaOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona una frecuencia"
+                class="w-full"
+                required
+            />
+            @if (submitted && !model.frecuencia) { <small class="text-red-500">La frecuencia es requerida</small> }
+        </div>
+        <div class="col-span-12 flex flex-col gap-2">
+            <label for="nombre" class="font-medium">Nombre</label>
+            <input id="nombre" pInputText [(ngModel)]="model.nombre" name="nombre" class="w-full" required />
+            @if (submitted && !model.nombre) { <small class="text-red-500">El nombre es requerido</small> }
+        </div>
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="responsable" class="font-medium">Responsable</label>
+            <input id="responsable" pInputText [(ngModel)]="model.responsable" name="responsable" class="w-full" required />
+            @if (submitted && !model.responsable) { <small class="text-red-500">El responsable es requerido</small> }
+        </div>
+        <div class="col-span-12 flex flex-col gap-2">
+            <label for="descripcion" class="font-medium">Descripción</label>
+            <textarea id="descripcion" pInputTextarea [(ngModel)]="model.descripcion" name="descripcion" rows="3" class="w-full"></textarea>
+        </div>
+        <div class="col-span-12 flex justify-end gap-2 mt-4">
+            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button type="submit" label="Guardar" [loading]="saving" />
+        </div>
+    </form>
+</div>
