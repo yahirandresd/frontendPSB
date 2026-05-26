@@ -38,7 +38,7 @@ export class ProgramaLimpiezaListComponent implements OnInit {
 
     modules: LimpiezaModule[] = [
         { label: 'Equipos y Áreas',    icon: 'pi pi-wrench',   route: '/limpieza/equipos',            description: 'Equipos, áreas y utensilios de limpieza' },
-        { label: 'Productos Químicos', icon: 'pi pi-flask',    route: '/limpieza/productos-quimicos', description: 'Productos autorizados con registro INVIMA' },
+        { label: 'Productos Químicos', icon: 'pi pi-sparkles', route: '/limpieza/productos-quimicos', description: 'Productos autorizados con registro INVIMA' },
         { label: 'Pasos de Limpieza',  icon: 'pi pi-list',     route: '/limpieza/programas',          description: 'Pasos definidos por programa de limpieza' },
         { label: 'Registros',          icon: 'pi pi-file-edit', route: '/limpieza/programas',         description: 'Registros diarios de ejecución y verificación' },
     ];
