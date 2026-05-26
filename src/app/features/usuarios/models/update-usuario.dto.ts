@@ -5,6 +5,6 @@ export interface UpdateUsuarioDto {
     rol?: UsuarioRol;
     cargo?: string;
     estado?: UsuarioEstado;
-    pin_firma_hash?: string;
-    firma_digitalizada?: string;
+    pinFirmaHash?: string;
+    firmaDigitalizada?: string;
 }

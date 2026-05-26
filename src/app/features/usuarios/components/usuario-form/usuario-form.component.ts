@@ -34,15 +34,15 @@ export class UsuarioFormComponent implements OnInit {
     ];
 
     form: FormGroup = this.fb.group({
-        empresa_id:        ['', Validators.required],
+        empresaId:         ['', Validators.required],
         nombre:            ['', Validators.required],
         email:             ['', [Validators.required, Validators.email]],
         password:          ['', [Validators.required, Validators.minLength(6)]],
         rol:               ['', Validators.required],
         cargo:             [''],
         estado:            ['activo'],
-        pin_firma_hash:    [''],
-        firma_digitalizada: [''],
+        pinFirmaHash:      [''],
+        firmaDigitalizada: [''],
     });
 
     get f() { return this.form.controls; }
@@ -55,10 +55,9 @@ export class UsuarioFormComponent implements OnInit {
                 rol:               this.usuario.rol,
                 cargo:             this.usuario.cargo ?? '',
                 estado:            this.usuario.estado,
-                firma_digitalizada: this.usuario.firma_digitalizada ?? '',
-                // pin_firma_hash se deja vacío intencionalmente: no se muestra ni se envía salvo que el admin lo cambie
+                firmaDigitalizada: this.usuario.firmaDigitalizada ?? '',
             });
-            this.f['empresa_id'].disable();
+            this.f['empresaId'].disable();
             this.f['email'].disable();
             this.f['password'].clearValidators();
             this.f['password'].disable();
@@ -77,19 +76,19 @@ export class UsuarioFormComponent implements OnInit {
                 rol:               raw.rol,
                 cargo:             raw.cargo || undefined,
                 estado:            raw.estado,
-                ...(raw.pin_firma_hash ? { pin_firma_hash: raw.pin_firma_hash } : {}),
-                firma_digitalizada: raw.firma_digitalizada || undefined,
+                ...(raw.pinFirmaHash ? { pinFirmaHash: raw.pinFirmaHash } : {}),
+                firmaDigitalizada: raw.firmaDigitalizada || undefined,
               } as UpdateUsuarioDto
             : {
-                empresa_id:        raw.empresa_id,
+                empresaId:         raw.empresaId,
                 nombre:            raw.nombre,
                 email:             raw.email,
                 password:          raw.password,
                 rol:               raw.rol,
                 cargo:             raw.cargo || undefined,
                 estado:            raw.estado || undefined,
-                pin_firma_hash:    raw.pin_firma_hash || undefined,
-                firma_digitalizada: raw.firma_digitalizada || undefined,
+                pinFirmaHash:      raw.pinFirmaHash || undefined,
+                firmaDigitalizada: raw.firmaDigitalizada || undefined,
               } as CreateUsuarioDto;
         this.formSubmit.emit(payload);
     }

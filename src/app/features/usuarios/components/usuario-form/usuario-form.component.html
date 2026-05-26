@@ -1,14 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
 
     @if (!esEdicion) {
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex flex-col gap-1 md:col-span-2">
-                <label for="empresa_id" class="font-semibold text-sm">ID Empresa <span class="text-red-500">*</span></label>
-                <input pInputText id="empresa_id" formControlName="empresa_id" placeholder="UUID de la empresa" />
-                @if (f['empresa_id'].invalid && f['empresa_id'].touched) {
-                    <small class="text-red-500">El ID de empresa es requerido.</small>
-                }
-            </div>
+        <div class="flex flex-col gap-1">
+            <label for="empresaId" class="font-semibold text-sm">ID Empresa <span class="text-red-500">*</span></label>
+            <input pInputText id="empresaId" formControlName="empresaId" placeholder="UUID de la empresa" />
+            @if (f['empresaId'].invalid && f['empresaId'].touched) {
+                <small class="text-red-500">El ID de empresa es requerido.</small>
+            }
         </div>
     }
 
@@ -83,25 +81,23 @@
 
             <div class="flex flex-col gap-1">
                 @if (esEdicion) {
-                    <label for="pin_firma_hash" class="font-semibold text-sm">Nuevo PIN de firma</label>
-                    <p-password id="pin_firma_hash" formControlName="pin_firma_hash"
+                    <label for="pinFirmaHash" class="font-semibold text-sm">Nuevo PIN de firma</label>
+                    <p-password id="pinFirmaHash" formControlName="pinFirmaHash"
                         [toggleMask]="true" [feedback]="false"
-                        placeholder="Dejar vacío para no cambiar" styleClass="w-full"
-                        />
+                        placeholder="Dejar vacío para no cambiar" styleClass="w-full" />
                     <small class="text-muted-color">Solo escribe si quieres cambiar el PIN actual</small>
                 } @else {
-                    <label for="pin_firma_hash" class="font-semibold text-sm">PIN de firma (4 dígitos)</label>
-                    <p-password id="pin_firma_hash" formControlName="pin_firma_hash"
+                    <label for="pinFirmaHash" class="font-semibold text-sm">PIN de firma (4 dígitos)</label>
+                    <p-password id="pinFirmaHash" formControlName="pinFirmaHash"
                         [toggleMask]="true" [feedback]="false"
-                        placeholder="Ej. 1234" styleClass="w-full"
-                        />
+                        placeholder="Ej. 1234" styleClass="w-full" />
                     <small class="text-muted-color">PIN numérico para validar registros con firma</small>
                 }
             </div>
 
             <div class="flex flex-col gap-1">
-                <label for="firma_digitalizada" class="font-semibold text-sm">URL firma digitalizada</label>
-                <input pInputText id="firma_digitalizada" formControlName="firma_digitalizada"
+                <label for="firmaDigitalizada" class="font-semibold text-sm">URL firma digitalizada</label>
+                <input pInputText id="firmaDigitalizada" formControlName="firmaDigitalizada"
                     placeholder="https://..." />
             </div>
 
