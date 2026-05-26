@@ -52,6 +52,7 @@ export class UsuarioFormComponent implements OnInit {
         if (this.usuario) {
             this.form.patchValue({
                 nombre:            this.usuario.nombre,
+                email:             this.usuario.email,
                 rol:               this.usuario.rol,
                 cargo:             this.usuario.cargo ?? '',
                 estado:            this.usuario.estado,
