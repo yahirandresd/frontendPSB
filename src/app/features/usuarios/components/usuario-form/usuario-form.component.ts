@@ -50,7 +50,14 @@ export class UsuarioFormComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.usuario) {
-            this.form.patchValue(this.usuario);
+            this.form.patchValue({
+                nombre:            this.usuario.nombre,
+                rol:               this.usuario.rol,
+                cargo:             this.usuario.cargo ?? '',
+                estado:            this.usuario.estado,
+                firma_digitalizada: this.usuario.firma_digitalizada ?? '',
+                // pin_firma_hash se deja vacío intencionalmente: no se muestra ni se envía salvo que el admin lo cambie
+            });
             this.f['empresa_id'].disable();
             this.f['email'].disable();
             this.f['password'].clearValidators();
@@ -70,7 +77,7 @@ export class UsuarioFormComponent implements OnInit {
                 rol:               raw.rol,
                 cargo:             raw.cargo || undefined,
                 estado:            raw.estado,
-                pin_firma_hash:    raw.pin_firma_hash || undefined,
+                ...(raw.pin_firma_hash ? { pin_firma_hash: raw.pin_firma_hash } : {}),
                 firma_digitalizada: raw.firma_digitalizada || undefined,
               } as UpdateUsuarioDto
             : {

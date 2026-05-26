@@ -80,17 +80,31 @@
     <div>
         <p class="text-xs font-bold uppercase tracking-widest text-muted-color mb-3">Firma</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
             <div class="flex flex-col gap-1">
-                <label for="pin_firma_hash" class="font-semibold text-sm">PIN de firma (4 dígitos)</label>
-                <input pInputText id="pin_firma_hash" formControlName="pin_firma_hash"
-                    placeholder="Ej. 1234" maxlength="4" />
-                <small class="text-muted-color">PIN numérico para validar registros con firma</small>
+                @if (esEdicion) {
+                    <label for="pin_firma_hash" class="font-semibold text-sm">Nuevo PIN de firma</label>
+                    <p-password id="pin_firma_hash" formControlName="pin_firma_hash"
+                        [toggleMask]="true" [feedback]="false"
+                        placeholder="Dejar vacío para no cambiar" styleClass="w-full"
+                        />
+                    <small class="text-muted-color">Solo escribe si quieres cambiar el PIN actual</small>
+                } @else {
+                    <label for="pin_firma_hash" class="font-semibold text-sm">PIN de firma (4 dígitos)</label>
+                    <p-password id="pin_firma_hash" formControlName="pin_firma_hash"
+                        [toggleMask]="true" [feedback]="false"
+                        placeholder="Ej. 1234" styleClass="w-full"
+                        />
+                    <small class="text-muted-color">PIN numérico para validar registros con firma</small>
+                }
             </div>
+
             <div class="flex flex-col gap-1">
                 <label for="firma_digitalizada" class="font-semibold text-sm">URL firma digitalizada</label>
                 <input pInputText id="firma_digitalizada" formControlName="firma_digitalizada"
                     placeholder="https://..." />
             </div>
+
         </div>
     </div>
 
