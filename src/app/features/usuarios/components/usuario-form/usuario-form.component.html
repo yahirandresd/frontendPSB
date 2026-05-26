@@ -81,17 +81,23 @@
 
             <div class="flex flex-col gap-1">
                 @if (esEdicion) {
-                    <label for="pinFirmaHash" class="font-semibold text-sm">Nuevo PIN de firma</label>
-                    <p-password id="pinFirmaHash" formControlName="pinFirmaHash"
-                        [toggleMask]="true" [feedback]="false"
-                        placeholder="Dejar vacío para no cambiar" styleClass="w-full" />
-                    <small class="text-muted-color">Solo escribe si quieres cambiar el PIN actual</small>
+                    <label class="font-semibold text-sm">Nuevo PIN de firma</label>
+                    <p-inputotp formControlName="pinFirmaHash" [length]="4"
+                        [integerOnly]="true" [mask]="true" />
+                    @if (f['pinFirmaHash'].invalid && f['pinFirmaHash'].touched) {
+                        <small class="text-red-500">El PIN debe tener exactamente 4 dígitos.</small>
+                    } @else {
+                        <small class="text-muted-color">Déjalo vacío para conservar el PIN actual</small>
+                    }
                 } @else {
-                    <label for="pinFirmaHash" class="font-semibold text-sm">PIN de firma (4 dígitos)</label>
-                    <p-password id="pinFirmaHash" formControlName="pinFirmaHash"
-                        [toggleMask]="true" [feedback]="false"
-                        placeholder="Ej. 1234" styleClass="w-full" />
-                    <small class="text-muted-color">PIN numérico para validar registros con firma</small>
+                    <label class="font-semibold text-sm">PIN de firma</label>
+                    <p-inputotp formControlName="pinFirmaHash" [length]="4"
+                        [integerOnly]="true" [mask]="true" />
+                    @if (f['pinFirmaHash'].invalid && f['pinFirmaHash'].touched) {
+                        <small class="text-red-500">El PIN debe tener exactamente 4 dígitos.</small>
+                    } @else {
+                        <small class="text-muted-color">PIN numérico de 4 dígitos para validar registros con firma</small>
+                    }
                 }
             </div>
 

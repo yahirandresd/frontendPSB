@@ -1,17 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputOtpModule } from 'primeng/inputotp';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { Usuario, UsuarioRol } from '../../models/usuario.interface';
 import { CreateUsuarioDto } from '../../models/create-usuario.dto';
 import { UpdateUsuarioDto } from '../../models/update-usuario.dto';
 
+function pinValidator(control: AbstractControl): ValidationErrors | null {
+    const val = control.value as string;
+    if (!val || val === '') return null;
+    return /^\d{4}$/.test(val) ? null : { pinInvalido: true };
+}
+
 @Component({
     selector: 'app-usuario-form',
     standalone: true,
-    imports: [ReactiveFormsModule, InputTextModule, PasswordModule, SelectModule, ButtonModule],
+    imports: [ReactiveFormsModule, InputTextModule, InputOtpModule, PasswordModule, SelectModule, ButtonModule],
     templateUrl: './usuario-form.component.html',
     styleUrls: ['./usuario-form.component.scss']
 })
@@ -41,7 +48,7 @@ export class UsuarioFormComponent implements OnInit {
         rol:               ['', Validators.required],
         cargo:             [''],
         estado:            ['activo'],
-        pinFirmaHash:      [''],
+        pinFirmaHash:      ['', pinValidator],
         firmaDigitalizada: [''],
     });
 
