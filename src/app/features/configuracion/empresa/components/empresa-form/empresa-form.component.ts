@@ -7,11 +7,11 @@ import { Empresa } from '../../models/empresa.interface';
 export interface EmpresaFormValue {
     nombre: string;
     nit: string;
-    tipo_negocio: string;
+    tipoNegocio: string;
     direccion: string;
     representante: string;
-    registro_sanitario_funcionamiento: string;
-    resolucion_invima: string;
+    registroSanitarioFuncionamiento: string;
+    resolucionInvima: string;
 }
 
 @Component({
@@ -33,11 +33,11 @@ export class EmpresaFormComponent implements OnInit {
     form: FormGroup = this.fb.group({
         nombre: ['', Validators.required],
         nit: ['', Validators.required],
-        tipo_negocio: ['', Validators.required],
+        tipoNegocio: ['', Validators.required],
         direccion: ['', Validators.required],
         representante: ['', Validators.required],
-        registro_sanitario_funcionamiento: [''],
-        resolucion_invima: [''],
+        registroSanitarioFuncionamiento: [''],
+        resolucionInvima: [''],
     });
 
     ngOnInit() {
@@ -45,11 +45,11 @@ export class EmpresaFormComponent implements OnInit {
             this.form.patchValue({
                 nombre: this.empresa.nombre,
                 nit: this.empresa.nit,
-                tipo_negocio: this.empresa.tipo_negocio,
+                tipoNegocio: this.empresa.tipoNegocio,
                 direccion: this.empresa.direccion,
                 representante: this.empresa.representante,
-                registro_sanitario_funcionamiento: this.empresa.registro_sanitario_funcionamiento ?? '',
-                resolucion_invima: this.empresa.resolucion_invima ?? '',
+                registroSanitarioFuncionamiento: this.empresa.registroSanitarioFuncionamiento ?? '',
+                resolucionInvima: this.empresa.resolucionInvima ?? '',
             });
         }
     }

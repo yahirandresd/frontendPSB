@@ -22,9 +22,9 @@
         </div>
 
         <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-            <label for="tipo_negocio" class="font-medium">Tipo de negocio *</label>
-            <input id="tipo_negocio" pInputText formControlName="tipo_negocio" class="w-full" placeholder="Ej: Empresa láctea" />
-            @if (f['tipo_negocio'].touched && f['tipo_negocio'].invalid) {
+            <label for="tipoNegocio" class="font-medium">Tipo de negocio *</label>
+            <input id="tipoNegocio" pInputText formControlName="tipoNegocio" class="w-full" placeholder="Ej: Empresa láctea" />
+            @if (f['tipoNegocio'].touched && f['tipoNegocio'].invalid) {
                 <small class="text-red-500">El tipo de negocio es requerido</small>
             }
         </div>
@@ -46,13 +46,13 @@
         </div>
 
         <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-            <label for="registro_sanitario" class="font-medium">Registro sanitario de funcionamiento</label>
-            <input id="registro_sanitario" pInputText formControlName="registro_sanitario_funcionamiento" class="w-full" placeholder="Número de registro (opcional)" />
+            <label for="registroSanitarioFuncionamiento" class="font-medium">Registro sanitario de funcionamiento</label>
+            <input id="registroSanitarioFuncionamiento" pInputText formControlName="registroSanitarioFuncionamiento" class="w-full" placeholder="Número de registro (opcional)" />
         </div>
 
         <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-            <label for="resolucion_invima" class="font-medium">Resolución INVIMA</label>
-            <input id="resolucion_invima" pInputText formControlName="resolucion_invima" class="w-full" placeholder="Número de resolución (opcional)" />
+            <label for="resolucionInvima" class="font-medium">Resolución INVIMA</label>
+            <input id="resolucionInvima" pInputText formControlName="resolucionInvima" class="w-full" placeholder="Número de resolución (opcional)" />
         </div>
 
         <div class="col-span-12 flex justify-end mt-4">
