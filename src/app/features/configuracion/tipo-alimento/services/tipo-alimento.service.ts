@@ -9,7 +9,7 @@ import { UpdateTipoAlimentoDto } from '../models/update-tipo-alimento.dto';
 @Injectable({ providedIn: 'root' })
 export class TipoAlimentoService {
     private http = inject(HttpClient);
-    private readonly url = `${environment.apiUrl}/tipos-alimento`;
+    private readonly url = `${environment.apiUrl}/tipo-alimento`;
 
     getAll(): Observable<TipoAlimento[]> {
         return this.http.get<TipoAlimento[]>(this.url);

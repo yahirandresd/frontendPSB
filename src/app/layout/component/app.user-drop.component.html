@@ -1,0 +1,50 @@
+<div class="relative">
+    <button
+        type="button"
+        class="layout-topbar-action"
+        pStyleClass="@next"
+        enterFromClass="hidden"
+        enterActiveClass="animate-scalein"
+        leaveToClass="hidden"
+        leaveActiveClass="animate-fadeout"
+        [hideOnOutsideClick]="true"
+    >
+        <div class="user-avatar">
+            {{ userInitials() }}
+        </div>
+    </button>
+
+    <div class="user-drop hidden">
+        <div class="user-drop-header">
+            <div class="user-avatar user-avatar--lg">
+                {{ userInitials() }}
+            </div>
+            <div class="user-drop-info">
+                @if (userName()) {
+                    <p class="user-drop-name">{{ userName() }}</p>
+                }
+                <p class="user-drop-email">{{ userEmail() }}</p>
+            </div>
+        </div>
+
+        <div class="user-drop-section">
+            <button type="button" class="user-drop-item">
+                <i class="pi pi-user"></i>
+                <span>Mi perfil</span>
+            </button>
+            <button type="button" class="user-drop-item">
+                <i class="pi pi-bell"></i>
+                <span>Notificaciones</span>
+            </button>
+        </div>
+
+        <div class="user-drop-divider"></div>
+
+        <div class="user-drop-section">
+            <button type="button" (click)="logout()" class="user-drop-item user-drop-item--danger">
+                <i class="pi pi-sign-out"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </div>
+    </div>
+</div>

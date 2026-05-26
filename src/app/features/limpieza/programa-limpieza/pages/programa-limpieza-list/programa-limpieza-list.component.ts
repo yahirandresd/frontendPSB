@@ -1,20 +1,36 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { SlicePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
+import { AccordionModule } from 'primeng/accordion';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { LucideAngularModule, LUCIDE_ICONS, LucideIconProvider, Wrench, FlaskConical, ClipboardList, FileText } from 'lucide-angular';
 import { ProgramaLimpiezaService } from '../../services/programa-limpieza.service';
 import { ProgramaLimpieza } from '../../models/programa-limpieza.interface';
+
+interface LimpiezaModule {
+    label: string;
+    icon: string;
+    route: string;
+    description: string;
+}
 
 @Component({
     selector: 'app-programa-limpieza-list',
     standalone: true,
-    imports: [TableModule, ButtonModule, ConfirmDialogModule, ToastModule, SlicePipe],
-    providers: [ConfirmationService, MessageService],
+    imports: [
+        RouterModule, TableModule, ButtonModule, CardModule, AccordionModule,
+        ConfirmDialogModule, ToastModule, SlicePipe, LucideAngularModule
+    ],
+    providers: [
+        ConfirmationService, MessageService,
+        { provide: LUCIDE_ICONS, useValue: new LucideIconProvider({ Wrench, FlaskConical, ClipboardList, FileText }), multi: true }
+    ],
     templateUrl: './programa-limpieza-list.component.html',
     styleUrls: ['./programa-limpieza-list.component.scss']
 })
@@ -26,6 +42,13 @@ export class ProgramaLimpiezaListComponent implements OnInit {
 
     programas = signal<ProgramaLimpieza[]>([]);
     cargando = signal(true);
+
+    modules: LimpiezaModule[] = [
+        { label: 'Equipos y Áreas',    icon: 'wrench',         route: '/limpieza/equipos',            description: 'Equipos, áreas y utensilios de limpieza' },
+        { label: 'Productos Químicos', icon: 'flask-conical',  route: '/limpieza/productos-quimicos', description: 'Productos autorizados con registro INVIMA' },
+        { label: 'Pasos de Limpieza',  icon: 'clipboard-list', route: '/limpieza/programas',          description: 'Pasos definidos por programa de limpieza' },
+        { label: 'Registros',          icon: 'file-text',      route: '/limpieza/programas',          description: 'Registros diarios de ejecución y verificación' },
+    ];
 
     async ngOnInit(): Promise<void> {
         await this.cargar();
@@ -42,6 +65,10 @@ export class ProgramaLimpiezaListComponent implements OnInit {
 
     irACrear(): void {
         this.router.navigate(['/limpieza/programas/crear']);
+    }
+
+    irAVer(id: string): void {
+        this.router.navigate(['/limpieza/programas', id]);
     }
 
     irAEditar(id: string): void {

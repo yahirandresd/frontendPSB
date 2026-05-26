@@ -45,9 +45,9 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
-                <a routerLink="/plan" routerLinkActive="active">
+                <a routerLink="/planes" routerLinkActive="active">
                     <i class="pi pi-check-square"></i>
-                    <span>Mi Plan de Saneamiento</span>
+                    <span>Planes de Saneamiento</span>
                 </a>
             </li>
 
@@ -95,6 +95,13 @@ import { RouterModule } from '@angular/router';
                     <span>Control de Plagas</span>
                 </a>
             </li>
+
+            <li>
+                <a routerLink="/usuarios" routerLinkActive="active">
+                    <i class="pi pi-users"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
         </ul>
     `,
     styles: [`
@@ -117,7 +124,7 @@ import { RouterModule } from '@angular/router';
             padding: 10px 12px;
             border-radius: 10px;
 
-            color: #374151;
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
 
@@ -136,7 +143,7 @@ import { RouterModule } from '@angular/router';
 
         /* 🔥 HOVER */
         .menu-list a:hover {
-            background: linear-gradient(90deg, #eef2ff, #f8fafc);
+            background: var(--surface-hover);
             transform: translateX(6px);
         }
 
@@ -144,23 +151,18 @@ import { RouterModule } from '@angular/router';
         .menu-list a:hover i,
         .menu-list a:hover .menu-svg-icon {
             transform: scale(1.2);
-            color: #2563eb;
+            color: var(--primary-color);
         }
 
         /* ICONO AZUL PERMANENTE */
         .menu-list a i.menu-icon-blue {
-            color: #2563eb;
-        }
-
-        /* TEXTO EN HOVER */
-        .menu-list a:hover span {
-            color: #111827;
+            color: var(--primary-color);
         }
 
         /* 🔥 ACTIVO */
         .menu-list a.active {
-            background-color: #e8f0fe;
-            color: #2563eb;
+            background-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+            color: var(--primary-color);
             font-weight: 600;
 
             transform: translateX(4px);
@@ -174,7 +176,7 @@ import { RouterModule } from '@angular/router';
             top: 20%;
             height: 60%;
             width: 4px;
-            background-color: #2563eb;
+            background-color: var(--primary-color);
             border-radius: 4px;
         }
 

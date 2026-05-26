@@ -1,0 +1,83 @@
+<div class="card">
+    <div class="flex justify-between items-center mb-6">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">
+            Planes de Saneamiento
+        </div>
+        <p-button label="Nuevo Plan" icon="pi pi-plus" routerLink="crear" />
+    </div>
+
+    @if (loading()) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (_ of [1, 2, 3]; track $index) {
+                <div class="border border-surface rounded-xl p-5 flex flex-col gap-3 animate-pulse">
+                    <div class="h-5 bg-surface-200 dark:bg-surface-700 rounded w-3/4"></div>
+                    <div class="h-4 bg-surface-200 dark:bg-surface-700 rounded w-1/2"></div>
+                    <div class="h-4 bg-surface-200 dark:bg-surface-700 rounded w-2/3"></div>
+                    <div class="h-9 bg-surface-200 dark:bg-surface-700 rounded mt-2"></div>
+                </div>
+            }
+        </div>
+    } @else if (planes().length === 0) {
+        <div class="flex flex-col items-center justify-center py-16 gap-4 text-muted-color">
+            <i class="pi pi-file text-5xl"></i>
+            <p class="text-lg">No hay planes de saneamiento registrados.</p>
+            <p-button label="Crear primer plan" icon="pi pi-plus" routerLink="crear" severity="secondary" />
+        </div>
+    } @else {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (plan of planes(); track plan.id) {
+                <div class="border border-surface rounded-xl p-5 flex flex-col gap-4 hover:shadow-md transition-shadow bg-surface-0 dark:bg-surface-900">
+
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0">
+                            <p class="text-surface-900 dark:text-surface-0 font-semibold text-base leading-tight">
+                                {{ plan.nombre }}
+                            </p>
+                            <p class="text-muted-color text-xs font-mono mt-0.5">#{{ plan.id.slice(0, 8) }}</p>
+                            @if (plan.empresa) {
+                                <p class="text-muted-color text-sm mt-1">{{ plan.empresa.nombre }}</p>
+                                <p class="text-muted-color text-xs">NIT {{ plan.empresa.nit }}</p>
+                            }
+                        </div>
+                        <i class="pi pi-check-square text-primary text-2xl mt-1 shrink-0"></i>
+                    </div>
+
+                    <div class="flex gap-2 flex-wrap">
+                        <p-tag [value]="plan.estado | uppercase" [severity]="estadoSeverity(plan.estado)" />
+                        <p-tag [value]="plan.nivel_riesgo | uppercase" [severity]="riesgoSeverity(plan.nivel_riesgo)" />
+                    </div>
+
+                    @if (plan.tipoAlimento) {
+                        <div class="border-t border-surface pt-3 flex flex-col gap-1">
+                            <p class="text-xs font-semibold text-muted-color uppercase tracking-wide">Tipo de alimento</p>
+                            <p class="text-sm font-medium text-surface-900 dark:text-surface-0">{{ plan.tipoAlimento.nombre }}</p>
+                            <p class="text-xs text-muted-color">{{ plan.tipoAlimento.descripcion }}</p>
+                        </div>
+                    }
+
+                    <div class="text-muted-color text-xs">
+                        Creado: {{ plan.createdAt | date:'dd/MM/yyyy' }}
+                    </div>
+
+                    <div class="flex gap-2">
+                        <p-button
+                            label="Ver"
+                            icon="pi pi-eye"
+                            severity="secondary"
+                            styleClass="flex-1"
+                            [routerLink]="[plan.id]"
+                        />
+                        <p-button
+                            label="Editar"
+                            icon="pi pi-pencil"
+                            styleClass="flex-1"
+                            [routerLink]="[plan.id, 'editar']"
+                        />
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<p-toast />
