@@ -45,9 +45,9 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
-                <a routerLink="/plan" routerLinkActive="active">
+                <a routerLink="/planes" routerLinkActive="active">
                     <i class="pi pi-check-square"></i>
-                    <span>Mi Plan de Saneamiento</span>
+                    <span>Planes de Saneamiento</span>
                 </a>
             </li>
 

@@ -1,0 +1,121 @@
+@if (loading()) {
+    <div class="card flex justify-center items-center py-16">
+        <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+    </div>
+} @else if (plan()) {
+    <div class="flex flex-col gap-4">
+
+        <!-- Header -->
+        <div class="card">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex flex-col gap-2">
+                    <h1 class="text-surface-900 dark:text-surface-0 text-2xl font-bold m-0">
+                        Plan v{{ plan()!.version }}
+                    </h1>
+                    <div class="flex gap-2 flex-wrap">
+                        <p-tag [value]="plan()!.estado" [severity]="estadoSeverity(plan()!.estado)" />
+                        <p-tag [value]="plan()!.nivel_riesgo" [severity]="riesgoSeverity(plan()!.nivel_riesgo)" />
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <p-button label="Volver" icon="pi pi-arrow-left" severity="secondary" (onClick)="volver()" />
+                    <p-button label="Editar" icon="pi pi-pencil" [routerLink]="['/planes', planId, 'editar']" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Info del plan + Tipo de alimento -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div class="card flex flex-col gap-4">
+                <p class="text-xs font-semibold text-muted-color uppercase tracking-wide m-0">Información del plan</p>
+                @if (plan()!.empresa) {
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-color">Empresa</span>
+                        <span class="font-medium text-surface-900 dark:text-surface-0">{{ plan()!.empresa!.nombre }}</span>
+                        <span class="text-xs text-muted-color">NIT {{ plan()!.empresa!.nit }}</span>
+                    </div>
+                }
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-color">Creado</span>
+                        <span class="text-sm font-medium">{{ plan()!.createdAt | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-color">Última actualización</span>
+                        <span class="text-sm font-medium">{{ plan()!.updatedAt | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            @if (plan()!.tipoAlimento) {
+                <div class="card flex flex-col gap-3">
+                    <p class="text-xs font-semibold text-muted-color uppercase tracking-wide m-0">Tipo de alimento</p>
+                    <div class="flex items-center gap-3">
+                        <span class="font-semibold text-surface-900 dark:text-surface-0 text-base">
+                            {{ plan()!.tipoAlimento!.nombre }}
+                        </span>
+                        <p-tag [value]="plan()!.tipoAlimento!.nivel_riesgo" [severity]="riesgoSeverity(plan()!.tipoAlimento!.nivel_riesgo)" />
+                    </div>
+                    <p class="text-sm text-muted-color m-0">{{ plan()!.tipoAlimento!.descripcion }}</p>
+                </div>
+            }
+        </div>
+
+        <!-- Programa principal -->
+        @if (programa()) {
+            <div class="card flex flex-col gap-3">
+                <p class="text-xs font-semibold text-muted-color uppercase tracking-wide m-0">Programa PSB</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    @if (programa()!.nombre) {
+                        <div class="flex flex-col gap-1">
+                            <span class="text-xs text-muted-color">Nombre</span>
+                            <span class="font-medium">{{ programa()!.nombre }}</span>
+                        </div>
+                    }
+                    @if (programa()!.responsable) {
+                        <div class="flex flex-col gap-1">
+                            <span class="text-xs text-muted-color">Responsable</span>
+                            <span class="font-medium">{{ programa()!.responsable }}</span>
+                        </div>
+                    }
+                    @if (programa()!.frecuencia) {
+                        <div class="flex flex-col gap-1">
+                            <span class="text-xs text-muted-color">Frecuencia</span>
+                            <span class="font-medium capitalize">{{ programa()!.frecuencia }}</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Los 4 sub-programas -->
+        <div>
+            <p class="text-xs font-semibold text-muted-color uppercase tracking-wide mb-3">Programas del plan</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                @for (card of programaCards; track card.tipo) {
+                    <div class="card flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                <i [class]="'pi ' + card.icono + ' text-primary'"></i>
+                            </div>
+                            <span class="font-medium text-surface-900 dark:text-surface-0">{{ card.nombre }}</span>
+                        </div>
+                        <p-button
+                            label="Ver"
+                            icon="pi pi-arrow-right"
+                            iconPos="right"
+                            severity="secondary"
+                            size="small"
+                            [routerLink]="card.ruta"
+                            [queryParams]="{ planPsbId: planId }"
+                        />
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+
+<p-toast />
