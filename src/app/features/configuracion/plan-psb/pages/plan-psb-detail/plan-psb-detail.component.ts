@@ -1,20 +1,20 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, UpperCasePipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { PlanPsbService } from '../../services/plan-psb.service';
-import { PlanPsb, NivelRiesgo, EstadoPlan } from '../../models/plan-psb.interface';
+import { PlanPsb } from '../../models/plan-psb.interface';
 import { ProgramaService } from '@/app/features/programa/services/programa.service';
 import { Programa } from '@/app/features/programa/models/programa.interface';
 
 @Component({
     selector: 'app-plan-psb-detail',
     standalone: true,
-    imports: [CommonModule, RouterModule, ButtonModule, TagModule, ToastModule],
+    imports: [CommonModule, RouterModule, ButtonModule, TagModule, ToastModule, UpperCasePipe],
     templateUrl: './plan-psb-detail.component.html',
     styleUrls: ['./plan-psb-detail.component.scss'],
     providers: [MessageService],
@@ -59,16 +59,21 @@ export class PlanPsbDetailComponent implements OnInit {
 
     get planId(): string { return this.route.snapshot.paramMap.get('id') ?? ''; }
 
-    estadoSeverity(estado: EstadoPlan): 'success' | 'secondary' | 'danger' | 'warn' {
-        const map: Record<EstadoPlan, 'success' | 'secondary' | 'danger' | 'warn'> = {
-            ACTIVO: 'success', BORRADOR: 'secondary', VENCIDO: 'danger', EN_REVISION: 'warn',
+    estadoSeverity(estado: string): 'success' | 'secondary' | 'danger' | 'warn' {
+        const map: Record<string, 'success' | 'secondary' | 'danger' | 'warn'> = {
+            ACTIVO: 'success', VIGENTE: 'success',
+            BORRADOR: 'secondary',
+            VENCIDO: 'danger',
+            EN_REVISION: 'warn',
         };
-        return map[estado];
+        return map[estado.toUpperCase()] ?? 'secondary';
     }
 
-    riesgoSeverity(nivel: NivelRiesgo): 'danger' | 'warn' | 'success' {
-        const map: Record<NivelRiesgo, 'danger' | 'warn' | 'success'> = { ALTO: 'danger', MEDIO: 'warn', BAJO: 'success' };
-        return map[nivel];
+    riesgoSeverity(nivel: string): 'danger' | 'warn' | 'success' {
+        const map: Record<string, 'danger' | 'warn' | 'success'> = {
+            ALTO: 'danger', MEDIO: 'warn', BAJO: 'success',
+        };
+        return map[nivel.toUpperCase()] ?? 'warn';
     }
 
     volver() { this.router.navigate(['/planes']); }

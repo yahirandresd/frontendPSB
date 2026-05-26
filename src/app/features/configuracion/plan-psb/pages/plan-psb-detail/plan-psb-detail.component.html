@@ -10,11 +10,11 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex flex-col gap-2">
                     <h1 class="text-surface-900 dark:text-surface-0 text-2xl font-bold m-0">
-                        Plan v{{ plan()!.version }}
+                        {{ plan()!.nombre }}
                     </h1>
                     <div class="flex gap-2 flex-wrap">
-                        <p-tag [value]="plan()!.estado" [severity]="estadoSeverity(plan()!.estado)" />
-                        <p-tag [value]="plan()!.nivel_riesgo" [severity]="riesgoSeverity(plan()!.nivel_riesgo)" />
+                        <p-tag [value]="plan()!.estado | uppercase" [severity]="estadoSeverity(plan()!.estado)" />
+                        <p-tag [value]="plan()!.nivel_riesgo | uppercase" [severity]="riesgoSeverity(plan()!.nivel_riesgo)" />
                     </div>
                 </div>
                 <div class="flex gap-2">
@@ -55,7 +55,7 @@
                         <span class="font-semibold text-surface-900 dark:text-surface-0 text-base">
                             {{ plan()!.tipoAlimento!.nombre }}
                         </span>
-                        <p-tag [value]="plan()!.tipoAlimento!.nivel_riesgo" [severity]="riesgoSeverity(plan()!.tipoAlimento!.nivel_riesgo)" />
+                        <p-tag [value]="plan()!.tipoAlimento!.nivel_riesgo | uppercase" [severity]="riesgoSeverity(plan()!.tipoAlimento!.nivel_riesgo)" />
                     </div>
                     <p class="text-sm text-muted-color m-0">{{ plan()!.tipoAlimento!.descripcion }}</p>
                 } @else {

@@ -6,4 +6,5 @@ export interface CreatePlanPsbDto {
     version: string;
     estado: EstadoPlan;
     empresaId: string;
+    tipoAlimentoId: number;
 }

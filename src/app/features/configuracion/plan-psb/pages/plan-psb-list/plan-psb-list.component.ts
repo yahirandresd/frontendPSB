@@ -7,12 +7,13 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PlanPsbService } from '../../services/plan-psb.service';
-import { PlanPsb, EstadoPlan, NivelRiesgo } from '../../models/plan-psb.interface';
+import { UpperCasePipe } from '@angular/common';
+import { PlanPsb } from '../../models/plan-psb.interface';
 
 @Component({
     selector: 'app-plan-psb-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, ButtonModule, TagModule, ToastModule],
+    imports: [CommonModule, RouterModule, ButtonModule, TagModule, ToastModule, UpperCasePipe],
     templateUrl: './plan-psb-list.component.html',
     styleUrls: ['./plan-psb-list.component.scss'],
     providers: [MessageService],
@@ -38,22 +39,22 @@ export class PlanPsbListComponent implements OnInit {
         }
     }
 
-    estadoSeverity(estado: EstadoPlan): 'success' | 'secondary' | 'danger' | 'warn' {
-        const map: Record<EstadoPlan, 'success' | 'secondary' | 'danger' | 'warn'> = {
-            ACTIVO: 'success',
+    estadoSeverity(estado: string): 'success' | 'secondary' | 'danger' | 'warn' {
+        const map: Record<string, 'success' | 'secondary' | 'danger' | 'warn'> = {
+            ACTIVO: 'success', VIGENTE: 'success',
             BORRADOR: 'secondary',
             VENCIDO: 'danger',
             EN_REVISION: 'warn',
         };
-        return map[estado];
+        return map[estado.toUpperCase()] ?? 'secondary';
     }
 
-    riesgoSeverity(nivel: NivelRiesgo): 'danger' | 'warn' | 'success' {
-        const map: Record<NivelRiesgo, 'danger' | 'warn' | 'success'> = {
+    riesgoSeverity(nivel: string): 'danger' | 'warn' | 'success' {
+        const map: Record<string, 'danger' | 'warn' | 'success'> = {
             ALTO: 'danger',
             MEDIO: 'warn',
             BAJO: 'success',
         };
-        return map[nivel];
+        return map[nivel.toUpperCase()] ?? 'warn';
     }
 }

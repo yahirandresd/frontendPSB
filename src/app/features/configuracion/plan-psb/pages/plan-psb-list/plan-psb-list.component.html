@@ -29,21 +29,22 @@
                 <div class="border border-surface rounded-xl p-5 flex flex-col gap-4 hover:shadow-md transition-shadow bg-surface-0 dark:bg-surface-900">
 
                     <div class="flex items-start justify-between gap-2">
-                        <div>
-                            <p class="text-surface-900 dark:text-surface-0 font-semibold text-base">
-                                Plan v{{ plan.version }}
+                        <div class="min-w-0">
+                            <p class="text-surface-900 dark:text-surface-0 font-semibold text-base leading-tight">
+                                {{ plan.nombre }}
                             </p>
+                            <p class="text-muted-color text-xs font-mono mt-0.5">#{{ plan.id.slice(0, 8) }}</p>
                             @if (plan.empresa) {
                                 <p class="text-muted-color text-sm mt-1">{{ plan.empresa.nombre }}</p>
                                 <p class="text-muted-color text-xs">NIT {{ plan.empresa.nit }}</p>
                             }
                         </div>
-                        <i class="pi pi-check-square text-primary text-2xl mt-1"></i>
+                        <i class="pi pi-check-square text-primary text-2xl mt-1 shrink-0"></i>
                     </div>
 
                     <div class="flex gap-2 flex-wrap">
-                        <p-tag [value]="plan.estado" [severity]="estadoSeverity(plan.estado)" />
-                        <p-tag [value]="plan.nivel_riesgo" [severity]="riesgoSeverity(plan.nivel_riesgo)" />
+                        <p-tag [value]="plan.estado | uppercase" [severity]="estadoSeverity(plan.estado)" />
+                        <p-tag [value]="plan.nivel_riesgo | uppercase" [severity]="riesgoSeverity(plan.nivel_riesgo)" />
                     </div>
 
                     @if (plan.tipoAlimento) {
