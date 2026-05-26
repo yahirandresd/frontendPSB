@@ -1,0 +1,92 @@
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <button pButton icon="pi pi-arrow-left" [text]="true" [rounded]="true" (click)="volver()"></button>
+            <div>
+                <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Detalle del Producto Químico</h2>
+                <p class="text-muted-color mt-1">Información completa del producto</p>
+            </div>
+        </div>
+        @if (!cargando() && !error()) {
+            <button pButton label="Editar" icon="pi pi-pencil" severity="secondary" (click)="irAEditar()"></button>
+        }
+    </div>
+
+    @if (cargando()) {
+        <div class="flex justify-center py-12">
+            <p-progressSpinner strokeWidth="4" />
+        </div>
+    } @else if (error()) {
+        <div class="flex flex-col items-center py-12 gap-3 text-muted-color">
+            <i class="pi pi-exclamation-circle text-4xl"></i>
+            <span>No se pudo cargar el producto químico.</span>
+        </div>
+    } @else if (producto()) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Código</span>
+                <span class="font-mono text-sm">{{ producto()!.codigo }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Nombre</span>
+                <span class="font-semibold">{{ producto()!.nombre }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Fabricante</span>
+                <span>{{ producto()!.fabricante }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Registro Sanitario INVIMA</span>
+                <span class="font-mono text-sm">{{ producto()!.registroSanitarioInvima }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Grado Alimenticio</span>
+                @if (producto()!.gradoAlimenticio) {
+                    <p-tag severity="success" value="Sí" icon="pi pi-check" />
+                } @else {
+                    <p-tag severity="secondary" value="No" />
+                }
+            </div>
+
+            @if (producto()!.phPuro !== null && producto()!.phPuro !== undefined) {
+                <div class="flex flex-col gap-1">
+                    <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">pH Puro</span>
+                    <span>{{ producto()!.phPuro }}</span>
+                </div>
+            }
+
+            @if (producto()!.dosificacionSugerida) {
+                <div class="flex flex-col gap-1 md:col-span-2">
+                    <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Dosificación Sugerida</span>
+                    <p class="text-sm m-0 whitespace-pre-line">{{ producto()!.dosificacionSugerida }}</p>
+                </div>
+            }
+
+            @if (producto()!.fichaTecnicaUrl) {
+                <div class="flex flex-col gap-1 md:col-span-2">
+                    <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Ficha Técnica</span>
+                    <a [href]="producto()!.fichaTecnicaUrl" target="_blank" rel="noopener noreferrer"
+                        class="text-primary underline text-sm break-all">
+                        {{ producto()!.fichaTecnicaUrl }}
+                    </a>
+                </div>
+            }
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Creado</span>
+                <span class="text-sm">{{ producto()!.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Última actualización</span>
+                <span class="text-sm">{{ producto()!.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+        </div>
+    }
+</div>

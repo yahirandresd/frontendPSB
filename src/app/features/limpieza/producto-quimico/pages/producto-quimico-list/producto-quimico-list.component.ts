@@ -45,6 +45,10 @@ export class ProductoQuimicoListComponent implements OnInit {
         this.router.navigate(['/limpieza/productos-quimicos/crear']);
     }
 
+    irAVer(id: string): void {
+        this.router.navigate(['/limpieza/productos-quimicos', id]);
+    }
+
     irAEditar(id: string): void {
         this.router.navigate(['/limpieza/productos-quimicos', id, 'editar']);
     }

@@ -26,7 +26,7 @@
                 <th>Fabricante</th>
                 <th>Reg. INVIMA</th>
                 <th class="text-center w-32">Grado alim.</th>
-                <th class="w-28">Acciones</th>
+                <th class="w-36">Acciones</th>
             </tr>
         </ng-template>
 
@@ -45,6 +45,8 @@
                 </td>
                 <td>
                     <div class="flex gap-2">
+                        <button pButton icon="pi pi-eye" severity="info" [text]="true" [rounded]="true"
+                            (click)="irAVer(prod.id)" pTooltip="Ver"></button>
                         <button pButton icon="pi pi-pencil" severity="secondary" [text]="true" [rounded]="true"
                             (click)="irAEditar(prod.id)" pTooltip="Editar"></button>
                         <button pButton icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
