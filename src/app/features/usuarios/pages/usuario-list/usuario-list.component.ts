@@ -23,9 +23,11 @@ import { Usuario, UsuarioRol } from '../../models/usuario.interface';
 export class UsuarioListComponent implements OnInit {
     private service = inject(UsuarioService);
     private router = inject(Router);
+    private messageService = inject(MessageService);
 
     usuarios = signal<Usuario[]>([]);
     cargando = signal(true);
+    error = signal(false);
 
     async ngOnInit(): Promise<void> {
         await this.cargar();
@@ -33,8 +35,12 @@ export class UsuarioListComponent implements OnInit {
 
     async cargar(): Promise<void> {
         this.cargando.set(true);
+        this.error.set(false);
         try {
             this.usuarios.set(await firstValueFrom(this.service.getAll()));
+        } catch {
+            this.error.set(true);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los usuarios' });
         } finally {
             this.cargando.set(false);
         }

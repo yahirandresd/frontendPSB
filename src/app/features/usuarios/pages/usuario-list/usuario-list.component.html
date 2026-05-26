@@ -9,6 +9,14 @@
         <button pButton label="Nuevo usuario" icon="pi pi-user-plus" (click)="irACrear()"></button>
     </div>
 
+    @if (error()) {
+        <div class="flex flex-col items-center py-12 gap-3 text-muted-color">
+            <i class="pi pi-exclamation-circle text-4xl text-red-400"></i>
+            <span>No se pudieron cargar los usuarios. Verifica la conexión con el servidor.</span>
+            <button pButton label="Reintentar" icon="pi pi-refresh" severity="secondary" (click)="cargar()"></button>
+        </div>
+    }
+
     <p-table
         [value]="usuarios()"
         [loading]="cargando()"
