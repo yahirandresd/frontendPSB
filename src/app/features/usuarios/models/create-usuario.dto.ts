@@ -8,5 +8,6 @@ export interface CreateUsuarioDto {
     rol: UsuarioRol;
     cargo?: string;
     estado?: UsuarioEstado;
+    pin_firma_hash?: string;
     firma_digitalizada?: string;
 }

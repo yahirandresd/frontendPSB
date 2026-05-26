@@ -9,6 +9,7 @@ export interface Usuario {
     rol: UsuarioRol;
     cargo?: string;
     estado: UsuarioEstado;
+    pin_firma_hash?: string;
     firma_digitalizada?: string;
     created_at?: string;
     updated_at?: string;

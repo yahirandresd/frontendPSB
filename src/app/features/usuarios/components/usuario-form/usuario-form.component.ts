@@ -41,6 +41,7 @@ export class UsuarioFormComponent implements OnInit {
         rol:               ['', Validators.required],
         cargo:             [''],
         estado:            ['activo'],
+        pin_firma_hash:    [''],
         firma_digitalizada: [''],
     });
 
@@ -69,6 +70,7 @@ export class UsuarioFormComponent implements OnInit {
                 rol:               raw.rol,
                 cargo:             raw.cargo || undefined,
                 estado:            raw.estado,
+                pin_firma_hash:    raw.pin_firma_hash || undefined,
                 firma_digitalizada: raw.firma_digitalizada || undefined,
               } as UpdateUsuarioDto
             : {
@@ -79,6 +81,7 @@ export class UsuarioFormComponent implements OnInit {
                 rol:               raw.rol,
                 cargo:             raw.cargo || undefined,
                 estado:            raw.estado || undefined,
+                pin_firma_hash:    raw.pin_firma_hash || undefined,
                 firma_digitalizada: raw.firma_digitalizada || undefined,
               } as CreateUsuarioDto;
         this.formSubmit.emit(payload);
