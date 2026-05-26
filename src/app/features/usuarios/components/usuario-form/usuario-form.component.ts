@@ -72,23 +72,23 @@ export class UsuarioFormComponent implements OnInit {
         const raw = this.form.getRawValue();
         const payload = this.usuario
             ? {
-                nombre:            raw.nombre,
-                rol:               raw.rol,
-                cargo:             raw.cargo || undefined,
-                estado:            raw.estado,
-                ...(raw.pinFirmaHash ? { pinFirmaHash: raw.pinFirmaHash } : {}),
-                firmaDigitalizada: raw.firmaDigitalizada || undefined,
+                nombre:             raw.nombre,
+                rol:                raw.rol,
+                cargo:              raw.cargo || undefined,
+                estado:             raw.estado,
+                ...(raw.pinFirmaHash ? { pin_firma_hash: raw.pinFirmaHash } : {}),
+                firma_digitalizada: raw.firmaDigitalizada || undefined,
               } as UpdateUsuarioDto
             : {
-                empresaId:         raw.empresaId,
-                nombre:            raw.nombre,
-                email:             raw.email,
-                password:          raw.password,
-                rol:               raw.rol,
-                cargo:             raw.cargo || undefined,
-                estado:            raw.estado || undefined,
-                pinFirmaHash:      raw.pinFirmaHash || undefined,
-                firmaDigitalizada: raw.firmaDigitalizada || undefined,
+                empresa_id:         raw.empresaId,
+                nombre:             raw.nombre,
+                email:              raw.email,
+                password:           raw.password,
+                rol:                raw.rol,
+                cargo:              raw.cargo || undefined,
+                estado:             raw.estado || undefined,
+                pin_firma_hash:     raw.pinFirmaHash || undefined,
+                firma_digitalizada: raw.firmaDigitalizada || undefined,
               } as CreateUsuarioDto;
         this.formSubmit.emit(payload);
     }
