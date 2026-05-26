@@ -3,7 +3,6 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
 import { firstValueFrom } from 'rxjs';
 import { PlanPsb, NivelRiesgo, EstadoPlan } from '../../models/plan-psb.interface';
@@ -16,7 +15,7 @@ export type PlanPsbFormValue = CreatePlanPsbDto;
 @Component({
     selector: 'app-plan-psb-form',
     standalone: true,
-    imports: [ReactiveFormsModule, ButtonModule, InputTextModule, SelectModule, CheckboxModule, TagModule],
+    imports: [ReactiveFormsModule, ButtonModule, InputTextModule, SelectModule, TagModule],
     templateUrl: './plan-psb-form.component.html',
     styleUrls: ['./plan-psb-form.component.scss'],
 })
@@ -33,44 +32,49 @@ export class PlanPsbFormComponent implements OnInit {
     empresas = signal<Empresa[]>([]);
 
     estadoOptions: { label: string; value: EstadoPlan }[] = [
-        { label: 'Borrador', value: 'BORRADOR' },
-        { label: 'Activo', value: 'ACTIVO' },
-        { label: 'En revisión', value: 'EN_REVISION' },
-        { label: 'Vencido', value: 'VENCIDO' },
+        { label: 'Borrador',     value: 'BORRADOR'    },
+        { label: 'Activo',       value: 'ACTIVO'      },
+        { label: 'En revisión',  value: 'EN_REVISION' },
+        { label: 'Vencido',      value: 'VENCIDO'     },
     ];
 
     nivelRiesgoOptions: { label: string; value: NivelRiesgo }[] = [
-        { label: 'Alto', value: 'ALTO' },
+        { label: 'Alto',  value: 'ALTO'  },
         { label: 'Medio', value: 'MEDIO' },
-        { label: 'Bajo', value: 'BAJO' },
+        { label: 'Bajo',  value: 'BAJO'  },
     ];
 
     form: FormGroup = this.fb.group({
-        nombre: ['', Validators.required],
-        version: ['1.0', Validators.required],
-        estado: ['BORRADOR', Validators.required],
-        nivel_riesgo: [null, Validators.required],
-        activo: [true],
-        empresaId: [null, Validators.required],
+        nombre:      ['', Validators.required],
+        version:     ['1.0', Validators.required],
+        estado:      ['BORRADOR', Validators.required],
+        nivel_riesgo:[null, Validators.required],
+        empresaId:   [null, Validators.required],
     });
 
+    get modoEdicion(): boolean { return !!this.plan; }
+
     async ngOnInit() {
+        if (this.modoEdicion) {
+            // En edición solo se validan estado y empresaId
+            this.form.get('nombre')!.clearValidators();
+            this.form.get('nombre')!.updateValueAndValidity();
+            this.form.get('version')!.clearValidators();
+            this.form.get('version')!.updateValueAndValidity();
+            this.form.get('nivel_riesgo')!.clearValidators();
+            this.form.get('nivel_riesgo')!.updateValueAndValidity();
+
+            this.form.patchValue({
+                estado:    this.plan!.estado,
+                empresaId: this.plan!.empresa?.id ?? null,
+            });
+        }
+
         try {
             const data = await firstValueFrom(this.empresaService.getAll());
             this.empresas.set(data);
         } catch (e) {
             console.error('Error cargando empresas:', e);
-        }
-
-        if (this.plan) {
-            this.form.patchValue({
-                nombre: `Plan PSB v${this.plan.version}`,
-                version: this.plan.version,
-                estado: this.plan.estado,
-                nivel_riesgo: this.plan.nivel_riesgo,
-                activo: true,
-                empresaId: this.plan.empresa?.id ?? null,
-            });
         }
     }
 

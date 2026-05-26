@@ -5,6 +5,5 @@ export interface CreatePlanPsbDto {
     nivel_riesgo: NivelRiesgo;
     version: string;
     estado: EstadoPlan;
-    activo?: boolean;
     empresaId: string;
 }

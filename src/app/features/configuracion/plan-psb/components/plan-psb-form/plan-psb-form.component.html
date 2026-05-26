@@ -1,9 +1,9 @@
 <div class="card">
     <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
-        {{ plan ? 'Editar Plan de Saneamiento' : 'Nuevo Plan de Saneamiento' }}
+        {{ modoEdicion ? 'Editar Plan de Saneamiento' : 'Nuevo Plan de Saneamiento' }}
     </div>
 
-    @if (plan?.tipoAlimento) {
+    @if (modoEdicion && plan?.tipoAlimento) {
         <div class="border border-surface rounded-xl p-4 mb-5 flex flex-col gap-2 bg-surface-50 dark:bg-surface-800">
             <p class="text-xs font-semibold text-muted-color uppercase tracking-wide">Tipo de alimento</p>
             <div class="flex items-center gap-3">
@@ -16,37 +16,39 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
 
-        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-            <label for="nombre" class="font-medium">Nombre del plan *</label>
-            <input id="nombre" pInputText formControlName="nombre" class="w-full" placeholder="Ej: Plan PSB v1.0" />
-            @if (f['nombre'].touched && f['nombre'].invalid) {
-                <small class="text-red-500">El nombre es requerido</small>
-            }
-        </div>
+        @if (!modoEdicion) {
+            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+                <label for="nombre" class="font-medium">Nombre del plan *</label>
+                <input id="nombre" pInputText formControlName="nombre" class="w-full" placeholder="Ej: Plan PSB v1.0" />
+                @if (f['nombre'].touched && f['nombre'].invalid) {
+                    <small class="text-red-500">El nombre es requerido</small>
+                }
+            </div>
 
-        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-            <label for="version" class="font-medium">Versión *</label>
-            <input id="version" pInputText formControlName="version" class="w-full" placeholder="1.0" />
-            @if (f['version'].touched && f['version'].invalid) {
-                <small class="text-red-500">La versión es requerida</small>
-            }
-        </div>
+            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+                <label for="version" class="font-medium">Versión *</label>
+                <input id="version" pInputText formControlName="version" class="w-full" placeholder="1.0" />
+                @if (f['version'].touched && f['version'].invalid) {
+                    <small class="text-red-500">La versión es requerida</small>
+                }
+            </div>
 
-        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-            <label for="nivel_riesgo" class="font-medium">Nivel de riesgo *</label>
-            <p-select
-                id="nivel_riesgo"
-                formControlName="nivel_riesgo"
-                [options]="nivelRiesgoOptions"
-                optionLabel="label"
-                optionValue="value"
-                placeholder="Selecciona el nivel"
-                class="w-full"
-            />
-            @if (f['nivel_riesgo'].touched && f['nivel_riesgo'].invalid) {
-                <small class="text-red-500">El nivel de riesgo es requerido</small>
-            }
-        </div>
+            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+                <label for="nivel_riesgo" class="font-medium">Nivel de riesgo *</label>
+                <p-select
+                    id="nivel_riesgo"
+                    formControlName="nivel_riesgo"
+                    [options]="nivelRiesgoOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Selecciona el nivel"
+                    class="w-full"
+                />
+                @if (f['nivel_riesgo'].touched && f['nivel_riesgo'].invalid) {
+                    <small class="text-red-500">El nivel de riesgo es requerido</small>
+                }
+            </div>
+        }
 
         <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
             <label for="estado" class="font-medium">Estado *</label>
@@ -80,14 +82,9 @@
             }
         </div>
 
-        <div class="col-span-12 md:col-span-6 flex items-center gap-3 mt-4">
-            <p-checkbox formControlName="activo" [binary]="true" inputId="activo" />
-            <label for="activo" class="font-medium cursor-pointer">Plan activo</label>
-        </div>
-
         <div class="col-span-12 flex justify-end gap-3 mt-4">
             <p-button type="button" label="Cancelar" severity="secondary" (onClick)="onCancel()" />
-            <p-button type="submit" [label]="plan ? 'Actualizar' : 'Crear plan'" [loading]="saving" />
+            <p-button type="submit" [label]="modoEdicion ? 'Actualizar' : 'Crear plan'" [loading]="saving" />
         </div>
 
     </form>

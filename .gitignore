@@ -43,6 +43,7 @@ testem.log
 Thumbs.db
 .env
 CLAUDE.md
+YAHIR.md
 
 # Environments con credenciales reales (copiar desde *.example.ts)
 src/environments/environment.ts
