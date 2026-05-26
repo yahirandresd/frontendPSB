@@ -44,6 +44,10 @@ export class ProgramaLimpiezaListComponent implements OnInit {
         this.router.navigate(['/limpieza/programas/crear']);
     }
 
+    irAVer(id: string): void {
+        this.router.navigate(['/limpieza/programas', id]);
+    }
+
     irAEditar(id: string): void {
         this.router.navigate(['/limpieza/programas', id, 'editar']);
     }

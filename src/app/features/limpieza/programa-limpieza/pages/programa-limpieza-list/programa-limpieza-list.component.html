@@ -51,6 +51,14 @@
                     <div class="flex gap-2">
                         <button
                             pButton
+                            icon="pi pi-eye"
+                            severity="info"
+                            [text]="true"
+                            [rounded]="true"
+                            (click)="irAVer(prog.id)"
+                            pTooltip="Ver"></button>
+                        <button
+                            pButton
                             icon="pi pi-pencil"
                             severity="secondary"
                             [text]="true"
