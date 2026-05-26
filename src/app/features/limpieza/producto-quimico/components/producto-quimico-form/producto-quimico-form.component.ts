@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ProductoQuimico } from '../../models/producto-quimico.interface';
 import { CreateProductoQuimicoDto } from '../../models/create-producto-quimico.dto';
@@ -12,7 +11,7 @@ import { UpdateProductoQuimicoDto } from '../../models/update-producto-quimico.d
 @Component({
     selector: 'app-producto-quimico-form',
     standalone: true,
-    imports: [ReactiveFormsModule, InputTextModule, InputNumberModule, TextareaModule, CheckboxModule, ButtonModule],
+    imports: [ReactiveFormsModule, InputTextModule, SelectModule, CheckboxModule, ButtonModule],
     templateUrl: './producto-quimico-form.component.html',
     styleUrls: ['./producto-quimico-form.component.scss']
 })
@@ -22,15 +21,23 @@ export class ProductoQuimicoFormComponent implements OnInit {
 
     private fb = inject(FormBuilder);
 
+    tipoOpciones = [
+        { label: 'Desinfectante',  value: 'desinfectante'  },
+        { label: 'Detergente',     value: 'detergente'     },
+        { label: 'Sanitizante',    value: 'sanitizante'    },
+        { label: 'Desengrasante',  value: 'desengrasante'  },
+        { label: 'Esterilizante',  value: 'esterilizante'  },
+    ];
+
     form: FormGroup = this.fb.group({
-        empresaId:               ['', Validators.required],
         codigo:                  ['', Validators.required],
         nombre:                  ['', Validators.required],
         fabricante:              ['', Validators.required],
-        registroSanitarioInvima: ['', Validators.required],
+        tipo:                    ['', Validators.required],
         gradoAlimenticio:        [false],
-        phPuro:                  [null],
-        dosificacionSugerida:    [''],
+        ph:                      [''],
+        concentracionRecomendada: [''],
+        tiempoContactoMin:       [''],
         fichaTecnicaUrl:         ['']
     });
 
@@ -39,7 +46,6 @@ export class ProductoQuimicoFormComponent implements OnInit {
     ngOnInit(): void {
         if (this.producto) {
             this.form.patchValue(this.producto);
-            this.f['empresaId'].disable();
         }
     }
 
@@ -54,21 +60,22 @@ export class ProductoQuimicoFormComponent implements OnInit {
                 codigo:                  raw.codigo,
                 nombre:                  raw.nombre,
                 fabricante:              raw.fabricante,
-                registroSanitarioInvima: raw.registroSanitarioInvima,
+                tipo:                    raw.tipo,
                 gradoAlimenticio:        raw.gradoAlimenticio,
-                phPuro:                  raw.phPuro ?? undefined,
-                dosificacionSugerida:    raw.dosificacionSugerida || undefined,
+                ph:                      raw.ph || undefined,
+                concentracionRecomendada: raw.concentracionRecomendada || undefined,
+                tiempoContactoMin:       raw.tiempoContactoMin || undefined,
                 fichaTecnicaUrl:         raw.fichaTecnicaUrl || undefined
               } as UpdateProductoQuimicoDto
             : {
-                empresaId:               raw.empresaId,
                 codigo:                  raw.codigo,
                 nombre:                  raw.nombre,
                 fabricante:              raw.fabricante,
-                registroSanitarioInvima: raw.registroSanitarioInvima,
+                tipo:                    raw.tipo,
                 gradoAlimenticio:        raw.gradoAlimenticio,
-                phPuro:                  raw.phPuro ?? undefined,
-                dosificacionSugerida:    raw.dosificacionSugerida || undefined,
+                ph:                      raw.ph || undefined,
+                concentracionRecomendada: raw.concentracionRecomendada || undefined,
+                tiempoContactoMin:       raw.tiempoContactoMin || undefined,
                 fichaTecnicaUrl:         raw.fichaTecnicaUrl || undefined
               } as CreateProductoQuimicoDto;
         this.formSubmit.emit(payload);

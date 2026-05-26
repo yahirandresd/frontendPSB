@@ -1,9 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ProductoQuimicoService } from '../../services/producto-quimico.service';
@@ -12,7 +11,7 @@ import { ProductoQuimico } from '../../models/producto-quimico.interface';
 @Component({
     selector: 'app-producto-quimico-detail',
     standalone: true,
-    imports: [ButtonModule, CardModule, TagModule, ProgressSpinnerModule, DatePipe],
+    imports: [ButtonModule, TagModule, ProgressSpinnerModule, DatePipe, TitleCasePipe],
     templateUrl: './producto-quimico-detail.component.html',
     styleUrls: ['./producto-quimico-detail.component.scss']
 })
@@ -34,6 +33,17 @@ export class ProductoQuimicoDetailComponent implements OnInit {
         } finally {
             this.cargando.set(false);
         }
+    }
+
+    tipoSeverity(tipo: string): 'info' | 'success' | 'warn' | 'secondary' | 'danger' {
+        const map: Record<string, 'info' | 'success' | 'warn' | 'secondary' | 'danger'> = {
+            desinfectante: 'info',
+            detergente:    'secondary',
+            sanitizante:   'success',
+            desengrasante: 'warn',
+            esterilizante: 'danger',
+        };
+        return map[tipo] ?? 'secondary';
     }
 
     volver(): void {

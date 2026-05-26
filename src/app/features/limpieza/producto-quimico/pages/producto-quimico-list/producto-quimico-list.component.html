@@ -24,7 +24,7 @@
                 <th>Código</th>
                 <th>Nombre</th>
                 <th>Fabricante</th>
-                <th>Reg. INVIMA</th>
+                <th>Tipo</th>
                 <th class="text-center w-32">Grado alim.</th>
                 <th class="w-36">Acciones</th>
             </tr>
@@ -35,7 +35,7 @@
                 <td><span class="font-mono text-sm">{{ prod.codigo }}</span></td>
                 <td><span class="font-semibold">{{ prod.nombre }}</span></td>
                 <td>{{ prod.fabricante }}</td>
-                <td><span class="font-mono text-xs text-muted-color">{{ prod.registroSanitarioInvima }}</span></td>
+                <td><p-tag [value]="prod.tipo | titlecase" [severity]="tipoSeverity(prod.tipo)" /></td>
                 <td class="text-center">
                     @if (prod.gradoAlimenticio) {
                         <p-tag severity="success" value="Sí" icon="pi pi-check" />

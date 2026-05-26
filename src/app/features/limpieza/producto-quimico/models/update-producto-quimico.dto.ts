@@ -2,9 +2,10 @@ export interface UpdateProductoQuimicoDto {
     codigo?: string;
     nombre?: string;
     fabricante?: string;
-    registroSanitarioInvima?: string;
+    tipo?: string;
     gradoAlimenticio?: boolean;
-    phPuro?: number;
-    dosificacionSugerida?: string;
+    ph?: string;
+    concentracionRecomendada?: string;
+    tiempoContactoMin?: string;
     fichaTecnicaUrl?: string;
 }

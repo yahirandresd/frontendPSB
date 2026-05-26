@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
@@ -14,7 +15,7 @@ import { ProductoQuimico } from '../../models/producto-quimico.interface';
 @Component({
     selector: 'app-producto-quimico-list',
     standalone: true,
-    imports: [TableModule, TagModule, ButtonModule, TooltipModule, ConfirmDialogModule, ToastModule],
+    imports: [TableModule, TagModule, ButtonModule, TooltipModule, ConfirmDialogModule, ToastModule, TitleCasePipe],
     providers: [ConfirmationService, MessageService],
     templateUrl: './producto-quimico-list.component.html',
     styleUrls: ['./producto-quimico-list.component.scss']
@@ -43,6 +44,17 @@ export class ProductoQuimicoListComponent implements OnInit {
 
     irACrear(): void {
         this.router.navigate(['/limpieza/productos-quimicos/crear']);
+    }
+
+    tipoSeverity(tipo: string): 'info' | 'success' | 'warn' | 'secondary' | 'danger' {
+        const map: Record<string, 'info' | 'success' | 'warn' | 'secondary' | 'danger'> = {
+            desinfectante: 'info',
+            detergente:    'secondary',
+            sanitizante:   'success',
+            desengrasante: 'warn',
+            esterilizante: 'danger',
+        };
+        return map[tipo] ?? 'secondary';
     }
 
     irAVer(id: string): void {
