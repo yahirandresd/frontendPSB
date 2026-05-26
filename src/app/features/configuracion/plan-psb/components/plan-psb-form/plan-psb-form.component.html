@@ -16,39 +16,37 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
 
-        @if (!modoEdicion) {
-            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-                <label for="nombre" class="font-medium">Nombre del plan *</label>
-                <input id="nombre" pInputText formControlName="nombre" class="w-full" placeholder="Ej: Plan PSB v1.0" />
-                @if (f['nombre'].touched && f['nombre'].invalid) {
-                    <small class="text-red-500">El nombre es requerido</small>
-                }
-            </div>
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="nombre" class="font-medium">Nombre del plan *</label>
+            <input id="nombre" pInputText formControlName="nombre" class="w-full" placeholder="Ej: Plan PSB v1.0" />
+            @if (f['nombre'].touched && f['nombre'].invalid) {
+                <small class="text-red-500">El nombre es requerido</small>
+            }
+        </div>
 
-            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-                <label for="version" class="font-medium">Versión *</label>
-                <input id="version" pInputText formControlName="version" class="w-full" placeholder="1.0" />
-                @if (f['version'].touched && f['version'].invalid) {
-                    <small class="text-red-500">La versión es requerida</small>
-                }
-            </div>
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="version" class="font-medium">Versión *</label>
+            <input id="version" pInputText formControlName="version" class="w-full" placeholder="1.0" />
+            @if (f['version'].touched && f['version'].invalid) {
+                <small class="text-red-500">La versión es requerida</small>
+            }
+        </div>
 
-            <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
-                <label for="nivel_riesgo" class="font-medium">Nivel de riesgo *</label>
-                <p-select
-                    id="nivel_riesgo"
-                    formControlName="nivel_riesgo"
-                    [options]="nivelRiesgoOptions"
-                    optionLabel="label"
-                    optionValue="value"
-                    placeholder="Selecciona el nivel"
-                    class="w-full"
-                />
-                @if (f['nivel_riesgo'].touched && f['nivel_riesgo'].invalid) {
-                    <small class="text-red-500">El nivel de riesgo es requerido</small>
-                }
-            </div>
-        }
+        <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="nivel_riesgo" class="font-medium">Nivel de riesgo *</label>
+            <p-select
+                id="nivel_riesgo"
+                formControlName="nivel_riesgo"
+                [options]="nivelRiesgoOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona el nivel"
+                class="w-full"
+            />
+            @if (f['nivel_riesgo'].touched && f['nivel_riesgo'].invalid) {
+                <small class="text-red-500">El nivel de riesgo es requerido</small>
+            }
+        </div>
 
         <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
             <label for="estado" class="font-medium">Estado *</label>

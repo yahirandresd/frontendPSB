@@ -56,18 +56,16 @@ export class PlanPsbFormComponent implements OnInit {
 
     async ngOnInit() {
         if (this.modoEdicion) {
-            // En edición solo se validan estado y empresaId
-            this.form.get('nombre')!.clearValidators();
-            this.form.get('nombre')!.updateValueAndValidity();
-            this.form.get('version')!.clearValidators();
-            this.form.get('version')!.updateValueAndValidity();
-            this.form.get('nivel_riesgo')!.clearValidators();
-            this.form.get('nivel_riesgo')!.updateValueAndValidity();
-
             this.form.patchValue({
-                estado:    this.plan!.estado,
-                empresaId: this.plan!.empresa?.id ?? null,
+                nombre:       `Plan PSB v${this.plan!.version}`,
+                version:      this.plan!.version,
+                nivel_riesgo: this.plan!.nivel_riesgo,
+                estado:       this.plan!.estado,
+                empresaId:    this.plan!.empresa?.id ?? null,
             });
+            this.form.get('nombre')!.disable();
+            this.form.get('version')!.disable();
+            this.form.get('nivel_riesgo')!.disable();
         }
 
         try {
