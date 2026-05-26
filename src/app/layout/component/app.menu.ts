@@ -95,6 +95,13 @@ import { RouterModule } from '@angular/router';
                     <span>Control de Plagas</span>
                 </a>
             </li>
+
+            <li>
+                <a routerLink="/usuarios" routerLinkActive="active">
+                    <i class="pi pi-users"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
         </ul>
     `,
     styles: [`

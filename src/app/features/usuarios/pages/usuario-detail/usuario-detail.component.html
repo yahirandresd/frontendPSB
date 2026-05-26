@@ -1,0 +1,125 @@
+@if (cargando()) {
+    <div class="flex justify-center items-center py-24">
+        <p-progressSpinner strokeWidth="4" />
+    </div>
+} @else if (error()) {
+    <div class="card flex flex-col items-center py-16 gap-3 text-muted-color">
+        <i class="pi pi-exclamation-circle text-5xl"></i>
+        <span class="text-lg">No se pudo cargar el usuario.</span>
+        <button pButton label="Volver" icon="pi pi-arrow-left" severity="secondary" (click)="volver()"></button>
+    </div>
+} @else if (usuario()) {
+
+    <!-- Nav -->
+    <div class="flex items-center justify-between mb-6">
+        <button pButton icon="pi pi-arrow-left" label="Usuarios"
+            [text]="true" severity="secondary" (click)="volver()"></button>
+        <button pButton label="Editar" icon="pi pi-pencil"
+            severity="secondary" (click)="irAEditar()"></button>
+    </div>
+
+    <!-- Perfil header -->
+    <div class="card mb-4">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+
+            <!-- Avatar grande -->
+            <p-avatar [label]="iniciales(usuario()!.nombre)" shape="circle" size="xlarge"
+                styleClass="text-3xl font-bold w-24 h-24"
+                [style]="{ background: 'color-mix(in srgb, var(--p-primary-color) 15%, transparent)', color: 'var(--p-primary-color)', width: '5rem', height: '5rem', fontSize: '1.5rem' }" />
+
+            <!-- Info principal -->
+            <div class="flex-1 text-center sm:text-left">
+                <h1 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0 mb-1">
+                    {{ usuario()!.nombre }}
+                </h1>
+                <p class="text-muted-color m-0 mb-3">{{ usuario()!.email }}</p>
+                <div class="flex flex-wrap justify-center sm:justify-start gap-2">
+                    <p-tag [value]="usuario()!.rol | titlecase" [severity]="rolSeverity(usuario()!.rol)" />
+                    @if (usuario()!.estado === 'activo') {
+                        <p-tag severity="success" value="Activo" icon="pi pi-check-circle" />
+                    } @else {
+                        <p-tag severity="secondary" value="Inactivo" icon="pi pi-ban" />
+                    }
+                </div>
+            </div>
+
+            <!-- Fechas (desktop) -->
+            <div class="text-right text-xs text-muted-color hidden sm:block shrink-0">
+                @if (usuario()!.created_at) {
+                    <div>Creado: {{ usuario()!.created_at | date:'dd/MM/yyyy' }}</div>
+                }
+                @if (usuario()!.updated_at) {
+                    <div class="mt-1">Actualizado: {{ usuario()!.updated_at | date:'dd/MM/yyyy HH:mm' }}</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalles -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Información laboral -->
+        <div class="card">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-muted-color mb-4">Información laboral</h3>
+            <div class="flex flex-col gap-4">
+
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-muted-color">Cargo</span>
+                    <span class="font-semibold text-sm">{{ usuario()!.cargo || '—' }}</span>
+                </div>
+
+                <div class="border-t border-surface-200 dark:border-surface-700"></div>
+
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-muted-color">Rol del sistema</span>
+                    <p-tag [value]="usuario()!.rol | titlecase" [severity]="rolSeverity(usuario()!.rol)" />
+                </div>
+
+                <div class="border-t border-surface-200 dark:border-surface-700"></div>
+
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-muted-color">Estado</span>
+                    @if (usuario()!.estado === 'activo') {
+                        <p-tag severity="success" value="Activo" icon="pi pi-check-circle" />
+                    } @else {
+                        <p-tag severity="secondary" value="Inactivo" icon="pi pi-ban" />
+                    }
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Cuenta y acceso -->
+        <div class="card">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-muted-color mb-4">Cuenta y acceso</h3>
+            <div class="flex flex-col gap-4">
+
+                <div class="flex flex-col gap-1">
+                    <span class="text-xs text-muted-color">Correo electrónico</span>
+                    <span class="font-mono text-sm break-all">{{ usuario()!.email }}</span>
+                </div>
+
+                <div class="border-t border-surface-200 dark:border-surface-700"></div>
+
+                <div class="flex flex-col gap-1">
+                    <span class="text-xs text-muted-color">ID de usuario</span>
+                    <span class="font-mono text-xs text-muted-color break-all">{{ usuario()!.id }}</span>
+                </div>
+
+                @if (usuario()!.firma_digitalizada) {
+                    <div class="border-t border-surface-200 dark:border-surface-700"></div>
+                    <div class="flex flex-col gap-1">
+                        <span class="text-xs text-muted-color">Firma digitalizada</span>
+                        <a [href]="usuario()!.firma_digitalizada" target="_blank" rel="noopener noreferrer"
+                            class="text-primary text-sm hover:underline inline-flex items-center gap-1">
+                            <i class="pi pi-external-link text-xs"></i> Ver firma
+                        </a>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+}

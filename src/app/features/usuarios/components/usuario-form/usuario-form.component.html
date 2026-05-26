@@ -1,0 +1,92 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+    @if (!esEdicion) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1 md:col-span-2">
+                <label for="empresa_id" class="font-semibold text-sm">ID Empresa <span class="text-red-500">*</span></label>
+                <input pInputText id="empresa_id" formControlName="empresa_id" placeholder="UUID de la empresa" />
+                @if (f['empresa_id'].invalid && f['empresa_id'].touched) {
+                    <small class="text-red-500">El ID de empresa es requerido.</small>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Información personal -->
+    <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-muted-color mb-3">Información personal</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div class="flex flex-col gap-1">
+                <label for="nombre" class="font-semibold text-sm">Nombre completo <span class="text-red-500">*</span></label>
+                <input pInputText id="nombre" formControlName="nombre" placeholder="Ej. Juan Pérez" />
+                @if (f['nombre'].invalid && f['nombre'].touched) {
+                    <small class="text-red-500">El nombre es requerido.</small>
+                }
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="cargo" class="font-semibold text-sm">Cargo</label>
+                <input pInputText id="cargo" formControlName="cargo" placeholder="Ej. Operario de planta" />
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="email" class="font-semibold text-sm">Correo electrónico <span class="text-red-500">*</span></label>
+                <input pInputText id="email" formControlName="email" type="email"
+                    placeholder="correo@empresa.com" [readonly]="esEdicion" />
+                @if (f['email'].invalid && f['email'].touched) {
+                    <small class="text-red-500">Ingresa un correo válido.</small>
+                }
+            </div>
+
+            @if (!esEdicion) {
+                <div class="flex flex-col gap-1">
+                    <label for="password" class="font-semibold text-sm">Contraseña <span class="text-red-500">*</span></label>
+                    <p-password id="password" formControlName="password" [toggleMask]="true"
+                        [feedback]="false" placeholder="Mínimo 6 caracteres" styleClass="w-full" />
+                    @if (f['password'].invalid && f['password'].touched) {
+                        <small class="text-red-500">Mínimo 6 caracteres.</small>
+                    }
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <!-- Acceso y permisos -->
+    <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-muted-color mb-3">Acceso y permisos</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div class="flex flex-col gap-1">
+                <label for="rol" class="font-semibold text-sm">Rol <span class="text-red-500">*</span></label>
+                <p-select id="rol" formControlName="rol" [options]="rolesOpciones"
+                    optionLabel="label" optionValue="value" placeholder="Seleccionar rol" />
+                @if (f['rol'].invalid && f['rol'].touched) {
+                    <small class="text-red-500">El rol es requerido.</small>
+                }
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label for="estado" class="font-semibold text-sm">Estado</label>
+                <p-select id="estado" formControlName="estado" [options]="estadoOpciones"
+                    optionLabel="label" optionValue="value" />
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Opcional -->
+    <div class="flex flex-col gap-1">
+        <label for="firma_digitalizada" class="font-semibold text-sm">URL firma digitalizada</label>
+        <input pInputText id="firma_digitalizada" formControlName="firma_digitalizada"
+            placeholder="https://..." />
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2">
+        <button pButton type="submit"
+            [label]="esEdicion ? 'Guardar cambios' : 'Crear usuario'"
+            icon="pi pi-check"></button>
+    </div>
+
+</form>

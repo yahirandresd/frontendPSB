@@ -53,6 +53,8 @@ export const appRoutes: Routes = [
                 loadChildren: () =>
                     import('./app/features/configuracion/plan-psb/plan-psb.routes')
             },
+            // ── Usuarios ──
+            { path: 'usuarios', loadChildren: () => import('./app/features/usuarios/usuarios.routes') },
         ]
     },
     {
