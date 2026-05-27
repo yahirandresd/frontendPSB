@@ -170,3 +170,15 @@ export interface CreateProgramaResiduoDto {
 
 export type UpdateProgramaResiduoDto = Partial<CreateProgramaResiduoDto>;
 
+export interface CreateRecoleccionDto {
+    fecha: string;
+    responsable: string;
+    cantidad_recolectada: number;
+    observaciones?: string;
+    registroResiduoId: string;
+}
+
+export type UpdateRecoleccionDto = Partial<
+    Pick<Recoleccion, 'fecha' | 'responsable' | 'cantidad_recolectada' | 'observaciones'>
+>;
+

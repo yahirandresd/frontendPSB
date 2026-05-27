@@ -9,7 +9,9 @@ import {
     ChecklistResiduo,
     EvidenciaResiduo,
     CreateProgramaResiduoDto,
-    UpdateProgramaResiduoDto
+    UpdateProgramaResiduoDto,
+    CreateRecoleccionDto,
+    UpdateRecoleccionDto
 } from '../models/programa-residuos.models';
 
 @Injectable({ providedIn: 'root' })
@@ -76,7 +78,7 @@ export class ProgramaResiduosService {
     }
 
     // --- RECOLECCIONES ---
-    updateRecoleccion(id: string, dto: Partial<Recoleccion>): Observable<Recoleccion> {
+    updateRecoleccion(id: string, dto: UpdateRecoleccionDto): Observable<Recoleccion> {
         return this.http.patch<Recoleccion>(`${this.baseUrl}/recoleccion/${id}`, dto);
     }
 
@@ -170,13 +172,7 @@ export class ProgramaResiduosService {
         return this.http.delete<void>(`${this.baseUrl}/registros/${id}`);
     }
 
-    createRecoleccion(dto: {
-        fecha: string;
-        responsable: string;
-        cantidad_recolectada: number;
-        observaciones?: string;
-        registroResiduoId: string;
-    }): Observable<Recoleccion> {
+    createRecoleccion(dto: CreateRecoleccionDto): Observable<Recoleccion> {
         return this.http.post<Recoleccion>(`${this.baseUrl}/recoleccion`, dto);
     }
 

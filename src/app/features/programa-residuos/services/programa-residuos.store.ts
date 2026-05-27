@@ -2,23 +2,16 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
+    CreateProgramaResiduoDto,
+    CreateRecoleccionDto,
+    EstadoRegistro,
+    FrecuenciaPrograma,
     Programa,
     ProgramaResiduo,
-    Registro,
-    RegistroResiduo,
     Recoleccion,
-    ChecklistResiduo,
-    EvidenciaResiduo,
-    DisposicionFinal,
-    TipoResiduo,
-    AreaGenereacion,
-    Contenedeor,
-    Residuo,
     TipoPrograma,
-    FrecuenciaPrograma,
-    EstadoRegistro,
-    CreateProgramaResiduoDto,
-    UpdateProgramaResiduoDto
+    UpdateProgramaResiduoDto,
+    UpdateRecoleccionDto
 } from '../models/programa-residuos.models';
 import { checklistProgreso } from '../utils/programa-residuos.labels';
 import { ProgramaResiduosService } from './programa-residuos.service';
@@ -30,44 +23,64 @@ export class ProgramaResiduosStore {
 
     readonly programasList = this.programas.asReadonly();
 
-    // Derived collection list pulling recolecciones from all registros
     readonly recoleccionesList = computed(() => {
-        const list: (Recoleccion & { programaId: string; programaNombre: string; tipoResiduoName: string; estado: EstadoRegistro; vehiculo: string })[] = [];
-        this.programas().forEach((p) => {
-            p.programaResiduo?.registros.forEach((rr) => {
-                rr.recolecciones.forEach((rec) => {
-                    // Find some residue type info
-                    const tipoName = rr.tipo_actividad === 'recoleccion' ? 'Orgánico' : 'Reciclable';
+        const list: (Recoleccion & {
+            programaId: string;
+            programaNombre: string;
+            registroResiduoId: string;
+            tipoActividad: string;
+            tipoResiduoName: string;
+            estado: EstadoRegistro;
+            vehiculo: string;
+        })[] = [];
+
+        this.programas().forEach((programa) => {
+            programa.programaResiduo?.registros.forEach((registroResiduo) => {
+                registroResiduo.recolecciones.forEach((recoleccion) => {
                     list.push({
-                        ...rec,
-                        programaId: p.id,
-                        programaNombre: p.nombre,
-                        tipoResiduoName: tipoName,
-                        estado: rr.registro?.estado || EstadoRegistro.PENDIENTE,
-                        vehiculo: rec.disposicionFinal ? 'Camión Autorizado' : 'Camión R-12'
+                        ...recoleccion,
+                        programaId: programa.id,
+                        programaNombre: programa.nombre,
+                        registroResiduoId: registroResiduo.id,
+                        tipoActividad: registroResiduo.tipo_actividad,
+                        tipoResiduoName: registroResiduo.tipo_actividad === 'recoleccion' ? 'Organico' : 'Reciclable',
+                        estado: registroResiduo.registro?.estado || EstadoRegistro.PENDIENTE,
+                        vehiculo: recoleccion.disposicionFinal ? 'Camion Autorizado' : 'Camion R-12'
                     });
                 });
             });
         });
+
         return list;
     });
+
+    readonly registrosDisponiblesParaRecoleccion = computed(() =>
+        this.programas()
+            .flatMap((programa) =>
+                (programa.programaResiduo?.registros || []).map((registroResiduo) => ({
+                    label: `${programa.nombre} · ${registroResiduo.tipo_actividad} · ${registroResiduo.registro?.fecha || 'sin fecha'}`,
+                    value: registroResiduo.id,
+                    programaId: programa.id,
+                    programaNombre: programa.nombre,
+                    fecha: registroResiduo.registro?.fecha || '',
+                    responsable: programa.responsable,
+                    estado: registroResiduo.registro?.estado || EstadoRegistro.PENDIENTE
+                }))
+            )
+            .sort((a, b) => b.fecha.localeCompare(a.fecha))
+    );
 
     readonly stats = computed(() => {
         const progs = this.programas();
         const recs = this.recoleccionesList();
 
-        // Count active programs (programs with en_proceso or pendiente execution)
-        const activos = progs.filter((p) =>
-            p.registros?.some((r) => r.estado === EstadoRegistro.EN_PROCESO)
-        ).length || progs.length; // Fallback to total if none
+        const activos =
+            progs.filter((p) => p.registros?.some((r) => r.estado === EstadoRegistro.EN_PROCESO)).length || progs.length;
 
-        const finalizados = progs.filter((p) =>
-            p.registros?.every((r) => r.estado === EstadoRegistro.COMPLETADO)
-        ).length;
+        const finalizados = progs.filter((p) => p.registros?.every((r) => r.estado === EstadoRegistro.COMPLETADO)).length;
 
         const recPendientes = recs.filter((r) => r.estado === 'pendiente' || r.estado === 'en_proceso').length;
 
-        // Calculate delayed activities (records pending with past dates)
         let atrasadas = 0;
         const now = new Date();
         progs.forEach((p) => {
@@ -78,7 +91,6 @@ export class ProgramaResiduosStore {
             });
         });
 
-        // Compute average checklist compliance across all program records
         let totalPct = 0;
         let totalCount = 0;
         progs.forEach((p) => {
@@ -97,7 +109,7 @@ export class ProgramaResiduosStore {
             finalizados,
             recoleccionesPendientes: recPendientes,
             actividadesAtrasadas: atrasadas,
-            cumplimientoGeneral: cumplimiento > 0 ? cumplimiento : 70 // default fallback
+            cumplimientoGeneral: cumplimiento > 0 ? cumplimiento : 70
         };
     });
 
@@ -135,6 +147,7 @@ export class ProgramaResiduosStore {
         if (!prId) {
             throw new Error(`Programa de residuos no encontrado para id ${id}`);
         }
+
         return this.service.updatePrograma(prId, dto).pipe(
             map(() => {
                 this.loadAll();
@@ -153,40 +166,66 @@ export class ProgramaResiduosStore {
         }
     }
 
-    addActividad(programaId: string, actividad: { tipo_actividad: string; resultado_general: string; fecha: string; responsable: string; observaciones?: string; estado?: EstadoRegistro }): Observable<void> {
+    addActividad(
+        programaId: string,
+        actividad: {
+            tipo_actividad: string;
+            resultado_general: string;
+            fecha: string;
+            responsable: string;
+            observaciones?: string;
+            estado?: EstadoRegistro;
+        }
+    ): Observable<void> {
         const prog = this.programas().find((p) => p.id === programaId || p.programaResiduo?.id === programaId);
         const prId = prog?.programaResiduo?.id;
         if (!prId) {
             throw new Error(`Programa de residuos no encontrado para id ${programaId}`);
         }
-        return this.service.createRegistro({
-            tipo_actividad: actividad.tipo_actividad,
-            resultado_general: actividad.resultado_general,
-            programaResiduoId: prId,
-            fecha: actividad.fecha,
-            observaciones: actividad.observaciones,
-            responsable: actividad.responsable,
-            estado: actividad.estado
-        }).pipe(
-            map(() => {
-                this.loadAll();
+
+        return this.service
+            .createRegistro({
+                tipo_actividad: actividad.tipo_actividad,
+                resultado_general: actividad.resultado_general,
+                programaResiduoId: prId,
+                fecha: actividad.fecha,
+                observaciones: actividad.observaciones,
+                responsable: actividad.responsable,
+                estado: actividad.estado
             })
-        );
+            .pipe(
+                map(() => {
+                    this.loadAll();
+                })
+            );
     }
 
-    updateActividad(programaId: string, registroResiduoId: string, data: { tipo_actividad?: string; resultado_general?: string; fecha?: string; responsable?: string; observaciones?: string; estado?: EstadoRegistro }): Observable<void> {
-        return this.service.updateRegistro(registroResiduoId, {
-            tipo_actividad: data.tipo_actividad,
-            resultado_general: data.resultado_general,
-            fecha: data.fecha,
-            observaciones: data.observaciones,
-            responsable: data.responsable,
-            estado: data.estado
-        }).pipe(
-            map(() => {
-                this.loadAll();
+    updateActividad(
+        programaId: string,
+        registroResiduoId: string,
+        data: {
+            tipo_actividad?: string;
+            resultado_general?: string;
+            fecha?: string;
+            responsable?: string;
+            observaciones?: string;
+            estado?: EstadoRegistro;
+        }
+    ): Observable<void> {
+        return this.service
+            .updateRegistro(registroResiduoId, {
+                tipo_actividad: data.tipo_actividad,
+                resultado_general: data.resultado_general,
+                fecha: data.fecha,
+                observaciones: data.observaciones,
+                responsable: data.responsable,
+                estado: data.estado
             })
-        );
+            .pipe(
+                map(() => {
+                    this.loadAll();
+                })
+            );
     }
 
     deleteActividad(programaId: string, registroResiduoId: string): Observable<void> {
@@ -217,18 +256,24 @@ export class ProgramaResiduosStore {
         });
     }
 
-    addChecklistItem(programaId: string, registroResiduoId: string, item: { titulo: string; descripcion: string; porcentaje_cumplimiento: number }): void {
-        this.service.createChecklist({
-            titulo: item.titulo,
-            descripcion: item.descripcion,
-            porcentaje_cumplimiento: item.porcentaje_cumplimiento,
-            registroResiduoId
-        }).subscribe({
-            next: () => {
-                this.loadAll();
-            },
-            error: (err) => console.error('Error adding checklist item:', err)
-        });
+    addChecklistItem(
+        programaId: string,
+        registroResiduoId: string,
+        item: { titulo: string; descripcion: string; porcentaje_cumplimiento: number }
+    ): void {
+        this.service
+            .createChecklist({
+                titulo: item.titulo,
+                descripcion: item.descripcion,
+                porcentaje_cumplimiento: item.porcentaje_cumplimiento,
+                registroResiduoId
+            })
+            .subscribe({
+                next: () => {
+                    this.loadAll();
+                },
+                error: (err) => console.error('Error adding checklist item:', err)
+            });
     }
 
     addEvidencia(programaId: string, file: File, evidencia: { nombre: string; tipo: string; fecha: string; usuario: string }): Observable<void> {
@@ -237,17 +282,20 @@ export class ProgramaResiduosStore {
         if (!regs || regs.length === 0) {
             throw new Error(`No hay registros disponibles en el programa ${programaId} para asociar la evidencia.`);
         }
+
         const latestReg = regs[regs.length - 1];
-        return this.service.uploadEvidencia(file, {
-            tipo_archivo: evidencia.tipo,
-            descripcion: evidencia.nombre,
-            fecha: evidencia.fecha,
-            registroResiduoId: latestReg.id
-        }).pipe(
-            map(() => {
-                this.loadAll();
+        return this.service
+            .uploadEvidencia(file, {
+                tipo_archivo: evidencia.tipo,
+                descripcion: evidencia.nombre,
+                fecha: evidencia.fecha,
+                registroResiduoId: latestReg.id
             })
-        );
+            .pipe(
+                map(() => {
+                    this.loadAll();
+                })
+            );
     }
 
     deleteEvidencia(programaId: string, evidenciaId: number): Observable<void> {
@@ -258,11 +306,20 @@ export class ProgramaResiduosStore {
         );
     }
 
-    updateRecoleccion(id: string, data: Partial<Recoleccion>): void {
-        this.service.updateRecoleccion(id, data).subscribe({
-            next: () => this.loadAll(),
-            error: (err) => console.error('Error updating collection:', err)
-        });
+    createRecoleccion(data: CreateRecoleccionDto): Observable<void> {
+        return this.service.createRecoleccion(data).pipe(
+            map(() => {
+                this.loadAll();
+            })
+        );
+    }
+
+    updateRecoleccion(id: string, data: UpdateRecoleccionDto): Observable<void> {
+        return this.service.updateRecoleccion(id, data).pipe(
+            map(() => {
+                this.loadAll();
+            })
+        );
     }
 
     private mapToFrontendPrograma(pr: ProgramaResiduo): Programa {
@@ -289,21 +346,24 @@ export class ProgramaResiduosStore {
                     id: rr.id,
                     tipo_actividad: rr.tipo_actividad,
                     resultado_general: rr.resultado_general,
-                    registro: rr.registro ? {
-                        id: rr.registro.id,
-                        programaId: rr.registro.programaId,
-                        usuarioId: rr.registro.usuarioId,
-                        fecha: new Date(rr.registro.fecha).toISOString().slice(0, 10),
-                        estado: rr.registro.estado as unknown as EstadoRegistro,
-                        createdAt: rr.registro.createdAt,
-                        observaciones: rr.registro.observaciones || ''
-                    } : undefined,
+                    registro: rr.registro
+                        ? {
+                              id: rr.registro.id,
+                              programaId: rr.registro.programaId,
+                              usuarioId: rr.registro.usuarioId,
+                              fecha: new Date(rr.registro.fecha).toISOString().slice(0, 10),
+                              estado: rr.registro.estado as unknown as EstadoRegistro,
+                              createdAt: rr.registro.createdAt,
+                              observaciones: rr.registro.observaciones || ''
+                          }
+                        : undefined,
                     recolecciones: (rr.recolecciones || []).map((rec) => ({
                         id: rec.id,
                         fecha: new Date(rec.fecha).toISOString().slice(0, 10),
                         responsable: rec.responsable,
                         cantidad_recolectada: rec.cantidad_recolectada,
-                        observaciones: rec.observaciones
+                        observaciones: rec.observaciones,
+                        disposicionFinal: rec.disposicionFinal
                     })),
                     checklistResiduo: (rr.checklistResiduo || []).map((c) => ({
                         id: c.id,
