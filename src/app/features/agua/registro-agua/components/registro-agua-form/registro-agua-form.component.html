@@ -2,31 +2,80 @@
     <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
         {{ registroAgua ? 'Editar' : 'Nuevo' }} Registro Agua
     </div>
-    <form #form="ngForm" (ngSubmit)="onSubmit()">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Registro</label>
-                <input pInputText name="registroId" [(ngModel)]="model.registroId" class="w-full" required />
+                <input #registroId="ngModel" pInputText name="registroId" [(ngModel)]="model.registroId" class="w-full" required />
+                <small class="text-surface-500">ID del registro base asociado</small>
+                @if (registroId.invalid && (registroId.dirty || registroId.touched || form.submitted)) {
+                    @if (registroId.errors?.['required']) {
+                        <small class="text-red-500">El registro es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Programa Agua</label>
-                <p-select name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <p-select #programaAguaId="ngModel" name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <small class="text-surface-500">Seleccione el programa de agua</small>
+                @if (programaAguaId.invalid && (programaAguaId.dirty || programaAguaId.touched || form.submitted)) {
+                    @if (programaAguaId.errors?.['required']) {
+                        <small class="text-red-500">El programa de agua es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Tipo Actividad</label>
-                <p-select name="tipoActividad" [(ngModel)]="model.tipoActividad" [options]="tipoActividadOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" required />
+                <p-select #tipoActividad="ngModel" name="tipoActividad" [(ngModel)]="model.tipoActividad" [options]="tipoActividadOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" required />
+                <small class="text-surface-500">Tipo de actividad realizada</small>
+                @if (tipoActividad.invalid && (tipoActividad.dirty || tipoActividad.touched || form.submitted)) {
+                    @if (tipoActividad.errors?.['required']) {
+                        <small class="text-red-500">El tipo de actividad es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Resultado General</label>
                 <p-select name="resultadoGeneral" [(ngModel)]="model.resultadoGeneral" [options]="resultadoGeneralOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Resultado general de la actividad</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Período</label>
+                <input pInputText name="periodo" [(ngModel)]="model.periodo" class="w-full" />
+                <small class="text-surface-500">Ej: Enero 2026, Q1 2026</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Responsable</label>
+                <input pInputText name="responsable" [(ngModel)]="model.responsable" class="w-full" />
+                <small class="text-surface-500">Responsable del registro</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">% Cumplimiento</label>
+                <p-inputNumber name="porcentajeCumplimiento" [(ngModel)]="model.porcentajeCumplimiento" [min]="0" [max]="100" class="w-full" />
+                <small class="text-surface-500">Porcentaje de cumplimiento</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Reporte</label>
+                <textarea pTextarea name="reporte" [(ngModel)]="model.reporte" rows="3" class="w-full"></textarea>
+                <small class="text-surface-500">Reporte detallado de la actividad</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Cierre</label>
+                <p-datepicker name="fechaCierre" [(ngModel)]="model.fechaCierre" [showIcon]="true" class="w-full" />
+                <small class="text-surface-500">Fecha de cierre del registro</small>
             </div>
         </div>
 
         <div class="flex justify-end gap-2 mt-4">
-            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
             <p-button type="submit" label="Guardar" [loading]="saving" />
         </div>
     </form>

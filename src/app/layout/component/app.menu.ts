@@ -40,7 +40,7 @@ import { RouterModule } from '@angular/router';
             <li>
                 <a routerLink="/registro" routerLinkActive="active">
                     <i class="pi pi-book"></i>
-                    <span>Registro</span>
+                    <span>Registros Diarios</span>
                 </a>
             </li>
 
@@ -66,13 +66,6 @@ import { RouterModule } from '@angular/router';
                 <a routerLink="/limpieza/equipos" routerLinkActive="active">
                     <i class="pi pi-wrench"></i>
                     <span>Equipos y Áreas</span>
-                </a>
-            </li>
-
-            <li>
-                <a routerLink="/registros" routerLinkActive="active">
-                    <i class="pi pi-folder"></i>
-                    <span>Registros diarios</span>
                 </a>
             </li>
 

@@ -2,31 +2,51 @@
     <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
         {{ fuenteAgua ? 'Editar' : 'Nuevo' }} Fuente Agua
     </div>
-    <form #form="ngForm" (ngSubmit)="onSubmit()">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Programa Agua</label>
-                <p-select name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <p-select #programaAguaId="ngModel" name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <small class="text-surface-500">Seleccione el programa de agua asociado</small>
+                @if (programaAguaId.invalid && (programaAguaId.dirty || programaAguaId.touched || form.submitted)) {
+                    @if (programaAguaId.errors?.['required']) {
+                        <small class="text-red-500">El programa de agua es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Nombre</label>
-                <input pInputText name="nombre" [(ngModel)]="model.nombre" class="w-full" required />
+                <input #nombre="ngModel" pInputText name="nombre" [(ngModel)]="model.nombre" class="w-full" required />
+                <small class="text-surface-500">Nombre descriptivo de la fuente</small>
+                @if (nombre.invalid && (nombre.dirty || nombre.touched || form.submitted)) {
+                    @if (nombre.errors?.['required']) {
+                        <small class="text-red-500">El nombre es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Tipo</label>
-                <p-select name="tipo" [(ngModel)]="model.tipo" [options]="tipoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" required />
+                <p-select #tipo="ngModel" name="tipo" [(ngModel)]="model.tipo" [options]="tipoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" required />
+                <small class="text-surface-500">Pozo, Red Pública, Río, etc.</small>
+                @if (tipo.invalid && (tipo.dirty || tipo.touched || form.submitted)) {
+                    @if (tipo.errors?.['required']) {
+                        <small class="text-red-500">El tipo de fuente es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Proveedor</label>
                 <input pInputText name="proveedor" [(ngModel)]="model.proveedor" class="w-full" />
+                <small class="text-surface-500">Nombre del proveedor (opcional)</small>
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Ubicación</label>
                 <input pInputText name="ubicacion" [(ngModel)]="model.ubicacion" class="w-full" />
+                <small class="text-surface-500">Ubicación geográfica (opcional)</small>
             </div>
 
             <div class="col-span-3 flex items-center gap-2 mt-6">
@@ -38,10 +58,53 @@
                 <label class="block font-medium mb-1">Estado</label>
                 <p-select name="estado" [(ngModel)]="model.estado" [options]="estadoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
             </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Municipio</label>
+                <input pInputText name="municipio" [(ngModel)]="model.municipio" class="w-full" />
+                <small class="text-surface-500">Municipio donde se ubica la fuente</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Departamento</label>
+                <p-select name="departamento" [(ngModel)]="model.departamento" [options]="departamentoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Departamento de ubicación</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Concesión</label>
+                <input pInputText name="concesion" [(ngModel)]="model.concesion" class="w-full" />
+                <small class="text-surface-500">Número de concesión de aguas (si aplica)</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Tratamiento</label>
+                <input pInputText name="tratamiento" [(ngModel)]="model.tratamiento" class="w-full" />
+                <small class="text-surface-500">Tipo de tratamiento aplicado</small>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <label class="block font-medium mb-1">Foto de evidencia</label>
+            <p-fileUpload
+                [url]="uploadUrl"
+                name="file"
+                accept="image/*"
+                maxFileSize="5000000"
+                chooseLabel="Seleccionar foto"
+                [auto]="false"
+                mode="basic"
+                (onUpload)="onUpload($event)">
+            </p-fileUpload>
+            @if (model.evidenciaFoto) {
+                <div class="mt-2">
+                    <img [src]="model.evidenciaFoto" class="w-32 h-32 object-cover rounded-lg shadow-sm" />
+                </div>
+            }
         </div>
 
         <div class="flex justify-end gap-2 mt-4">
-            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
             <p-button type="submit" label="Guardar" [loading]="saving" />
         </div>
     </form>

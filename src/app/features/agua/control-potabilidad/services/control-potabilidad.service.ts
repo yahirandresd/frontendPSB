@@ -9,6 +9,7 @@ export class ControlPotabilidadService {
     private http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/control-diario-potabilidad`;
     getAll(): Observable<ControlPotabilidad[]> { return this.http.get<ControlPotabilidad[]>(this.url); }
+    getByRegistro(registroAguaId: string): Observable<ControlPotabilidad[]> { return this.http.get<ControlPotabilidad[]>(`${this.url}/registro/${registroAguaId}`); }
     getById(id: string): Observable<ControlPotabilidad> { return this.http.get<ControlPotabilidad>(`${this.url}/${id}`); }
     create(dto: CreateControlPotabilidadDto): Observable<ControlPotabilidad> { return this.http.post<ControlPotabilidad>(this.url, dto); }
     update(id: string, dto: UpdateControlPotabilidadDto): Observable<ControlPotabilidad> { return this.http.patch<ControlPotabilidad>(`${this.url}/${id}`, dto); }

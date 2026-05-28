@@ -9,6 +9,7 @@ export class AnalisisLaboratorioService {
     private http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/analisis-laboratorio`;
     getAll(): Observable<AnalisisLaboratorio[]> { return this.http.get<AnalisisLaboratorio[]>(this.url); }
+    getByRegistro(registroAguaId: string): Observable<AnalisisLaboratorio[]> { return this.http.get<AnalisisLaboratorio[]>(`${this.url}/registro/${registroAguaId}`); }
     getById(id: string): Observable<AnalisisLaboratorio> { return this.http.get<AnalisisLaboratorio>(`${this.url}/${id}`); }
     create(dto: CreateAnalisisLaboratorioDto): Observable<AnalisisLaboratorio> { return this.http.post<AnalisisLaboratorio>(this.url, dto); }
     update(id: string, dto: UpdateAnalisisLaboratorioDto): Observable<AnalisisLaboratorio> { return this.http.patch<AnalisisLaboratorio>(`${this.url}/${id}`, dto); }

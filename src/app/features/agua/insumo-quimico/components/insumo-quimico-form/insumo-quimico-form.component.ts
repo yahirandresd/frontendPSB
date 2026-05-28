@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -17,13 +18,15 @@ import { InsumoQuimico } from '../../models/insumo-quimico.interface';
     templateUrl: './insumo-quimico-form.component.html',
     styleUrls: ['./insumo-quimico-form.component.scss'],
 })
-export class InsumoQuimicoFormComponent implements OnInit {
+export class InsumoQuimicoFormComponent implements OnInit, OnChanges, HasUnsavedChanges {
     @Input() insumoQuimico?: InsumoQuimico;
     @Input() saving = false;
     @Output() formSubmit = new EventEmitter<any>();
     @Output() cancel = new EventEmitter<void>();
 
+    unidadOptions = [{"label":"Litros","value":"L"},{"label":"Mililitros","value":"mL"},{"label":"Kilogramos","value":"kg"},{"label":"Gramos","value":"g"},{"label":"Unidades","value":"unidades"}];
     model: any = {};
+    private initialModel = '';
 
     ngOnInit() {
         if (this.insumoQuimico) {
@@ -32,14 +35,26 @@ export class InsumoQuimicoFormComponent implements OnInit {
         } else {
             this.model = {};
         }
+        this.initialModel = JSON.stringify(this.model);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['insumoQuimico'] && this.insumoQuimico) {
+            this.model = { ...this.insumoQuimico };
+            if (this.insumoQuimico.fechaVencimiento) this.model.fechaVencimiento = new Date(this.insumoQuimico.fechaVencimiento);
+        }
+        this.initialModel = JSON.stringify(this.model);
     }
 
     onSubmit() {
+        const { mantenimientoId, nombre } = this.model;
+        if (!mantenimientoId || !nombre) return;
         const data = { ...this.model };
-        // Convertir fechas a ISO string
         if (data.fechaVencimiento instanceof Date) data.fechaVencimiento = data.fechaVencimiento.toISOString();
         this.formSubmit.emit(data);
     }
+
+    hasUnsavedChanges(): boolean { return JSON.stringify(this.model) !== this.initialModel; }
 
     onCancel() { this.cancel.emit(); }
 }

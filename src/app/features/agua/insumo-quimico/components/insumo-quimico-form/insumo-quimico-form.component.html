@@ -2,41 +2,93 @@
     <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
         {{ insumoQuimico ? 'Editar' : 'Nuevo' }} Insumo Químico
     </div>
-    <form #form="ngForm" (ngSubmit)="onSubmit()">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Mantenimiento</label>
-                <input pInputText name="mantenimientoId" [(ngModel)]="model.mantenimientoId" class="w-full" required />
+                <input #mantenimientoId="ngModel" pInputText name="mantenimientoId" [(ngModel)]="model.mantenimientoId" class="w-full" required />
+                <small class="text-surface-500">ID del mantenimiento asociado</small>
+                @if (mantenimientoId.invalid && (mantenimientoId.dirty || mantenimientoId.touched || form.submitted)) {
+                    @if (mantenimientoId.errors?.['required']) {
+                        <small class="text-red-500">El mantenimiento es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Nombre</label>
-                <input pInputText name="nombre" [(ngModel)]="model.nombre" class="w-full" required />
+                <input #nombre="ngModel" pInputText name="nombre" [(ngModel)]="model.nombre" class="w-full" required />
+                <small class="text-surface-500">Nombre del insumo químico</small>
+                @if (nombre.invalid && (nombre.dirty || nombre.touched || form.submitted)) {
+                    @if (nombre.errors?.['required']) {
+                        <small class="text-red-500">El nombre es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Registro Sanitario INVIMA</label>
                 <input pInputText name="registroSanitarioInvima" [(ngModel)]="model.registroSanitarioInvima" class="w-full" />
+                <small class="text-surface-500">Registro sanitario INVIMA (opcional)</small>
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Lote</label>
                 <input pInputText name="lote" [(ngModel)]="model.lote" class="w-full" />
+                <small class="text-surface-500">Número de lote (opcional)</small>
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Vencimiento</label>
                 <p-datepicker name="fechaVencimiento" [(ngModel)]="model.fechaVencimiento" [showIcon]="true" class="w-full" />
+                <small class="text-surface-500">Fecha de vencimiento (opcional)</small>
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Concentración</label>
                 <p-inputNumber name="concentracion" [(ngModel)]="model.concentracion" [min]="0" class="w-full" />
+                <small class="text-surface-500">Concentración en % (opcional)</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Fabricante</label>
+                <input pInputText name="fabricante" [(ngModel)]="model.fabricante" class="w-full" />
+                <small class="text-surface-500">Nombre del fabricante (opcional)</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Uso</label>
+                <input pInputText name="uso" [(ngModel)]="model.uso" class="w-full" />
+                <small class="text-surface-500">Uso previsto del insumo (opcional)</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Stock</label>
+                <p-inputNumber name="stock" [(ngModel)]="model.stock" [min]="0" class="w-full" />
+                <small class="text-surface-500">Cantidad en stock (opcional)</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Unidad</label>
+                <p-select name="unidad" [(ngModel)]="model.unidad" [options]="unidadOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Unidad de medida del stock</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Ficha Técnica (link)</label>
+                <input pInputText name="fichaTecnica" [(ngModel)]="model.fichaTecnica" class="w-full" />
+                <small class="text-surface-500">Enlace a la ficha técnica (opcional)</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Condiciones Almacenamiento</label>
+                <textarea pTextarea name="condicionesAlmacenamiento" [(ngModel)]="model.condicionesAlmacenamiento" rows="2" class="w-full"></textarea>
+                <small class="text-surface-500">Condiciones de almacenamiento requeridas</small>
             </div>
         </div>
 
         <div class="flex justify-end gap-2 mt-4">
-            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
             <p-button type="submit" label="Guardar" [loading]="saving" />
         </div>
     </form>

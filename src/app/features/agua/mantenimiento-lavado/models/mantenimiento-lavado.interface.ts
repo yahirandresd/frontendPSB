@@ -10,6 +10,15 @@ export interface MantenimientoLavado {
     observaciones?: string;
     estado: EstadoMantenimiento;
     evidenciaFoto?: string;
+    tipoLimpieza?: string;
+    productoUtilizado?: string;
+    concentracionProducto?: number;
+    tiempoContacto?: number;
+    volumenAgua?: number;
+    proceso?: string;
+    responsable?: string;
+    proximaLimpieza?: string;
+    cumple?: boolean;
 }
 export interface CreateMantenimientoLavadoDto {
     fuenteAguaId: string;
@@ -20,6 +29,15 @@ export interface CreateMantenimientoLavadoDto {
     observaciones?: string;
     estado?: EstadoMantenimiento;
     evidenciaFoto?: string;
+    tipoLimpieza?: string;
+    productoUtilizado?: string;
+    concentracionProducto?: number;
+    tiempoContacto?: number;
+    volumenAgua?: number;
+    proceso?: string;
+    responsable?: string;
+    proximaLimpieza?: string;
+    cumple?: boolean;
 }
 export interface UpdateMantenimientoLavadoDto {
     fechaProgramada?: string;
@@ -28,4 +46,13 @@ export interface UpdateMantenimientoLavadoDto {
     observaciones?: string;
     estado?: EstadoMantenimiento;
     evidenciaFoto?: string;
+    tipoLimpieza?: string;
+    productoUtilizado?: string;
+    concentracionProducto?: number;
+    tiempoContacto?: number;
+    volumenAgua?: number;
+    proceso?: string;
+    responsable?: string;
+    proximaLimpieza?: string;
+    cumple?: boolean;
 }

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -11,6 +12,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { environment } from '@/environments/environment';
 import { AccionCorrectivaAgua } from '../../models/accion-correctiva-agua.interface';
+import { FuenteAguaService } from '@/app/features/agua/fuente-agua/services/fuente-agua.service';
+import { FuenteAgua } from '@/app/features/agua/fuente-agua/models/fuente-agua.interface';
 
 @Component({
     selector: 'app-accion-correctiva-agua-form',
@@ -19,28 +22,47 @@ import { AccionCorrectivaAgua } from '../../models/accion-correctiva-agua.interf
     templateUrl: './accion-correctiva-agua-form.component.html',
     styleUrls: ['./accion-correctiva-agua-form.component.scss'],
 })
-export class AccionCorrectivaAguaFormComponent implements OnInit {
+export class AccionCorrectivaAguaFormComponent implements OnInit, OnChanges, HasUnsavedChanges {
+    private fuenteAguaService = inject(FuenteAguaService);
     @Input() accionCorrectivaAgua?: AccionCorrectivaAgua;
     @Input() saving = false;
     @Output() formSubmit = new EventEmitter<any>();
     @Output() cancel = new EventEmitter<void>();
 
+    fuenteAguaItems: FuenteAgua[] = [];
     estadoOptions = [{"label":"Pendiente","value":"pendiente"},{"label":"En Proceso","value":"en_proceso"},{"label":"Completada","value":"completada"},{"label":"Cancelada","value":"cancelada"}];
+    origenOptions = [{"label":"Control Diario","value":"control_diario"},{"label":"Análisis Laboratorio","value":"analisis_laboratorio"},{"label":"Mantenimiento","value":"mantenimiento"},{"label":"Auditoría","value":"auditoria"},{"label":"Otro","value":"otro"}];
     model: any = {};
+    private initialModel = '';
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {
+        this.fuenteAguaService.getAll().subscribe(items => this.fuenteAguaItems = items);
         if (this.accionCorrectivaAgua) {
             this.model = { ...this.accionCorrectivaAgua };
             if (this.accionCorrectivaAgua.fecha) this.model.fecha = new Date(this.accionCorrectivaAgua.fecha);
+            if (this.accionCorrectivaAgua.fechaLimite) this.model.fechaLimite = new Date(this.accionCorrectivaAgua.fechaLimite);
         } else {
             this.model = {};
         }
+        this.initialModel = JSON.stringify(this.model);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['accionCorrectivaAgua'] && this.accionCorrectivaAgua) {
+            this.model = { ...this.accionCorrectivaAgua };
+            if (this.accionCorrectivaAgua.fecha) this.model.fecha = new Date(this.accionCorrectivaAgua.fecha);
+            if (this.accionCorrectivaAgua.fechaLimite) this.model.fechaLimite = new Date(this.accionCorrectivaAgua.fechaLimite);
+        }
+        this.initialModel = JSON.stringify(this.model);
     }
 
     onSubmit() {
+        const { fuenteAguaId, descripcionDesviacion, medidaTomada, fecha, responsable } = this.model;
+        if (!fuenteAguaId || !descripcionDesviacion || !medidaTomada || !fecha || !responsable) return;
         const data = { ...this.model };
         if (data.fecha instanceof Date) data.fecha = data.fecha.toISOString();
+        if (data.fechaLimite instanceof Date) data.fechaLimite = data.fechaLimite.toISOString();
         this.formSubmit.emit(data);
     }
 
@@ -48,6 +70,8 @@ export class AccionCorrectivaAguaFormComponent implements OnInit {
         const response = JSON.parse(event.xhr.response);
         this.model.evidenciaFoto = response.url;
     }
+
+    hasUnsavedChanges(): boolean { return JSON.stringify(this.model) !== this.initialModel; }
 
     onCancel() { this.cancel.emit(); }
 }

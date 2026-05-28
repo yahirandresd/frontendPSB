@@ -15,6 +15,8 @@ export interface ControlPotabilidad {
     requiereAnalisisLaboratorio: boolean;
     parametroFueraRango?: string;
     evidenciaFoto?: string;
+    olor?: string;
+    sabor?: string;
 }
 export interface CreateControlPotabilidadDto {
     fuenteAguaId: string;
@@ -29,6 +31,8 @@ export interface CreateControlPotabilidadDto {
     responsableMuestra: string;
     observaciones?: string;
     evidenciaFoto?: string;
+    olor?: string;
+    sabor?: string;
 }
 export interface UpdateControlPotabilidadDto {
     fechaHora?: string;
@@ -41,4 +45,6 @@ export interface UpdateControlPotabilidadDto {
     responsableMuestra?: string;
     observaciones?: string;
     evidenciaFoto?: string;
+    olor?: string;
+    sabor?: string;
 }

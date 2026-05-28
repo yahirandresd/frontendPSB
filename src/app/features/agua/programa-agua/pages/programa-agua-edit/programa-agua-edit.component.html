@@ -1,6 +1,9 @@
-<app-programa-agua-form
-    [programaAgua]="programaAgua()"
-    (formSubmit)="onSubmit($event)"
-    (cancel)="onCancel()"
-    [saving]="saving()"
-/>
+<div class="card">
+    <p-toast />
+    <app-programa-agua-form
+        [programaAgua]="programaAgua()"
+        (formSubmit)="onSubmit($event)"
+        (cancel)="onCancel()"
+        [saving]="saving()"
+    />
+</div>
