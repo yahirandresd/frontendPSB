@@ -25,8 +25,8 @@
                 <td>{{ p.codigoRegistro }}</td>
                 <td class="font-medium">{{ p.nombreComercial }}</td>
                 <td>{{ p.ingredienteActivo }}</td>
-                <td><p-tag [value]="p.categoriaOMS" [severity]="getCategoriaSeverity(p.categoriaOMS)" /></td>
-                <td>{{ p.registroICA }}</td>
+                <td><p-tag [value]="p.categoriaOms" [severity]="getCategoriaSeverity(p.categoriaOms)" /></td>
+                <td>{{ p.registroIca }}</td>
                 <td>
                     @if (p.fichaTecnicaUrl) {
                         <a [href]="p.fichaTecnicaUrl" target="_blank" class="text-primary underline text-sm">Ver</a>
@@ -55,6 +55,7 @@
           [modal]="true" [style]="{ width: '640px' }" [closable]="true">
     <app-plaguicida-form
         [plaguicida]="plaguicidaSeleccionado"
+        [programaPlagasId]="programaPlagasId"
         (guardado)="onGuardado()"
         (cancelado)="mostrarFormulario = false" />
 </p-dialog>
@@ -70,12 +71,12 @@
             <span class="text-muted-color">Ingrediente Activo</span>
             <span>{{ plaguicidaSeleccionado.ingredienteActivo }}</span>
             <span class="text-muted-color">Categoría OMS</span>
-            <p-tag [value]="plaguicidaSeleccionado.categoriaOMS"
-                   [severity]="getCategoriaSeverity(plaguicidaSeleccionado.categoriaOMS)" />
+            <p-tag [value]="plaguicidaSeleccionado.categoriaOms"
+                   [severity]="getCategoriaSeverity(plaguicidaSeleccionado.categoriaOms)" />
             <span class="text-muted-color">Dosis de Aplicación</span>
             <span>{{ plaguicidaSeleccionado.dosisAplicacion || '—' }}</span>
             <span class="text-muted-color">Registro ICA</span>
-            <span>{{ plaguicidaSeleccionado.registroICA }}</span>
+            <span>{{ plaguicidaSeleccionado.registroIca }}</span>
             <span class="text-muted-color">Ficha Técnica</span>
             @if (plaguicidaSeleccionado.fichaTecnicaUrl) {
                 <a [href]="plaguicidaSeleccionado.fichaTecnicaUrl" target="_blank" class="text-primary underline">Ver ficha</a>

@@ -1,4 +1,3 @@
-
 <div class="card">
     <div class="flex items-center justify-between mb-6">
         <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
@@ -6,7 +5,7 @@
         </h5>
         <p-button label="Nueva Evidencia" icon="pi pi-plus" (onClick)="abrirFormulario()" />
     </div>
-
+ 
     <p-table [value]="evidencias" [loading]="cargando" [paginator]="true" [rows]="10"
              styleClass="p-datatable-gridlines" responsiveLayout="scroll">
         <ng-template pTemplate="header">
@@ -27,7 +26,7 @@
                     </div>
                 </td>
                 <td class="max-w-xs truncate">{{ e.descripcion }}</td>
-                <td>{{ e.fechaCarga | date:'dd/MM/yyyy' }}</td>
+                <td>{{ e.fecha_carga | date:'dd/MM/yyyy' }}</td>
                 <td>
                     <a [href]="e.urlArchivo" target="_blank" class="text-primary underline text-sm">Ver archivo</a>
                 </td>
@@ -48,16 +47,17 @@
         </ng-template>
     </p-table>
 </div>
-
+ 
 <p-dialog [(visible)]="mostrarFormulario"
           [header]="evidenciaSeleccionada ? 'Editar Evidencia' : 'Nueva Evidencia'"
           [modal]="true" [style]="{ width: '560px' }" [closable]="true">
     <app-evidencia-plagas-form
         [evidencia]="evidenciaSeleccionada"
+        [registroPlagasId]="registroPlagasId"
         (guardado)="onGuardado()"
         (cancelado)="mostrarFormulario = false" />
 </p-dialog>
-
+ 
 <p-dialog [(visible)]="mostrarDetalle" header="Detalle de la Evidencia"
           [modal]="true" [style]="{ width: '480px' }">
     @if (evidenciaSeleccionada) {
@@ -68,7 +68,7 @@
                 {{ evidenciaSeleccionada.tipoArchivo }}
             </span>
             <span class="text-muted-color">Fecha de Carga</span>
-            <span>{{ evidenciaSeleccionada.fechaCarga | date:'dd/MM/yyyy' }}</span>
+            <span>{{ evidenciaSeleccionada.fecha_carga | date:'dd/MM/yyyy' }}</span>
             <span class="text-muted-color">Descripción</span>
             <span>{{ evidenciaSeleccionada.descripcion || '—' }}</span>
             <span class="text-muted-color">Archivo</span>
@@ -76,9 +76,10 @@
         </div>
     }
     <ng-template pTemplate="footer">
-        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+        <p-button label="Cerrar" severity="secondary" [outlined]="true"
+                  (onClick)="mostrarDetalle = false" />
     </ng-template>
 </p-dialog>
-
+ 
 <p-confirmDialog />
 <p-toast />

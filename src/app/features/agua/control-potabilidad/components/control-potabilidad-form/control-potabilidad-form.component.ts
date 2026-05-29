@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -20,7 +21,7 @@ import { FuenteAgua } from '../../../fuente-agua/models/fuente-agua.interface';
     templateUrl: './control-potabilidad-form.component.html',
     styleUrls: ['./control-potabilidad-form.component.scss'],
 })
-export class ControlPotabilidadFormComponent implements OnInit {
+export class ControlPotabilidadFormComponent implements OnInit, OnChanges, HasUnsavedChanges {
     private fuenteAguaService = inject(FuenteAguaService);
     @Input() controlPotabilidad?: ControlPotabilidad;
     @Input() saving = false;
@@ -28,7 +29,10 @@ export class ControlPotabilidadFormComponent implements OnInit {
     @Output() cancel = new EventEmitter<void>();
 
     fuentesAgua: FuenteAgua[] = [];
+    olorOptions = [{"label":"Normal","value":"normal"},{"label":"Aceptable","value":"aceptable"},{"label":"Fuerte","value":"fuerte"},{"label":"N/A","value":"na"}];
+    saborOptions = [{"label":"Normal","value":"normal"},{"label":"Aceptable","value":"aceptable"},{"label":"Desagradable","value":"desagradable"},{"label":"N/A","value":"na"}];
     model: any = {};
+    private initialModel = '';
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {
@@ -38,9 +42,23 @@ export class ControlPotabilidadFormComponent implements OnInit {
         } else {
             this.model = { fechaHora: new Date() };
         }
+        this.initialModel = JSON.stringify(this.model);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['controlPotabilidad'] && this.controlPotabilidad) {
+            this.model = { ...this.controlPotabilidad, fechaHora: new Date(this.controlPotabilidad.fechaHora) };
+        }
+        this.initialModel = JSON.stringify(this.model);
     }
 
     onSubmit() {
+        const { fuenteAguaId, fechaHora, puntoCaptacion, cloroResidual, ph, turbiedad, colorAparente, responsableMuestra } = this.model;
+        if (!fuenteAguaId || !fechaHora || !puntoCaptacion || !responsableMuestra) return;
+        if (cloroResidual === undefined || cloroResidual === null) return;
+        if (ph === undefined || ph === null) return;
+        if (turbiedad === undefined || turbiedad === null) return;
+        if (colorAparente === undefined || colorAparente === null) return;
         const data = {
             ...this.model,
             fechaHora: this.model.fechaHora instanceof Date ? this.model.fechaHora.toISOString() : this.model.fechaHora,
@@ -53,5 +71,9 @@ export class ControlPotabilidadFormComponent implements OnInit {
         this.model.evidenciaFoto = response.url;
     }
 
-    onCancel() { this.cancel.emit(); }
+    hasUnsavedChanges(): boolean { return JSON.stringify(this.model) !== this.initialModel; }
+
+    markAsPristine(): void { this.initialModel = JSON.stringify(this.model); }
+
+    onCancel() { this.markAsPristine(); this.cancel.emit(); }
 }

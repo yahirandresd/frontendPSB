@@ -1,0 +1,146 @@
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">
+            Detalle de Registro Agua
+        </div>
+        <p-button label="Volver" severity="secondary" icon="pi pi-arrow-left" (onClick)="volver()" />
+    </div>
+
+    @if (loading()) {
+        <div class="text-center p-4">Cargando...</div>
+    } @else if (registroAgua(); as ra) {
+        <div class="grid grid-cols-12 gap-4 mb-4 p-3 surface-ground border-round">
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Tipo Actividad</label>
+                <span class="text-surface-900 dark:text-surface-0 font-medium">{{ tipoLabel(ra.tipoActividad) }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Resultado General</label>
+                <p-tag [value]="ra.resultadoGeneral" [severity]="resultColor(ra.resultadoGeneral)" />
+            </div>
+        </div>
+
+        <p-accordion [multiple]="true">
+            <p-accordion-panel value="control">
+                <p-accordion-header>Control Potabilidad</p-accordion-header>
+                <p-accordion-content>
+                    @if (controles().length > 0) {
+                        <p-table [value]="controles()" stripedRows>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Fecha/Hora</th>
+                                    <th>Cloro Residual</th>
+                                    <th>pH</th>
+                                    <th>Turbiedad</th>
+                                    <th>Color Aparente</th>
+                                    <th>Cumple Norma</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr>
+                                    <td>{{ item.fechaHora | date:'dd/MM/yyyy HH:mm' }}</td>
+                                    <td>{{ item.cloroResidual }}</td>
+                                    <td>{{ item.ph }}</td>
+                                    <td>{{ item.turbiedad }}</td>
+                                    <td>{{ item.colorAparente }}</td>
+                                    <td><p-tag [value]="item.cumpleNorma ? 'Sí' : 'No'" [severity]="item.cumpleNorma ? 'success' : 'danger'" /></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    } @else {
+                        <div class="text-center p-3 text-muted-color">Sin datos</div>
+                    }
+                </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="analisis">
+                <p-accordion-header>Análisis Laboratorio</p-accordion-header>
+                <p-accordion-content>
+                    @if (analisis().length > 0) {
+                        <p-table [value]="analisis()" stripedRows>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>N° Certificado</th>
+                                    <th>Laboratorio</th>
+                                    <th>Fecha Muestreo</th>
+                                    <th>IRCA</th>
+                                    <th>Nivel Riesgo</th>
+                                    <th>Resultado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr>
+                                    <td>{{ item.numeroCertificado }}</td>
+                                    <td>{{ item.laboratorioCertificado }}</td>
+                                    <td>{{ item.fechaMuestreo | date:'dd/MM/yyyy' }}</td>
+                                    <td>{{ item.irca }}%</td>
+                                    <td>{{ item.nivelRiesgo }}</td>
+                                    <td><p-tag [value]="item.resultado" [severity]="item.resultado === 'apto' ? 'success' : 'danger'" /></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    } @else {
+                        <div class="text-center p-3 text-muted-color">Sin datos</div>
+                    }
+                </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="mantenimiento">
+                <p-accordion-header>Mantenimiento Lavado</p-accordion-header>
+                <p-accordion-content>
+                    @if (mantenimientos().length > 0) {
+                        <p-table [value]="mantenimientos()" stripedRows>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Fecha Programada</th>
+                                    <th>Fecha Ejecución</th>
+                                    <th>Método</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr>
+                                    <td>{{ item.fechaProgramada | date:'dd/MM/yyyy' }}</td>
+                                    <td>{{ (item.fechaEjecucion | date:'dd/MM/yyyy') || '-' }}</td>
+                                    <td>{{ item.metodoLimpieza }}</td>
+                                    <td><p-tag [value]="item.estado" /></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    } @else {
+                        <div class="text-center p-3 text-muted-color">Sin datos</div>
+                    }
+                </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="accion">
+                <p-accordion-header>Acción Correctiva</p-accordion-header>
+                <p-accordion-content>
+                    @if (accionesCorrectivas().length > 0) {
+                        <p-table [value]="accionesCorrectivas()" stripedRows>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Descripción</th>
+                                    <th>Medida Tomada</th>
+                                    <th>Fecha</th>
+                                    <th>Responsable</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-item>
+                                <tr>
+                                    <td>{{ item.descripcionDesviacion }}</td>
+                                    <td>{{ item.medidaTomada }}</td>
+                                    <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                                    <td>{{ item.responsable }}</td>
+                                    <td><p-tag [value]="item.estado" /></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    } @else {
+                        <div class="text-center p-3 text-muted-color">Sin datos</div>
+                    }
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    } @else {
+        <div class="text-center p-4 text-muted-color">Registro no encontrado</div>
+    }
+</div>

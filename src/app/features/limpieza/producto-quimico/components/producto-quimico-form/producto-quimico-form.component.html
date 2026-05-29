@@ -1,0 +1,71 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1">
+            <label for="codigo" class="font-semibold text-sm">Código <span class="text-red-500">*</span></label>
+            <input pInputText id="codigo" formControlName="codigo" placeholder="Ej. PQ-DES-001" />
+            @if (f['codigo'].invalid && f['codigo'].touched) {
+                <small class="text-red-500">El código es requerido.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="tipo" class="font-semibold text-sm">Tipo <span class="text-red-500">*</span></label>
+            <p-select id="tipo" formControlName="tipo" [options]="tipoOpciones"
+                optionLabel="label" optionValue="value" placeholder="Seleccionar tipo" />
+            @if (f['tipo'].invalid && f['tipo'].touched) {
+                <small class="text-red-500">El tipo es requerido.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="nombre" class="font-semibold text-sm">Nombre <span class="text-red-500">*</span></label>
+            <input pInputText id="nombre" formControlName="nombre" placeholder="Ej. Hipoclorito de sodio" />
+            @if (f['nombre'].invalid && f['nombre'].touched) {
+                <small class="text-red-500">El nombre es requerido.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="fabricante" class="font-semibold text-sm">Fabricante <span class="text-red-500">*</span></label>
+            <input pInputText id="fabricante" formControlName="fabricante" placeholder="Nombre del fabricante" />
+            @if (f['fabricante'].invalid && f['fabricante'].touched) {
+                <small class="text-red-500">El fabricante es requerido.</small>
+            }
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="ph" class="font-semibold text-sm">pH</label>
+            <input pInputText id="ph" formControlName="ph" placeholder="Ej. 12.5" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="concentracionRecomendada" class="font-semibold text-sm">Concentración recomendada</label>
+            <input pInputText id="concentracionRecomendada" formControlName="concentracionRecomendada"
+                placeholder="Ej. 200 ppm" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label for="tiempoContactoMin" class="font-semibold text-sm">Tiempo de contacto (min)</label>
+            <input pInputText id="tiempoContactoMin" formControlName="tiempoContactoMin" placeholder="Ej. 15" />
+        </div>
+
+        <div class="flex items-center gap-2 pt-5">
+            <p-checkbox formControlName="gradoAlimenticio" [binary]="true" inputId="gradoAlimenticio" />
+            <label for="gradoAlimenticio" class="font-semibold text-sm">Grado alimenticio</label>
+        </div>
+
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label for="fichaTecnicaUrl" class="font-semibold text-sm">URL ficha técnica</label>
+        <input pInputText id="fichaTecnicaUrl" formControlName="fichaTecnicaUrl" placeholder="https://..." />
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2">
+        <button pButton type="submit" [label]="producto ? 'Guardar cambios' : 'Crear producto'"
+            icon="pi pi-check"></button>
+    </div>
+
+</form>

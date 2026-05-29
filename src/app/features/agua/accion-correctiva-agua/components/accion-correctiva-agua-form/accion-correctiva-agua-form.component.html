@@ -2,41 +2,132 @@
     <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
         {{ accionCorrectivaAgua ? 'Editar' : 'Nuevo' }} Acción Correctiva Agua
     </div>
-    <form #form="ngForm" (ngSubmit)="onSubmit()">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
-                <label class="block font-medium mb-1">Registro Agua</label>
-                <input pInputText name="registroAguaId" [(ngModel)]="model.registroAguaId" class="w-full" required />
+                <label class="block font-medium mb-1">Fuente Agua</label>
+                <p-select #fuenteAguaId="ngModel" name="fuenteAguaId" [(ngModel)]="model.fuenteAguaId" [options]="fuenteAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <small class="text-surface-500">Seleccione la fuente de agua</small>
+                @if (fuenteAguaId.invalid && (fuenteAguaId.dirty || fuenteAguaId.touched || form.submitted)) {
+                    @if (fuenteAguaId.errors?.['required']) {
+                        <small class="text-red-500">La fuente de agua es requerida</small>
+                    }
+                }
             </div>
 
             <div class="col-span-12">
                 <label class="block font-medium mb-1">Descripción Desviación</label>
-                <textarea pTextarea name="descripcionDesviacion" [(ngModel)]="model.descripcionDesviacion" rows="3" class="w-full" required></textarea>
+                <textarea #descripcionDesviacion="ngModel" pTextarea name="descripcionDesviacion" [(ngModel)]="model.descripcionDesviacion" rows="3" class="w-full" required></textarea>
+                <small class="text-surface-500">Describa la desviación encontrada</small>
+                @if (descripcionDesviacion.invalid && (descripcionDesviacion.dirty || descripcionDesviacion.touched || form.submitted)) {
+                    @if (descripcionDesviacion.errors?.['required']) {
+                        <small class="text-red-500">La descripción es requerida</small>
+                    }
+                }
             </div>
 
             <div class="col-span-12">
                 <label class="block font-medium mb-1">Medida Tomada</label>
-                <textarea pTextarea name="medidaTomada" [(ngModel)]="model.medidaTomada" rows="3" class="w-full" required></textarea>
+                <textarea #medidaTomada="ngModel" pTextarea name="medidaTomada" [(ngModel)]="model.medidaTomada" rows="3" class="w-full" required></textarea>
+                <small class="text-surface-500">Describa la medida correctiva aplicada</small>
+                @if (medidaTomada.invalid && (medidaTomada.dirty || medidaTomada.touched || form.submitted)) {
+                    @if (medidaTomada.errors?.['required']) {
+                        <small class="text-red-500">La medida tomada es requerida</small>
+                    }
+                }
             </div>
 
             <div class="col-span-12">
                 <label class="block font-medium mb-1">Resultado Verificación</label>
                 <textarea pTextarea name="resultadoVerificacion" [(ngModel)]="model.resultadoVerificacion" rows="3" class="w-full"></textarea>
+                <small class="text-surface-500">Resultado de la verificación (opcional)</small>
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha</label>
-                <p-datepicker name="fecha" [(ngModel)]="model.fecha" [showIcon]="true" class="w-full" required />
+                <p-datepicker #fecha="ngModel" name="fecha" [(ngModel)]="model.fecha" [showIcon]="true" class="w-full" required />
+                <small class="text-surface-500">Fecha de la acción correctiva</small>
+                @if (fecha.invalid && (fecha.dirty || fecha.touched || form.submitted)) {
+                    @if (fecha.errors?.['required']) {
+                        <small class="text-red-500">La fecha es requerida</small>
+                    }
+                }
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Responsable</label>
-                <input pInputText name="responsable" [(ngModel)]="model.responsable" class="w-full" required />
+                <input #responsable="ngModel" pInputText name="responsable" [(ngModel)]="model.responsable" class="w-full" required />
+                <small class="text-surface-500">Nombre del responsable</small>
+                @if (responsable.invalid && (responsable.dirty || responsable.touched || form.submitted)) {
+                    @if (responsable.errors?.['required']) {
+                        <small class="text-red-500">El responsable es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Estado</label>
                 <p-select name="estado" [(ngModel)]="model.estado" [options]="estadoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Estado de la acción correctiva</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Origen</label>
+                <p-select name="origen" [(ngModel)]="model.origen" [options]="origenOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Origen de la desviación</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Parámetro Incumplido</label>
+                <input pInputText name="parametroIncumplido" [(ngModel)]="model.parametroIncumplido" class="w-full" />
+                <small class="text-surface-500">Nombre del parámetro que no cumple</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Valor Medido</label>
+                <p-inputNumber name="valorMedido" [(ngModel)]="model.valorMedido"  [step]="0.01" class="w-full" />
+                <small class="text-surface-500">Valor medido del parámetro</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Valor Esperado</label>
+                <p-inputNumber name="valorEsperado" [(ngModel)]="model.valorEsperado"  [step]="0.01" class="w-full" />
+                <small class="text-surface-500">Valor esperado según norma</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Causa Raíz</label>
+                <textarea pTextarea name="causaRaiz" [(ngModel)]="model.causaRaiz" rows="2" class="w-full"></textarea>
+                <small class="text-surface-500">Análisis de causa raíz de la desviación</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Acción Inmediata</label>
+                <textarea pTextarea name="accionInmediata" [(ngModel)]="model.accionInmediata" rows="2" class="w-full"></textarea>
+                <small class="text-surface-500">Acción inmediata tomada para controlar la desviación</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Acción Correctiva</label>
+                <textarea pTextarea name="accionCorrectiva" [(ngModel)]="model.accionCorrectiva" rows="2" class="w-full"></textarea>
+                <small class="text-surface-500">Acción correctiva para eliminar la causa raíz</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Fecha Límite</label>
+                <p-datepicker name="fechaLimite" [(ngModel)]="model.fechaLimite" [showIcon]="true" class="w-full" />
+                <small class="text-surface-500">Fecha límite para implementar</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Verificación Eficacia</label>
+                <textarea pTextarea name="verificacionEficacia" [(ngModel)]="model.verificacionEficacia" rows="2" class="w-full"></textarea>
+                <small class="text-surface-500">Resultado de la verificación de eficacia</small>
+            </div>
+
+            <div class="col-span-3 flex items-center gap-2 mt-6">
+                <p-checkbox name="eficaz" [(ngModel)]="model.eficaz" [binary]="true" inputId="eficaz" />
+                <label for="eficaz">Eficaz</label>
             </div>
         </div>
 
@@ -60,7 +151,7 @@
         </div>
 
         <div class="flex justify-end gap-2 mt-4">
-            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
             <p-button type="submit" label="Guardar" [loading]="saving" />
         </div>
     </form>

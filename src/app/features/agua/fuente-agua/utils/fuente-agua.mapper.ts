@@ -1,7 +1,7 @@
 import { FuenteAgua, CreateFuenteAguaDto, UpdateFuenteAguaDto } from '../models/fuente-agua.interface';
 export function toCreateDto(form: Partial<FuenteAgua>): CreateFuenteAguaDto {
-    return { programaAguaId: form.programaAguaId!, nombre: form.nombre!, tipo: form.tipo!, proveedor: form.proveedor, ubicacion: form.ubicacion, requiereTanque: form.requiereTanque, estado: form.estado };
+    return { programaAguaId: form.programaAguaId!, nombre: form.nombre!, tipo: form.tipo!, proveedor: form.proveedor, ubicacion: form.ubicacion, requiereTanque: form.requiereTanque, estado: form.estado, municipio: form.municipio, departamento: form.departamento, concesion: form.concesion, tratamiento: form.tratamiento, evidenciaFoto: form.evidenciaFoto };
 }
 export function toUpdateDto(form: Partial<FuenteAgua>): UpdateFuenteAguaDto {
-    return { nombre: form.nombre, tipo: form.tipo, proveedor: form.proveedor, ubicacion: form.ubicacion, requiereTanque: form.requiereTanque, estado: form.estado };
+    return { nombre: form.nombre, tipo: form.tipo, proveedor: form.proveedor, ubicacion: form.ubicacion, requiereTanque: form.requiereTanque, estado: form.estado, municipio: form.municipio, departamento: form.departamento, concesion: form.concesion, tratamiento: form.tratamiento, evidenciaFoto: form.evidenciaFoto };
 }

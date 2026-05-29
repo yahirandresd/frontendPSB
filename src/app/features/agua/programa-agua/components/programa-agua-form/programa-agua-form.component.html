@@ -3,10 +3,11 @@
         {{ programaAgua ? 'Editar' : 'Nuevo' }} Programa de Agua
     </div>
 
-    <form #form="ngForm" (ngSubmit)="onSubmit()" class="grid grid-cols-12 gap-4">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate class="grid grid-cols-12 gap-4">
         <div class="col-span-12 flex flex-col gap-2">
             <label for="objetivo" class="font-medium">Objetivo</label>
             <textarea
+                #objetivo="ngModel"
                 id="objetivo"
                 pInputTextarea
                 [(ngModel)]="model.objetivo"
@@ -15,14 +16,18 @@
                 class="w-full"
                 required
             ></textarea>
-            @if (submitted && !model.objetivo) {
-                <small class="text-red-500">El objetivo es requerido</small>
+            <small class="text-surface-500">Defina el objetivo del programa de agua</small>
+            @if (objetivo.invalid && (objetivo.dirty || objetivo.touched || form.submitted)) {
+                @if (objetivo.errors?.['required']) {
+                    <small class="text-red-500">El objetivo es requerido</small>
+                }
             }
         </div>
 
         <div class="col-span-12 flex flex-col gap-2">
             <label for="alcance" class="font-medium">Alcance</label>
             <textarea
+                #alcance="ngModel"
                 id="alcance"
                 pInputTextarea
                 [(ngModel)]="model.alcance"
@@ -31,14 +36,18 @@
                 class="w-full"
                 required
             ></textarea>
-            @if (submitted && !model.alcance) {
-                <small class="text-red-500">El alcance es requerido</small>
+            <small class="text-surface-500">Defina el alcance del programa de agua</small>
+            @if (alcance.invalid && (alcance.dirty || alcance.touched || form.submitted)) {
+                @if (alcance.errors?.['required']) {
+                    <small class="text-red-500">El alcance es requerido</small>
+                }
             }
         </div>
 
         <div class="col-span-12 flex flex-col gap-2">
             <label for="procedimientoGeneral" class="font-medium">Procedimiento General</label>
             <textarea
+                #procedimientoGeneral="ngModel"
                 id="procedimientoGeneral"
                 pInputTextarea
                 [(ngModel)]="model.procedimientoGeneral"
@@ -47,13 +56,16 @@
                 class="w-full"
                 required
             ></textarea>
-            @if (submitted && !model.procedimientoGeneral) {
-                <small class="text-red-500">El procedimiento general es requerido</small>
+            <small class="text-surface-500">Describa el procedimiento general del programa</small>
+            @if (procedimientoGeneral.invalid && (procedimientoGeneral.dirty || procedimientoGeneral.touched || form.submitted)) {
+                @if (procedimientoGeneral.errors?.['required']) {
+                    <small class="text-red-500">El procedimiento general es requerido</small>
+                }
             }
         </div>
 
         <div class="col-span-12 flex justify-end gap-2 mt-4">
-            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
             <p-button type="submit" label="Guardar" [loading]="saving" />
         </div>
     </form>

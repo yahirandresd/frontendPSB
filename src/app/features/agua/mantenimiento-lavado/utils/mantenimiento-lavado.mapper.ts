@@ -1,7 +1,7 @@
 import { MantenimientoLavado, CreateMantenimientoLavadoDto, UpdateMantenimientoLavadoDto } from '../models/mantenimiento-lavado.interface';
 export function toCreateDto(form: Partial<MantenimientoLavado>): CreateMantenimientoLavadoDto {
-    return { fuenteAguaId: form.fuenteAguaId!, fechaProgramada: form.fechaProgramada!, metodoLimpieza: form.metodoLimpieza!, fechaEjecucion: form.fechaEjecucion, observaciones: form.observaciones, estado: form.estado, evidenciaFoto: form.evidenciaFoto };
+    return { fuenteAguaId: form.fuenteAguaId!, fechaProgramada: form.fechaProgramada!, metodoLimpieza: form.metodoLimpieza!, fechaEjecucion: form.fechaEjecucion, observaciones: form.observaciones, estado: form.estado, evidenciaFoto: form.evidenciaFoto, tipoLimpieza: form.tipoLimpieza, productoUtilizado: form.productoUtilizado, concentracionProducto: form.concentracionProducto, tiempoContacto: form.tiempoContacto, volumenAgua: form.volumenAgua, proceso: form.proceso, responsable: form.responsable, proximaLimpieza: form.proximaLimpieza, cumple: form.cumple };
 }
 export function toUpdateDto(form: Partial<MantenimientoLavado>): UpdateMantenimientoLavadoDto {
-    return { fechaProgramada: form.fechaProgramada, fechaEjecucion: form.fechaEjecucion, metodoLimpieza: form.metodoLimpieza, observaciones: form.observaciones, estado: form.estado, evidenciaFoto: form.evidenciaFoto };
+    return { fechaProgramada: form.fechaProgramada, fechaEjecucion: form.fechaEjecucion, metodoLimpieza: form.metodoLimpieza, observaciones: form.observaciones, estado: form.estado, evidenciaFoto: form.evidenciaFoto, tipoLimpieza: form.tipoLimpieza, productoUtilizado: form.productoUtilizado, concentracionProducto: form.concentracionProducto, tiempoContacto: form.tiempoContacto, volumenAgua: form.volumenAgua, proceso: form.proceso, responsable: form.responsable, proximaLimpieza: form.proximaLimpieza, cumple: form.cumple };
 }

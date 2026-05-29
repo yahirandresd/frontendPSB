@@ -1,0 +1,70 @@
+<div class="card">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <button pButton icon="pi pi-arrow-left" [text]="true" [rounded]="true" (click)="volver()"></button>
+            <div>
+                <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Detalle del Programa de Limpieza</h2>
+                <p class="text-muted-color mt-1">Información completa del programa</p>
+            </div>
+        </div>
+        @if (!cargando() && !error()) {
+            <button pButton label="Editar" icon="pi pi-pencil" severity="secondary" (click)="irAEditar()"></button>
+        }
+    </div>
+
+    @if (cargando()) {
+        <div class="flex justify-center py-12">
+            <p-progressSpinner strokeWidth="4" />
+        </div>
+    } @else if (error()) {
+        <div class="flex flex-col items-center py-12 gap-3 text-muted-color">
+            <i class="pi pi-exclamation-circle text-4xl"></i>
+            <span>No se pudo cargar el programa.</span>
+        </div>
+    } @else if (programa()) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Programa PSB (ID)</span>
+                <span class="font-mono text-sm">{{ programa()!.programaId }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Equipo / Área (ID)</span>
+                @if (programa()!.equipoAreaId) {
+                    <span class="font-mono text-sm">{{ programa()!.equipoAreaId }}</span>
+                } @else {
+                    <span class="text-muted-color">No asignado</span>
+                }
+            </div>
+
+            <div class="flex flex-col gap-1 md:col-span-2">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Objetivo</span>
+                <p class="text-sm m-0">{{ programa()!.objetivo }}</p>
+            </div>
+
+            <div class="flex flex-col gap-1 md:col-span-2">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Alcance</span>
+                <p class="text-sm m-0">{{ programa()!.alcance }}</p>
+            </div>
+
+            @if (programa()!.procedimientoGeneral) {
+                <div class="flex flex-col gap-1 md:col-span-2">
+                    <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Procedimiento General</span>
+                    <p class="text-sm m-0 whitespace-pre-line">{{ programa()!.procedimientoGeneral }}</p>
+                </div>
+            }
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Creado</span>
+                <span class="text-sm">{{ programa()!.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-muted-color uppercase tracking-wide">Última actualización</span>
+                <span class="text-sm">{{ programa()!.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+        </div>
+    }
+</div>

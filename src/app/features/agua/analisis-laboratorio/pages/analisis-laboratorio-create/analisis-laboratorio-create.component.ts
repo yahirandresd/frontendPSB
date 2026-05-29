@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { AnalisisLaboratorioFormComponent } from '../../components/analisis-laboratorio-form/analisis-laboratorio-form.component';
 import { AnalisisLaboratorioService } from '../../services/analisis-laboratorio.service';
 
@@ -14,11 +15,16 @@ import { AnalisisLaboratorioService } from '../../services/analisis-laboratorio.
     styleUrls: ['./analisis-laboratorio-create.component.scss'],
     providers: [MessageService],
 })
-export class AnalisisLaboratorioCreateComponent {
+export class AnalisisLaboratorioCreateComponent implements HasUnsavedChanges {
+    @ViewChild(AnalisisLaboratorioFormComponent) form!: AnalisisLaboratorioFormComponent;
     private service = inject(AnalisisLaboratorioService);
     private router = inject(Router);
     private messageService = inject(MessageService);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     async onSubmit(data: any) {
         this.saving.set(true);
         try {
@@ -28,5 +34,5 @@ export class AnalisisLaboratorioCreateComponent {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/analisis-laboratorio']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/analisis-laboratorio']); }
 }

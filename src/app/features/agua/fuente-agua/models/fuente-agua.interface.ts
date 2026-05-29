@@ -7,6 +7,11 @@ export interface FuenteAgua {
     ubicacion?: string;
     requiereTanque: boolean;
     estado: string;
+    municipio?: string;
+    departamento?: string;
+    concesion?: string;
+    tratamiento?: string;
+    evidenciaFoto?: string;
     tanqueAlmacenamiento?: any;
 }
 export interface CreateFuenteAguaDto {
@@ -17,6 +22,11 @@ export interface CreateFuenteAguaDto {
     ubicacion?: string;
     requiereTanque?: boolean;
     estado?: string;
+    municipio?: string;
+    departamento?: string;
+    concesion?: string;
+    tratamiento?: string;
+    evidenciaFoto?: string;
 }
 export interface UpdateFuenteAguaDto {
     nombre?: string;
@@ -25,4 +35,9 @@ export interface UpdateFuenteAguaDto {
     ubicacion?: string;
     requiereTanque?: boolean;
     estado?: string;
+    municipio?: string;
+    departamento?: string;
+    concesion?: string;
+    tratamiento?: string;
+    evidenciaFoto?: string;
 }

@@ -12,6 +12,8 @@ export function toCreateDto(form: Partial<ControlPotabilidad>): CreateControlPot
         responsableMuestra: form.responsableMuestra!,
         observaciones: form.observaciones,
         evidenciaFoto: form.evidenciaFoto,
+        olor: form.olor,
+        sabor: form.sabor,
     };
 }
 export function toUpdateDto(form: Partial<ControlPotabilidad>): UpdateControlPotabilidadDto {
@@ -26,5 +28,7 @@ export function toUpdateDto(form: Partial<ControlPotabilidad>): UpdateControlPot
         responsableMuestra: form.responsableMuestra,
         observaciones: form.observaciones,
         evidenciaFoto: form.evidenciaFoto,
+        olor: form.olor,
+        sabor: form.sabor,
     };
 }

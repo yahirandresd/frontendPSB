@@ -14,7 +14,7 @@
         </div>
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Categoría OMS</label>
-            <p-select [(ngModel)]="form.categoriaOMS" [options]="categoriasOMS"
+            <p-select [(ngModel)]="form.categoriaOms" [options]="categoriasOMS"
                       optionLabel="label" optionValue="value"
                       placeholder="Seleccione la categoría" styleClass="w-full" />
         </div>
@@ -24,11 +24,15 @@
         </div>
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Registro ICA</label>
-            <input pInputText [(ngModel)]="form.registroICA" placeholder="Número de registro ICA" class="w-full" />
+            <input pInputText [(ngModel)]="form.registroIca" placeholder="Número de registro ICA" class="w-full" />
         </div>
         <div class="flex flex-col gap-1 col-span-2">
             <label class="font-medium text-sm">URL Ficha Técnica</label>
             <input pInputText [(ngModel)]="form.fichaTecnicaUrl" placeholder="https://..." class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1 col-span-2">
+            <label class="font-medium text-sm">Acciones Correctivas para Plagas</label>
+            <textarea pInputText [(ngModel)]="form.accionesCorrectivasPlagas" placeholder="Describa las acciones correctivas..." class="w-full" rows="3"></textarea>
         </div>
     </div>
     <div class="flex justify-end gap-2 mt-2">

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -6,7 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { firstValueFrom } from 'rxjs';
 import { RegistroPlagasService } from '../services/registro-plagas.service';
 import { RegistroPlagas } from '../models/registro-plagas';
- 
+
 @Component({
     selector: 'app-registro-plagas-form',
     standalone: true,
@@ -18,20 +18,20 @@ export class RegistroPlagasComponent implements OnInit {
     @Input() usuarios: any[] = [];
     @Output() guardado = new EventEmitter<void>();
     @Output() cancelado = new EventEmitter<void>();
- 
+
     private service = inject(RegistroPlagasService);
- 
+
     guardando = false;
     firmaRealizadoPor: string | null = null;
     firmaAprobadoPor: string | null = null;
- 
+
     form: Partial<RegistroPlagas> = {
-        tipoActividad: undefined,
+        TipoActividad: undefined,
         resultadoGeneral: '',
         firmadoPorId: '',
         aprobadoPorId: ''
     };
- 
+
     readonly tiposActividad = [
         'Inspección preventiva',
         'Aplicación de plaguicida',
@@ -40,11 +40,11 @@ export class RegistroPlagasComponent implements OnInit {
         'Control de insectos',
         'Fumigación'
     ];
- 
+
     readonly resultados = [
         'APROBADO', 'CONFORME', 'OBSERVACIONES', 'PENDIENTE', 'NO_APROBADO'
     ];
- 
+
     ngOnInit(): void {
         if (this.registro) {
             this.form = { ...this.registro };
@@ -52,18 +52,33 @@ export class RegistroPlagasComponent implements OnInit {
             this.firmaAprobadoPor = this.registro.aprobadoPor?.firma ?? null;
         }
     }
- 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['registro']) {
+            if (this.registro) {
+                this.form = { ...this.registro };
+            } else {
+                // Reset al abrir formulario de creación
+                this.form = {
+                    TipoActividad: undefined,
+                    resultadoGeneral: '',
+                    firmadoPorId: '',
+                    aprobadoPorId: ''
+                };
+            }
+        }
+    }
+
     onSeleccionarFirmante(event: any, tipo: 'firmado' | 'aprobado'): void {
         const usuario = this.usuarios.find(u => u.id === event.value);
         if (!usuario) return;
         if (tipo === 'firmado') this.firmaRealizadoPor = usuario.firma ?? null;
         else this.firmaAprobadoPor = usuario.firma ?? null;
     }
- 
+
     async onGuardar(): Promise<void> {
-        if (!this.form.tipoActividad || !this.form.resultadoGeneral ||
+        if (!this.form.TipoActividad || !this.form.resultadoGeneral ||
             !this.form.firmadoPorId || !this.form.aprobadoPorId) return;
- 
+
         this.guardando = true;
         try {
             if (this.registro?.id) {
@@ -78,9 +93,8 @@ export class RegistroPlagasComponent implements OnInit {
             this.guardando = false;
         }
     }
- 
+
     onCancelar(): void {
         this.cancelado.emit();
     }
 }
- 

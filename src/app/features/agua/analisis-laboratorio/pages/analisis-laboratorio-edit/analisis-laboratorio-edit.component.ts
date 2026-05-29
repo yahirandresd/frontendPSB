@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { AnalisisLaboratorioFormComponent } from '../../components/analisis-laboratorio-form/analisis-laboratorio-form.component';
 import { AnalisisLaboratorioService } from '../../services/analisis-laboratorio.service';
 import { AnalisisLaboratorio } from '../../models/analisis-laboratorio.interface';
@@ -15,13 +16,18 @@ import { AnalisisLaboratorio } from '../../models/analisis-laboratorio.interface
     styleUrls: ['./analisis-laboratorio-edit.component.scss'],
     providers: [MessageService],
 })
-export class AnalisisLaboratorioEditComponent implements OnInit {
+export class AnalisisLaboratorioEditComponent implements OnInit, HasUnsavedChanges {
+    @ViewChild(AnalisisLaboratorioFormComponent) form!: AnalisisLaboratorioFormComponent;
     private service = inject(AnalisisLaboratorioService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private messageService = inject(MessageService);
     analisisLaboratorio = signal<AnalisisLaboratorio | undefined>(undefined);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     ngOnInit() { this.cargar(); }
     async cargar() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -40,5 +46,5 @@ export class AnalisisLaboratorioEditComponent implements OnInit {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/analisis-laboratorio']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/analisis-laboratorio']); }
 }

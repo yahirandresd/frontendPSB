@@ -48,9 +48,11 @@
           [header]="accionSeleccionada ? 'Editar Acción' : 'Nueva Acción Correctiva'"
           [modal]="true" [style]="{ width: '580px' }" [closable]="true">
     <app-accion-correctiva-plagas-form
-        [accion]="accionSeleccionada"
-        (guardado)="onGuardado()"
-        (cancelado)="mostrarFormulario = false" />
+    [accion]="accionSeleccionada"
+    [hallazgoPlagaId]="hallazgoPlagaId"
+    [plaguicidas]="plaguicidas"
+    (guardado)="onGuardado()"
+    (cancelado)="mostrarFormulario = false" />
 </p-dialog>
 
 <p-dialog [(visible)]="mostrarDetalle" header="Detalle de la Acción Correctiva"

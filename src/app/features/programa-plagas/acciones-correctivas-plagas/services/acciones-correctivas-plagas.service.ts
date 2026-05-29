@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AccionCorrectivaPlagas } from '../models/accion-correctiva-plagas';
 import { Observable } from 'rxjs';
 import { environment } from '@/environments/environment';
-const BASE = environment.apiUrl + '/acciones-correctivas'; // Ajusta la URL base según tu configuración de API
+const BASE = environment.apiUrl + '/accion-correctiva-plagas'; // Ajusta la URL base según tu configuración de API
 
 @Injectable({
     providedIn: 'root'

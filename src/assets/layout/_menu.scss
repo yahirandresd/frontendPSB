@@ -45,46 +45,14 @@
 }
 
 /* =========================================
-   MODO OSCURO — Todo en global para evitar ::ng-deep
+   MODO OSCURO
    ========================================= */
 
-/* Sidebar fondo y borde */
 .app-dark .layout-sidebar {
-    background: #1e1e1e;
-    border-right: 1px solid #3f3f46;
+    background: var(--surface-card);
+    border-right: 1px solid var(--surface-border);
 }
 
-/* Texto base del sidebar */
-.app-dark .layout-sidebar a,
-.app-dark .layout-sidebar span,
-.app-dark .layout-sidebar i {
-    color: rgba(255, 255, 255, 0.87);
-}
-
-/* Main fondo */
 .app-dark .layout-main {
-    background: #121212;
-}
-
-/* Hover en links del menú */
-.app-dark .layout-sidebar .layout-menu a:hover {
-    background-color: #2563eb;
-    border-radius: 6px;
-}
-
-.app-dark .layout-sidebar .layout-menu a:hover span,
-.app-dark .layout-sidebar .layout-menu a:hover i {
-    color: #ffffff;
-}
-
-/* Estado activo */
-.app-dark .layout-sidebar .layout-menu a.active-route,
-.app-dark .layout-sidebar .layout-menu a.p-highlight {
-    background-color: #1d4ed8;
-    border-radius: 6px;
-}
-
-/* Transición suave */
-.app-dark .layout-sidebar .layout-menu a {
-    transition: background-color 0.2s ease, color 0.2s ease;
+    background: var(--surface-ground);
 }

@@ -21,6 +21,12 @@ export const appRoutes: Routes = [
                     import('./app/features/documentation/documentation').then(m => m.Documentation)
             },
             { path: 'features', loadChildren: () => import('./app/features/pages.routes') },
+            // ── Registro principal hub (todos los programas) ──
+            {
+                path: 'registro',
+                loadChildren: () =>
+                    import('./app/features/registro/registro.routes').then(m => m.REGISTRO_ROUTES)
+            },
             // ── Configuración inicial (empresa) ──
             {
                 path: 'configuracion-inicial',
@@ -47,6 +53,14 @@ export const appRoutes: Routes = [
                 loadChildren: () =>
                     import('./app/features/programa-residuos/programa-residuos.routes')
             },
+            // ── Planes de Saneamiento (PSB) ──
+            {
+                path: 'planes',
+                loadChildren: () =>
+                    import('./app/features/configuracion/plan-psb/plan-psb.routes')
+            },
+            // ── Usuarios ──
+            { path: 'usuarios', loadChildren: () => import('./app/features/usuarios/usuarios.routes') },
         ]
     },
     {

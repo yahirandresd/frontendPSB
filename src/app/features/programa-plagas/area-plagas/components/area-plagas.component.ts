@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -41,6 +41,21 @@ export class AreaPlagasComponent implements OnInit {
     ngOnInit(): void {
         if (this.area) {
             this.form = { ...this.area };
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['area']) {
+            if (this.area) {
+                this.form = { ...this.area };
+            } else {
+                // Reset al abrir formulario de creación
+                this.form = {
+                    nombre: '',
+                    descripcion: '',
+                    nivelRiesgo: undefined
+                };
+            }
         }
     }
 

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -21,7 +22,7 @@ import { FuenteAgua } from '@/app/features/agua/fuente-agua/models/fuente-agua.i
     templateUrl: './mantenimiento-lavado-form.component.html',
     styleUrls: ['./mantenimiento-lavado-form.component.scss'],
 })
-export class MantenimientoLavadoFormComponent implements OnInit {
+export class MantenimientoLavadoFormComponent implements OnInit, OnChanges, HasUnsavedChanges {
     private fuenteAguaService = inject(FuenteAguaService);
     @Input() mantenimientoLavado?: MantenimientoLavado;
     @Input() saving = false;
@@ -30,7 +31,9 @@ export class MantenimientoLavadoFormComponent implements OnInit {
 
     fuenteAguaItems: FuenteAgua[] = [];
     estadoOptions = [{"label":"Programado","value":"programado"},{"label":"En Proceso","value":"en_proceso"},{"label":"Completado","value":"completado"},{"label":"Cancelado","value":"cancelado"}];
+    tipoLimpiezaOptions = [{"label":"Lavado Interno","value":"lavado_interno"},{"label":"Lavado Externo","value":"lavado_externo"},{"label":"Desinfección","value":"desinfeccion"},{"label":"Lavado General","value":"lavado_general"},{"label":"Otro","value":"otro"}];
     model: any = {};
+    private initialModel = '';
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {
@@ -39,15 +42,30 @@ export class MantenimientoLavadoFormComponent implements OnInit {
             this.model = { ...this.mantenimientoLavado };
             if (this.mantenimientoLavado.fechaProgramada) this.model.fechaProgramada = new Date(this.mantenimientoLavado.fechaProgramada);
             if (this.mantenimientoLavado.fechaEjecucion) this.model.fechaEjecucion = new Date(this.mantenimientoLavado.fechaEjecucion);
+            if (this.mantenimientoLavado.proximaLimpieza) this.model.proximaLimpieza = new Date(this.mantenimientoLavado.proximaLimpieza);
         } else {
             this.model = {};
         }
+        this.initialModel = JSON.stringify(this.model);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['mantenimientoLavado'] && this.mantenimientoLavado) {
+            this.model = { ...this.mantenimientoLavado };
+            if (this.mantenimientoLavado.fechaProgramada) this.model.fechaProgramada = new Date(this.mantenimientoLavado.fechaProgramada);
+            if (this.mantenimientoLavado.fechaEjecucion) this.model.fechaEjecucion = new Date(this.mantenimientoLavado.fechaEjecucion);
+            if (this.mantenimientoLavado.proximaLimpieza) this.model.proximaLimpieza = new Date(this.mantenimientoLavado.proximaLimpieza);
+        }
+        this.initialModel = JSON.stringify(this.model);
     }
 
     onSubmit() {
+        const { fuenteAguaId, fechaProgramada, metodoLimpieza } = this.model;
+        if (!fuenteAguaId || !fechaProgramada || !metodoLimpieza) return;
         const data = { ...this.model };
         if (data.fechaProgramada instanceof Date) data.fechaProgramada = data.fechaProgramada.toISOString();
         if (data.fechaEjecucion instanceof Date) data.fechaEjecucion = data.fechaEjecucion.toISOString();
+        if (data.proximaLimpieza instanceof Date) data.proximaLimpieza = data.proximaLimpieza.toISOString();
         this.formSubmit.emit(data);
     }
 
@@ -56,5 +74,9 @@ export class MantenimientoLavadoFormComponent implements OnInit {
         this.model.evidenciaFoto = response.url;
     }
 
-    onCancel() { this.cancel.emit(); }
+    hasUnsavedChanges(): boolean { return JSON.stringify(this.model) !== this.initialModel; }
+
+    markAsPristine(): void { this.initialModel = JSON.stringify(this.model); }
+
+    onCancel() { this.markAsPristine(); this.cancel.emit(); }
 }

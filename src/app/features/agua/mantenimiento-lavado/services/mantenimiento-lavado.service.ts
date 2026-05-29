@@ -9,6 +9,7 @@ export class MantenimientoLavadoService {
     private http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/mantenimiento-lavado`;
     getAll(): Observable<MantenimientoLavado[]> { return this.http.get<MantenimientoLavado[]>(this.url); }
+    getByRegistro(registroAguaId: string): Observable<MantenimientoLavado[]> { return this.http.get<MantenimientoLavado[]>(`${this.url}/registro/${registroAguaId}`); }
     getById(id: string): Observable<MantenimientoLavado> { return this.http.get<MantenimientoLavado>(`${this.url}/${id}`); }
     create(dto: CreateMantenimientoLavadoDto): Observable<MantenimientoLavado> { return this.http.post<MantenimientoLavado>(this.url, dto); }
     update(id: string, dto: UpdateMantenimientoLavadoDto): Observable<MantenimientoLavado> { return this.http.patch<MantenimientoLavado>(`${this.url}/${id}`, dto); }

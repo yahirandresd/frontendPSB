@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -26,12 +26,26 @@ export class ProgramaPlagasFormComponent implements OnInit {
     form: Partial<ProgramaPlagas> = {
         objetivo: '',
         alcance: '',
-        procedimientoGeneral: ''
+        procGeneral: ''
     };
 
     ngOnInit(): void {
         if (this.programa) {
             this.form = { ...this.programa };
+        }
+    }
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['programa']) {
+            if (this.programa) {
+                this.form = { ...this.programa };
+            } else {
+                // Reset al abrir formulario de creación
+                this.form = {
+                    objetivo: '',
+                    alcance: '',
+                    procGeneral: ''
+                };
+            }
         }
     }
 

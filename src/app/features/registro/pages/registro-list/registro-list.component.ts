@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { RegistroService } from '../../services/registro.service';
 import { Registro, EstadoRegistro } from '../../models/registro.interface';
@@ -14,7 +15,7 @@ import { Registro, EstadoRegistro } from '../../models/registro.interface';
 @Component({
     selector: 'app-registro-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule, TagModule],
+    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule, TagModule, TooltipModule],
     templateUrl: './registro-list.component.html',
     styleUrls: ['./registro-list.component.scss'],
     providers: [ConfirmationService, MessageService],
@@ -35,9 +36,28 @@ export class RegistroListComponent implements OnInit {
         finally { this.loading.set(false); }
     }
 
-    estadoSeverity(estado: EstadoRegistro) {
+    estadoSeverity(estado: EstadoRegistro): 'success' | 'info' | 'warn' | 'danger' {
         const map: Record<EstadoRegistro, 'success' | 'info' | 'warn' | 'danger'> = { completado: 'success', en_proceso: 'info', pendiente: 'warn', rechazado: 'danger' };
         return map[estado];
+    }
+
+    hasActividad(item: Registro, tipo: string): boolean {
+        const arr = (item as any)[tipo];
+        return Array.isArray(arr) && arr.length > 0;
+    }
+
+    badgeSeverity(item: Registro, tipo: string): 'success' | 'info' | 'warn' | 'danger' {
+        return this.hasActividad(item, tipo) ? 'success' : 'danger';
+    }
+
+    badgeIcon(tipo: string): string {
+        const icons: Record<string, string> = { agua: 'pi pi-drop', limpieza: 'pi pi-sparkles', plagas: 'pi pi-exclamation-triangle', residuos: 'pi pi-trash' };
+        return icons[tipo] ?? 'pi pi-circle';
+    }
+
+    badgeLabel(tipo: string): string {
+        const labels: Record<string, string> = { agua: 'Agua', limpieza: 'Limpieza', plagas: 'Plagas', residuos: 'Residuos' };
+        return labels[tipo] ?? tipo;
     }
 
     async completar(item: Registro) {

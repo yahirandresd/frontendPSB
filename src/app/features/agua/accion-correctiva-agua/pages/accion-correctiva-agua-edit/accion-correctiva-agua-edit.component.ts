@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { AccionCorrectivaAguaFormComponent } from '../../components/accion-correctiva-agua-form/accion-correctiva-agua-form.component';
 import { AccionCorrectivaAguaService } from '../../services/accion-correctiva-agua.service';
 import { AccionCorrectivaAgua } from '../../models/accion-correctiva-agua.interface';
@@ -15,13 +16,18 @@ import { AccionCorrectivaAgua } from '../../models/accion-correctiva-agua.interf
     styleUrls: ['./accion-correctiva-agua-edit.component.scss'],
     providers: [MessageService],
 })
-export class AccionCorrectivaAguaEditComponent implements OnInit {
+export class AccionCorrectivaAguaEditComponent implements OnInit, HasUnsavedChanges {
+    @ViewChild(AccionCorrectivaAguaFormComponent) form!: AccionCorrectivaAguaFormComponent;
     private service = inject(AccionCorrectivaAguaService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private messageService = inject(MessageService);
     accionCorrectivaAgua = signal<AccionCorrectivaAgua | undefined>(undefined);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     ngOnInit() { this.cargar(); }
     async cargar() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -40,5 +46,5 @@ export class AccionCorrectivaAguaEditComponent implements OnInit {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/accion-correctiva-agua']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/accion-correctiva-agua']); }
 }

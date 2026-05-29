@@ -2,6 +2,7 @@ export type EstadoAccionCorrectiva = 'pendiente' | 'en_proceso' | 'completada' |
 
 export interface AccionCorrectivaAgua {
     id: string;
+    fuenteAguaId: string;
     registroAguaId: string;
     descripcionDesviacion: string;
     medidaTomada: string;
@@ -10,9 +11,19 @@ export interface AccionCorrectivaAgua {
     responsable: string;
     estado: EstadoAccionCorrectiva;
     evidenciaFoto?: string;
+    parametroIncumplido?: string;
+    valorMedido?: number;
+    valorEsperado?: number;
+    causaRaiz?: string;
+    accionInmediata?: string;
+    accionCorrectiva?: string;
+    fechaLimite?: string;
+    verificacionEficacia?: string;
+    eficaz?: boolean;
+    origen?: string;
 }
 export interface CreateAccionCorrectivaAguaDto {
-    registroAguaId: string;
+    fuenteAguaId: string;
     descripcionDesviacion: string;
     medidaTomada: string;
     resultadoVerificacion?: string;
@@ -20,6 +31,16 @@ export interface CreateAccionCorrectivaAguaDto {
     responsable: string;
     estado?: EstadoAccionCorrectiva;
     evidenciaFoto?: string;
+    parametroIncumplido?: string;
+    valorMedido?: number;
+    valorEsperado?: number;
+    causaRaiz?: string;
+    accionInmediata?: string;
+    accionCorrectiva?: string;
+    fechaLimite?: string;
+    verificacionEficacia?: string;
+    eficaz?: boolean;
+    origen?: string;
 }
 export interface UpdateAccionCorrectivaAguaDto {
     descripcionDesviacion?: string;
@@ -29,4 +50,14 @@ export interface UpdateAccionCorrectivaAguaDto {
     responsable?: string;
     estado?: EstadoAccionCorrectiva;
     evidenciaFoto?: string;
+    parametroIncumplido?: string;
+    valorMedido?: number;
+    valorEsperado?: number;
+    causaRaiz?: string;
+    accionInmediata?: string;
+    accionCorrectiva?: string;
+    fechaLimite?: string;
+    verificacionEficacia?: string;
+    eficaz?: boolean;
+    origen?: string;
 }

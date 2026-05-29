@@ -7,13 +7,28 @@ export interface RegistroAgua {
     programaAguaId: string;
     tipoActividad: TipoActividadAgua;
     resultadoGeneral: ResultadoGeneralAgua;
+    periodo?: string;
+    responsable?: string;
+    porcentajeCumplimiento?: number;
+    reporte?: string;
+    fechaCierre?: string;
 }
 export interface CreateRegistroAguaDto {
     registroId: string;
     programaAguaId: string;
     tipoActividad: TipoActividadAgua;
     resultadoGeneral?: ResultadoGeneralAgua;
+    periodo?: string;
+    responsable?: string;
+    porcentajeCumplimiento?: number;
+    reporte?: string;
+    fechaCierre?: string;
 }
 export interface UpdateRegistroAguaDto {
     resultadoGeneral?: ResultadoGeneralAgua;
+    periodo?: string;
+    responsable?: string;
+    porcentajeCumplimiento?: number;
+    reporte?: string;
+    fechaCierre?: string;
 }

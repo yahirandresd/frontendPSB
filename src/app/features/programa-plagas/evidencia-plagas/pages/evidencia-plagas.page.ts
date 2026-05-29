@@ -1,5 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -12,52 +13,65 @@ import { firstValueFrom } from 'rxjs';
 import { EvidenciaPlagasService } from '../services/evidencia-plagas.service';
 import { Evidencia } from '../models/evidencia';
 import { EvidenciaPlagasComponent } from '../components/evidencia-plagas.component';
-
+ 
 @Component({
     selector: 'app-evidencia-plagas-page',
     standalone: true,
     imports: [CommonModule, TableModule, ButtonModule, DialogModule,
               TagModule, TooltipModule, ConfirmDialogModule, ToastModule, EvidenciaPlagasComponent],
     providers: [ConfirmationService, MessageService],
-    templateUrl: './evidencia-plagas-page.component.html'
+    templateUrl: './evidencia-plagas.page.html'
 })
 export class EvidenciaPlagasPageComponent implements OnInit {
-    private service = inject(EvidenciaPlagasService);
+    constructor() { this.cdr = inject(ChangeDetectorRef); }
+ 
+    private service             = inject(EvidenciaPlagasService);
     private confirmationService = inject(ConfirmationService);
-    private messageService = inject(MessageService);
-
+    private messageService      = inject(MessageService);
+    private route               = inject(ActivatedRoute);
+    private cdr: ChangeDetectorRef;
+ 
     evidencias: Evidencia[] = [];
     evidenciaSeleccionada: Evidencia | null = null;
+    registroPlagasId = '';
     cargando = false;
     mostrarFormulario = false;
     mostrarDetalle = false;
-
-    ngOnInit(): void { this.cargarEvidencias(); }
-
+ 
+    ngOnInit(): void {
+        this.registroPlagasId =
+            this.route.snapshot.params['registroId'] ??
+            this.route.snapshot.parent?.params['registroId'] ?? '';
+        this.cargarEvidencias();
+    }
+ 
     cargarEvidencias(): void {
         this.cargando = true;
-        this.service.listar().subscribe({
-            next: (data) => { this.evidencias = data; this.cargando = false; },
-            error: () => { this.cargando = false; this.mostrarError('Error al cargar evidencias'); }
+        const obs$ = this.registroPlagasId
+            ? this.service.listarPorRegistro(this.registroPlagasId)
+            : this.service.listar();
+        obs$.subscribe({
+            next: data => { this.evidencias = [...data]; this.cargando = false; this.cdr.detectChanges(); },
+            error: () => { this.cargando = false; this.cdr.detectChanges(); this.mostrarError('Error al cargar evidencias'); }
         });
     }
-
+ 
     abrirFormulario(evidencia?: Evidencia): void {
         this.evidenciaSeleccionada = evidencia ?? null;
         this.mostrarFormulario = true;
     }
-
+ 
     verDetalle(evidencia: Evidencia): void {
         this.evidenciaSeleccionada = evidencia;
         this.mostrarDetalle = true;
     }
-
+ 
     onGuardado(): void {
         this.mostrarFormulario = false;
         this.cargarEvidencias();
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Evidencia guardada correctamente' });
     }
-
+ 
     confirmarEliminar(evidencia: Evidencia): void {
         this.confirmationService.confirm({
             message: '¿Está seguro de eliminar esta evidencia?',
@@ -72,13 +86,14 @@ export class EvidenciaPlagasPageComponent implements OnInit {
             }
         });
     }
-
+ 
     getTipoIcon(tipo: string): string {
         const map: Record<string, string> = { imagen: 'pi-image', pdf: 'pi-file-pdf', video: 'pi-video' };
         return map[tipo] ?? 'pi-file';
     }
-
+ 
     private mostrarError(msg: string): void {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
     }
 }
+ 

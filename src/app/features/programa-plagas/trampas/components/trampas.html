@@ -2,17 +2,17 @@
     <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Código <span class="text-red-500">*</span></label>
-            <input pInputText [(ngModel)]="form.codigo" placeholder="Ej: T-001" class="w-full" />
+            <input pInputText [(ngModel)]="form.codigo" placeholder="Ej: TR-BOD-01" class="w-full" />
         </div>
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Tipo <span class="text-red-500">*</span></label>
-            <p-select [(ngModel)]="form.tipo" [options]="tiposTrampa"
+            <p-select [(ngModel)]="form.tipo" [options]="tipos"
                       optionLabel="label" optionValue="value"
                       placeholder="Seleccione el tipo" styleClass="w-full" />
         </div>
-        <div class="flex flex-col gap-1 col-span-2">
-            <label class="font-medium text-sm">Ubicación <span class="text-red-500">*</span></label>
-            <input pInputText [(ngModel)]="form.ubicacion" placeholder="Descripción de la ubicación" class="w-full" />
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Ubicación</label>
+            <input pInputText [(ngModel)]="form.ubicacion" placeholder="Ej: Esquina norte bodega" class="w-full" />
         </div>
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Estado</label>
@@ -21,12 +21,20 @@
                       placeholder="Seleccione el estado" styleClass="w-full" />
         </div>
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Fecha de Instalación</label>
-            <input pInputText type="date" [(ngModel)]="form.fechaInstalacion" class="w-full" />
+            <label class="font-medium text-sm">Fecha Instalación</label>
+            <input pInputText type="date" [(ngModel)]="form.fecha_instalacion" class="w-full" />
         </div>
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Última Revisión</label>
-            <input pInputText type="date" [(ngModel)]="form.ultimaRevision" class="w-full" />
+            <label class="font-medium text-sm">Fecha de Revisión</label>
+            <input pInputText type="date" [(ngModel)]="form.fecha_revision" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1 col-span-2">
+            <label class="font-medium text-sm">
+                Acciones Correctivas
+                <span class="text-xs text-muted-color ml-1">(una por línea)</span>
+            </label>
+            <textarea pTextarea [(ngModel)]="accionesCorrectivasTexto" rows="3"
+                      class="w-full" placeholder="Escriba cada acción correctiva en una línea..."></textarea>
         </div>
     </div>
     <div class="flex justify-end gap-2 mt-2">

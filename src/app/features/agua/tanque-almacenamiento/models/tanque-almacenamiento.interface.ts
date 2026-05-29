@@ -5,6 +5,11 @@ export interface TanqueAlmacenamiento {
     materialGradoAlimenticio: string;
     fechaUltimoLavado?: string;
     tieneTapa: boolean;
+    tipo?: string;
+    ubicacion?: string;
+    tapaBuenEstado?: boolean;
+    llavePaso?: boolean;
+    proximaLimpieza?: string;
 }
 export interface CreateTanqueAlmacenamientoDto {
     fuenteAguaId: string;
@@ -12,10 +17,20 @@ export interface CreateTanqueAlmacenamientoDto {
     materialGradoAlimenticio: string;
     fechaUltimoLavado?: string;
     tieneTapa?: boolean;
+    tipo?: string;
+    ubicacion?: string;
+    tapaBuenEstado?: boolean;
+    llavePaso?: boolean;
+    proximaLimpieza?: string;
 }
 export interface UpdateTanqueAlmacenamientoDto {
     capacidadLitros?: number;
     materialGradoAlimenticio?: string;
     fechaUltimoLavado?: string;
     tieneTapa?: boolean;
+    tipo?: string;
+    ubicacion?: string;
+    tapaBuenEstado?: boolean;
+    llavePaso?: boolean;
+    proximaLimpieza?: string;
 }
