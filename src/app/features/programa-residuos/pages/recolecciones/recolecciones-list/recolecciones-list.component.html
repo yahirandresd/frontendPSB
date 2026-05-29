@@ -51,7 +51,7 @@
     [visible]="createDialog()"
     (visibleChange)="createDialog.set($event)"
     [modal]="true"
-    [style]="{ width: '32rem' }"
+    [style]="{ width: '38rem' }"
 >
     <div class="flex flex-col gap-4 mt-2">
         <div class="flex flex-col gap-1">
@@ -69,6 +69,54 @@
                 <small class="text-muted-color">Primero debes crear un registro de actividad en un programa de residuos.</small>
             }
         </div>
+
+        <!-- SELECTOR DE TIPO DE RESIDUO -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Tipo de Residuo</label>
+            <p-select
+                [(ngModel)]="createForm.tipoResiduoId"
+                [options]="tiposResiduosOptions()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un tipo de residuo"
+                class="w-full"
+                (ngModelChange)="onTipoResiduoChange($event)"
+            />
+            @if (tiposResiduos().length === 0 && createForm.registroResiduoId) {
+                <small class="text-muted-color">No hay tipos de residuos disponibles para este programa.</small>
+            }
+        </div>
+
+        <!-- INFORMACIÓN REACTIVA DEL TIPO DE RESIDUO -->
+        @if (tipoResiduoSeleccionado()) {
+            <div class="flex flex-col gap-3 p-3 bg-surface-50 border border-surface-200 rounded-md">
+                <!-- Indicador de color -->
+                <div class="flex items-center gap-3">
+                    <label class="font-medium text-sm">Color Contenedor:</label>
+                    <div
+                        class="w-8 h-8 rounded-full border border-surface-300"
+                        [style]="{ backgroundColor: tipoResiduoSeleccionado()!.color_contenedor }"
+                        [title]="tipoResiduoSeleccionado()!.color_contenedor"
+                    ></div>
+                    <span class="text-sm text-muted-color">{{ tipoResiduoSeleccionado()!.color_contenedor }}</span>
+                </div>
+
+                <!-- Descripción -->
+                <div class="flex flex-col gap-1">
+                    <label class="font-medium text-sm">Descripción:</label>
+                    <p class="text-sm m-0 text-surface-700">{{ tipoResiduoSeleccionado()!.descripcion }}</p>
+                </div>
+
+                <!-- Indicador de Peligro -->
+                @if (tipoResiduoSeleccionado()!.es_peligroso) {
+                    <div class="flex items-center gap-2 p-2 bg-red-50 border border-red-200 rounded">
+                        <i class="pi pi-exclamation-triangle text-red-600"></i>
+                        <span class="text-sm font-medium text-red-700">⚠️ RESIDUO PELIGROSO - Manipular con precaución</span>
+                    </div>
+                }
+            </div>
+        }
+
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Fecha</label>
             <input pInputText type="date" [(ngModel)]="createForm.fecha" class="w-full" />

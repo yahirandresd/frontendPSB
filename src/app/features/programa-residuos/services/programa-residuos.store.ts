@@ -57,15 +57,21 @@ export class ProgramaResiduosStore {
     readonly registrosDisponiblesParaRecoleccion = computed(() =>
         this.programas()
             .flatMap((programa) =>
-                (programa.programaResiduo?.registros || []).map((registroResiduo) => ({
-                    label: `${programa.nombre} · ${registroResiduo.tipo_actividad} · ${registroResiduo.registro?.fecha || 'sin fecha'}`,
-                    value: registroResiduo.id,
-                    programaId: programa.id,
-                    programaNombre: programa.nombre,
-                    fecha: registroResiduo.registro?.fecha || '',
-                    responsable: programa.responsable,
-                    estado: registroResiduo.registro?.estado || EstadoRegistro.PENDIENTE
-                }))
+                (programa.programaResiduo?.registros || [])
+                    .filter((registroResiduo) => 
+                        registroResiduo.tipo_actividad === 'recoleccion' || 
+                        registroResiduo.tipo_actividad === 'recoleccion_interna'
+                    )
+                    .map((registroResiduo) => ({
+                        label: `${programa.nombre} · ${registroResiduo.tipo_actividad} · ${registroResiduo.registro?.fecha || 'sin fecha'}`,
+                        value: registroResiduo.id,
+                        programaId: programa.id,
+                        programaResiduoId: programa.programaResiduo?.id || '',
+                        programaNombre: programa.nombre,
+                        fecha: registroResiduo.registro?.fecha || '',
+                        responsable: programa.responsable,
+                        estado: registroResiduo.registro?.estado || EstadoRegistro.PENDIENTE
+                    }))
             )
             .sort((a, b) => b.fecha.localeCompare(a.fecha))
     );

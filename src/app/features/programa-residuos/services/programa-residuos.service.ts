@@ -11,7 +11,8 @@ import {
     CreateProgramaResiduoDto,
     UpdateProgramaResiduoDto,
     CreateRecoleccionDto,
-    UpdateRecoleccionDto
+    UpdateRecoleccionDto,
+    TipoResiduo
 } from '../models/programa-residuos.models';
 
 @Injectable({ providedIn: 'root' })
@@ -68,6 +69,32 @@ export class ProgramaResiduosService {
         return this.http.delete<void>(`${this.baseUrl}/registro-residuos/${id}`);
     }
 
+    // --- RECOLECCIONES (FILTRADAS POR TIPO_ACTIVIDAD) ---
+    /**
+     * Obtiene todos los registros de recolección (tipo_actividad = 'recoleccion' o 'recoleccion_interna')
+     */
+    getRegistrosRecolecciones(): Observable<RegistroResiduo[]> {
+        return this.http.get<RegistroResiduo[]>(`${this.baseUrl}/registro-residuos/recolecciones/all`);
+    }
+
+    /**
+     * Obtiene registros de recolección filtrados por programa específico
+     */
+    getRegistrosRecoleccionesByPrograma(programaResiduoId: string): Observable<RegistroResiduo[]> {
+        return this.http.get<RegistroResiduo[]>(`${this.baseUrl}/registro-residuos/recolecciones/programa/${programaResiduoId}`);
+    }
+
+    /**
+     * Obtiene tipos de residuos disponibles para un programa específico
+     */
+    getTiposResiduoByPrograma(programaResiduoId: string): Observable<TipoResiduo[]> {
+        return this.http.get<TipoResiduo[]>(`${this.baseUrl}/recoleccion/tipos-residuo-by-programa/${programaResiduoId}`);
+    }
+
+    updateRecoleccion(id: string, dto: UpdateRecoleccionDto): Observable<Recoleccion> {
+        return this.http.patch<Recoleccion>(`${this.baseUrl}/recoleccion/${id}`, dto);
+    }
+
     // --- CHECKLIST ---
     updateChecklist(id: string, dto: {
         titulo?: string;
@@ -75,11 +102,6 @@ export class ProgramaResiduosService {
         porcentaje_cumplimiento?: number;
     }): Observable<ChecklistResiduo> {
         return this.http.patch<ChecklistResiduo>(`${this.baseUrl}/checklist-residuos/${id}`, dto);
-    }
-
-    // --- RECOLECCIONES ---
-    updateRecoleccion(id: string, dto: UpdateRecoleccionDto): Observable<Recoleccion> {
-        return this.http.patch<Recoleccion>(`${this.baseUrl}/recoleccion/${id}`, dto);
     }
 
     // --- EVIDENCIAS ---

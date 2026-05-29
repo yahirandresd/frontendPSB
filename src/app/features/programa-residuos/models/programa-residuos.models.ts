@@ -128,7 +128,9 @@ export interface Recoleccion {
     responsable: string;
     cantidad_recolectada: number;
     observaciones: string;
+    tipoResiduoId?: string;
     registroResiduo?: RegistroResiduo;
+    tipoResiduo?: TipoResiduo;
     disposicionFinal?: DisposicionFinal;
 }
 
@@ -176,6 +178,7 @@ export interface CreateRecoleccionDto {
     cantidad_recolectada: number;
     observaciones?: string;
     registroResiduoId: string;
+    tipoResiduoId?: string;
 }
 
 export type UpdateRecoleccionDto = Partial<
