@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { TanqueAlmacenamientoFormComponent } from '../../components/tanque-almacenamiento-form/tanque-almacenamiento-form.component';
 import { TanqueAlmacenamientoService } from '../../services/tanque-almacenamiento.service';
 import { TanqueAlmacenamiento } from '../../models/tanque-almacenamiento.interface';
@@ -15,13 +16,18 @@ import { TanqueAlmacenamiento } from '../../models/tanque-almacenamiento.interfa
     styleUrls: ['./tanque-almacenamiento-edit.component.scss'],
     providers: [MessageService],
 })
-export class TanqueAlmacenamientoEditComponent implements OnInit {
+export class TanqueAlmacenamientoEditComponent implements OnInit, HasUnsavedChanges {
+    @ViewChild(TanqueAlmacenamientoFormComponent) form!: TanqueAlmacenamientoFormComponent;
     private service = inject(TanqueAlmacenamientoService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private messageService = inject(MessageService);
     tanqueAlmacenamiento = signal<TanqueAlmacenamiento | undefined>(undefined);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     ngOnInit() { this.cargar(); }
     async cargar() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -40,5 +46,5 @@ export class TanqueAlmacenamientoEditComponent implements OnInit {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/tanque-almacenamiento']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/tanque-almacenamiento']); }
 }

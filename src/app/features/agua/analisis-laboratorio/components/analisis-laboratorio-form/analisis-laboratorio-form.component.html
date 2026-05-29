@@ -92,57 +92,41 @@
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Cloro Residual (mg/L)</label>
-                            <p-inputNumber #cloroResidual="ngModel" name="cloroResidual" [(ngModel)]="model.cloroResidual" [min]="0" [max]="5" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
-                            <small class="text-surface-500">Rango: 0.00 - 5.00 mg/L</small>
+                            <p-inputNumber #cloroResidual="ngModel" name="cloroResidual" [(ngModel)]="model.cloroResidual" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
                             @if (cloroResidual.invalid && (cloroResidual.dirty || cloroResidual.touched || form.submitted)) {
                                 @if (cloroResidual.errors?.['required']) {
                                     <small class="text-red-500">El cloro residual es requerido</small>
                                 }
                             }
-                            @if ((form.submitted) && model.cloroResidual !== undefined && model.cloroResidual !== null && (model.cloroResidual < 0 || model.cloroResidual > 5)) {
-                                <small class="text-red-500">Debe estar entre 0 y 5</small>
-                            }
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">pH</label>
-                            <p-inputNumber #ph="ngModel" name="ph" [(ngModel)]="model.ph" [min]="0" [max]="14" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="1" class="w-full" required />
-                            <small class="text-surface-500">Rango: 0.0 - 14.0</small>
+                            <p-inputNumber #ph="ngModel" name="ph" [(ngModel)]="model.ph" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="1" class="w-full" required />
                             @if (ph.invalid && (ph.dirty || ph.touched || form.submitted)) {
                                 @if (ph.errors?.['required']) {
                                     <small class="text-red-500">El pH es requerido</small>
                                 }
                             }
-                            @if ((form.submitted) && model.ph !== undefined && model.ph !== null && (model.ph < 0 || model.ph > 14)) {
-                                <small class="text-red-500">Debe estar entre 0 y 14</small>
-                            }
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Turbiedad (UNT)</label>
-                            <p-inputNumber #turbiedad="ngModel" name="turbiedad" [(ngModel)]="model.turbiedad" [min]="0" [max]="100" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
-                            <small class="text-surface-500">Rango: 0.00 - 100.00 UNT</small>
+                            <p-inputNumber #turbiedad="ngModel" name="turbiedad" [(ngModel)]="model.turbiedad" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
                             @if (turbiedad.invalid && (turbiedad.dirty || turbiedad.touched || form.submitted)) {
                                 @if (turbiedad.errors?.['required']) {
                                     <small class="text-red-500">La turbiedad es requerida</small>
                                 }
                             }
-                            @if ((form.submitted) && model.turbiedad !== undefined && model.turbiedad !== null && (model.turbiedad < 0 || model.turbiedad > 100)) {
-                                <small class="text-red-500">Debe estar entre 0 y 100</small>
-                            }
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Color Aparente (UPC)</label>
-                            <p-inputNumber #colorAparente="ngModel" name="colorAparente" [(ngModel)]="model.colorAparente" [min]="0" [max]="500" [step]="0.1" [minFractionDigits]="0" [maxFractionDigits]="0" class="w-full" required />
-                            <small class="text-surface-500">Rango: 0 - 500 UPC</small>
+                            <p-inputNumber #colorAparente="ngModel" name="colorAparente" [(ngModel)]="model.colorAparente" [step]="0.1" [minFractionDigits]="0" [maxFractionDigits]="0" class="w-full" required />
                             @if (colorAparente.invalid && (colorAparente.dirty || colorAparente.touched || form.submitted)) {
                                 @if (colorAparente.errors?.['required']) {
                                     <small class="text-red-500">El color aparente es requerido</small>
                                 }
-                            }
-                            @if ((form.submitted) && model.colorAparente !== undefined && model.colorAparente !== null && (model.colorAparente < 0 || model.colorAparente > 500)) {
-                                <small class="text-red-500">Debe estar entre 0 y 500</small>
                             }
                         </div>
                     </div>
@@ -162,19 +146,19 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Mesofilos (UFC/mL)</label>
-                            <p-inputNumber name="mesofilos" [(ngModel)]="model.mesofilos" [min]="0" class="w-full" />
+                            <p-inputNumber name="mesofilos" [(ngModel)]="model.mesofilos" class="w-full" />
                             <small class="text-surface-500">Unidades Formadoras de Colonias (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Col. Totales (UFC)</label>
-                            <p-inputNumber name="coliformesTotalesUfc" [(ngModel)]="model.coliformesTotalesUfc" [min]="0" class="w-full" />
+                            <p-inputNumber name="coliformesTotalesUfc" [(ngModel)]="model.coliformesTotalesUfc" class="w-full" />
                             <small class="text-surface-500">Coliformes totales en UFC (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">E. Coli (UFC)</label>
-                            <p-inputNumber name="eColiUfc" [(ngModel)]="model.eColiUfc" [min]="0" class="w-full" />
+                            <p-inputNumber name="eColiUfc" [(ngModel)]="model.eColiUfc" class="w-full" />
                             <small class="text-surface-500">E. Coli en UFC (opcional)</small>
                         </div>
                     </div>
@@ -190,79 +174,79 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Conductividad (µS/cm)</label>
-                            <p-inputNumber name="conductividad" [(ngModel)]="model.conductividad" [min]="0" class="w-full" />
+                            <p-inputNumber name="conductividad" [(ngModel)]="model.conductividad" class="w-full" />
                             <small class="text-surface-500">Conductividad (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Dureza Total (mg/L)</label>
-                            <p-inputNumber name="durezaTotal" [(ngModel)]="model.durezaTotal" [min]="0" class="w-full" />
+                            <p-inputNumber name="durezaTotal" [(ngModel)]="model.durezaTotal" class="w-full" />
                             <small class="text-surface-500">Dureza total (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Nitritos (mg/L)</label>
-                            <p-inputNumber name="nitritos" [(ngModel)]="model.nitritos" [min]="0" [step]="0.01" class="w-full" />
+                            <p-inputNumber name="nitritos" [(ngModel)]="model.nitritos" [step]="0.01" class="w-full" />
                             <small class="text-surface-500">Nitritos (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Nitratos (mg/L)</label>
-                            <p-inputNumber name="nitratos" [(ngModel)]="model.nitratos" [min]="0" [step]="0.01" class="w-full" />
+                            <p-inputNumber name="nitratos" [(ngModel)]="model.nitratos" [step]="0.01" class="w-full" />
                             <small class="text-surface-500">Nitratos (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Hierro Total (mg/L)</label>
-                            <p-inputNumber name="hierroTotal" [(ngModel)]="model.hierroTotal" [min]="0" [step]="0.01" class="w-full" />
+                            <p-inputNumber name="hierroTotal" [(ngModel)]="model.hierroTotal" [step]="0.01" class="w-full" />
                             <small class="text-surface-500">Hierro total (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Cloruros (mg/L)</label>
-                            <p-inputNumber name="cloruros" [(ngModel)]="model.cloruros" [min]="0" class="w-full" />
+                            <p-inputNumber name="cloruros" [(ngModel)]="model.cloruros" class="w-full" />
                             <small class="text-surface-500">Cloruros (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Sulfatos (mg/L)</label>
-                            <p-inputNumber name="sulfatos" [(ngModel)]="model.sulfatos" [min]="0" class="w-full" />
+                            <p-inputNumber name="sulfatos" [(ngModel)]="model.sulfatos" class="w-full" />
                             <small class="text-surface-500">Sulfatos (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Fluoruros (mg/L)</label>
-                            <p-inputNumber name="fluoruros" [(ngModel)]="model.fluoruros" [min]="0" [step]="0.01" class="w-full" />
+                            <p-inputNumber name="fluoruros" [(ngModel)]="model.fluoruros" [step]="0.01" class="w-full" />
                             <small class="text-surface-500">Fluoruros (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Calcio (mg/L)</label>
-                            <p-inputNumber name="calcio" [(ngModel)]="model.calcio" [min]="0" class="w-full" />
+                            <p-inputNumber name="calcio" [(ngModel)]="model.calcio" class="w-full" />
                             <small class="text-surface-500">Calcio (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Magnesio (mg/L)</label>
-                            <p-inputNumber name="magnesio" [(ngModel)]="model.magnesio" [min]="0" class="w-full" />
+                            <p-inputNumber name="magnesio" [(ngModel)]="model.magnesio" class="w-full" />
                             <small class="text-surface-500">Magnesio (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Alcalinidad (mg/L)</label>
-                            <p-inputNumber name="alcalinidad" [(ngModel)]="model.alcalinidad" [min]="0" class="w-full" />
+                            <p-inputNumber name="alcalinidad" [(ngModel)]="model.alcalinidad" class="w-full" />
                             <small class="text-surface-500">Alcalinidad (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Carbono Org. Total (mg/L)</label>
-                            <p-inputNumber name="carbonoOrganicoTotal" [(ngModel)]="model.carbonoOrganicoTotal" [min]="0" [step]="0.01" class="w-full" />
+                            <p-inputNumber name="carbonoOrganicoTotal" [(ngModel)]="model.carbonoOrganicoTotal" [step]="0.01" class="w-full" />
                             <small class="text-surface-500">COT (opcional)</small>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Tensoactivos (mg/L)</label>
-                            <p-inputNumber name="tensoactivos" [(ngModel)]="model.tensoactivos" [min]="0" [step]="0.01" class="w-full" />
+                            <p-inputNumber name="tensoactivos" [(ngModel)]="model.tensoactivos" [step]="0.01" class="w-full" />
                             <small class="text-surface-500">Tensoactivos (opcional)</small>
                         </div>
                     </div>

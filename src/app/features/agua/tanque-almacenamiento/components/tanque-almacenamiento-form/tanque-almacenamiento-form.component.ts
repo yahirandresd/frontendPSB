@@ -64,5 +64,7 @@ export class TanqueAlmacenamientoFormComponent implements OnInit, OnChanges, Has
 
     hasUnsavedChanges(): boolean { return JSON.stringify(this.model) !== this.initialModel; }
 
-    onCancel() { this.cancel.emit(); }
+    markAsPristine(): void { this.initialModel = JSON.stringify(this.model); }
+
+    onCancel() { this.markAsPristine(); this.cancel.emit(); }
 }

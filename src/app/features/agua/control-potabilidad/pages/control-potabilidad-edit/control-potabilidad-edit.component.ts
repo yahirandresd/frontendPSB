@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { ControlPotabilidadFormComponent } from '../../components/control-potabilidad-form/control-potabilidad-form.component';
 import { ControlPotabilidadService } from '../../services/control-potabilidad.service';
 import { ControlPotabilidad } from '../../models/control-potabilidad.interface';
@@ -15,13 +16,18 @@ import { ControlPotabilidad } from '../../models/control-potabilidad.interface';
     styleUrls: ['./control-potabilidad-edit.component.scss'],
     providers: [MessageService],
 })
-export class ControlPotabilidadEditComponent implements OnInit {
+export class ControlPotabilidadEditComponent implements OnInit, HasUnsavedChanges {
+    @ViewChild(ControlPotabilidadFormComponent) form!: ControlPotabilidadFormComponent;
     private service = inject(ControlPotabilidadService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private messageService = inject(MessageService);
     controlPotabilidad = signal<ControlPotabilidad | undefined>(undefined);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     ngOnInit() { this.cargar(); }
     async cargar() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -40,5 +46,5 @@ export class ControlPotabilidadEditComponent implements OnInit {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/control-potabilidad']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/control-potabilidad']); }
 }

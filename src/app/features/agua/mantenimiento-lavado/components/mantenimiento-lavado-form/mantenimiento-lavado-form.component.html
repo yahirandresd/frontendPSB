@@ -68,19 +68,19 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Concentración (%)</label>
-                <p-inputNumber name="concentracionProducto" [(ngModel)]="model.concentracionProducto" [min]="0" [max]="100" [step]="0.1" class="w-full" />
+                <p-inputNumber name="concentracionProducto" [(ngModel)]="model.concentracionProducto"  [step]="0.1" class="w-full" />
                 <small class="text-surface-500">Concentración del producto</small>
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Tiempo Contacto (min)</label>
-                <p-inputNumber name="tiempoContacto" [(ngModel)]="model.tiempoContacto" [min]="0" class="w-full" />
+                <p-inputNumber name="tiempoContacto" [(ngModel)]="model.tiempoContacto" class="w-full" />
                 <small class="text-surface-500">Tiempo de contacto en minutos</small>
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Volumen Agua (L)</label>
-                <p-inputNumber name="volumenAgua" [(ngModel)]="model.volumenAgua" [min]="0" class="w-full" />
+                <p-inputNumber name="volumenAgua" [(ngModel)]="model.volumenAgua" class="w-full" />
                 <small class="text-surface-500">Volumen de agua utilizado</small>
             </div>
 

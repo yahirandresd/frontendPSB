@@ -17,15 +17,12 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Capacidad (Litros)</label>
-                <p-inputNumber #capacidadLitros="ngModel" name="capacidadLitros" [(ngModel)]="model.capacidadLitros" [min]="0" class="w-full" required />
+                <p-inputNumber #capacidadLitros="ngModel" name="capacidadLitros" [(ngModel)]="model.capacidadLitros" class="w-full" required />
                 <small class="text-surface-500">Capacidad total del tanque en litros</small>
                 @if (capacidadLitros.invalid && (capacidadLitros.dirty || capacidadLitros.touched || form.submitted)) {
                     @if (capacidadLitros.errors?.['required']) {
                         <small class="text-red-500">La capacidad es requerida</small>
                     }
-                }
-                @if (model.capacidadLitros !== undefined && model.capacidadLitros !== null && model.capacidadLitros < 0 && (form.submitted)) {
-                    <small class="text-red-500">Debe ser mayor o igual a 0</small>
                 }
             </div>
 

@@ -4,6 +4,7 @@ import { ConfirmationService } from 'primeng/api';
 import { HasUnsavedChanges } from '../interfaces/has-unsaved-changes.interface';
 
 export const unsavedChangesGuard: CanDeactivateFn<HasUnsavedChanges> = async (component) => {
+  if (typeof component.hasUnsavedChanges !== 'function') return true;
   if (!component.hasUnsavedChanges()) return true;
 
   const confirmationService = inject(ConfirmationService);

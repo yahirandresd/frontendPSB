@@ -37,61 +37,46 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Cloro Residual (mg/L)</label>
-                <p-inputNumber #cloroResidual="ngModel" name="cloroResidual" [(ngModel)]="model.cloroResidual" [min]="0" [max]="5" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full" required />
-                <small class="text-surface-500">Rango: 0.0 - 5.0 mg/L</small>
+                <p-inputNumber #cloroResidual="ngModel" name="cloroResidual" [(ngModel)]="model.cloroResidual" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full" required />
                 @if (cloroResidual.invalid && (cloroResidual.dirty || cloroResidual.touched || form.submitted)) {
                     @if (cloroResidual.errors?.['required']) {
                         <small class="text-red-500">El cloro residual es requerido</small>
                     }
                 }
-                @if ((form.submitted) && model.cloroResidual !== undefined && model.cloroResidual !== null && (model.cloroResidual < 0 || model.cloroResidual > 5)) {
-                    <small class="text-red-500">Debe estar entre 0 y 5</small>
-                }
             </div>
             <div class="col-span-3">
                 <label class="block font-medium mb-1">pH</label>
-                <p-inputNumber #ph="ngModel" name="ph" [(ngModel)]="model.ph" [min]="0" [max]="14" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full" required />
-                <small class="text-surface-500">Rango: 0.0 - 14.0</small>
+                <p-inputNumber #ph="ngModel" name="ph" [(ngModel)]="model.ph" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full" required />
                 @if (ph.invalid && (ph.dirty || ph.touched || form.submitted)) {
                     @if (ph.errors?.['required']) {
                         <small class="text-red-500">El pH es requerido</small>
                     }
                 }
-                @if ((form.submitted) && model.ph !== undefined && model.ph !== null && (model.ph < 0 || model.ph > 14)) {
-                    <small class="text-red-500">Debe estar entre 0 y 14</small>
-                }
             </div>
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Turbiedad (UNT)</label>
-                <p-inputNumber #turbiedad="ngModel" name="turbiedad" [(ngModel)]="model.turbiedad" [min]="0" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full" required />
+                <p-inputNumber #turbiedad="ngModel" name="turbiedad" [(ngModel)]="model.turbiedad" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="2" class="w-full" required />
                 <small class="text-surface-500">Unidades Nefelométricas de Turbiedad</small>
                 @if (turbiedad.invalid && (turbiedad.dirty || turbiedad.touched || form.submitted)) {
                     @if (turbiedad.errors?.['required']) {
                         <small class="text-red-500">La turbiedad es requerida</small>
                     }
                 }
-                @if ((form.submitted) && model.turbiedad !== undefined && model.turbiedad !== null && model.turbiedad < 0) {
-                    <small class="text-red-500">Debe ser mayor o igual a 0</small>
-                }
             </div>
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Color Aparente (UPC)</label>
-                <p-inputNumber #colorAparente="ngModel" name="colorAparente" [(ngModel)]="model.colorAparente" [min]="0" [max]="500" class="w-full" required />
-                <small class="text-surface-500">Rango: 0 - 500 UPC</small>
+                <p-inputNumber #colorAparente="ngModel" name="colorAparente" [(ngModel)]="model.colorAparente" class="w-full" required />
                 @if (colorAparente.invalid && (colorAparente.dirty || colorAparente.touched || form.submitted)) {
                     @if (colorAparente.errors?.['required']) {
                         <small class="text-red-500">El color aparente es requerido</small>
                     }
                 }
-                @if ((form.submitted) && model.colorAparente !== undefined && model.colorAparente !== null && (model.colorAparente < 0 || model.colorAparente > 500)) {
-                    <small class="text-red-500">Debe estar entre 0 y 500</small>
-                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Temperatura (°C)</label>
-                <p-inputNumber name="temperatura" [(ngModel)]="model.temperatura" [min]="-10" [max]="100" [step]="0.1" class="w-full" />
-                <small class="text-surface-500">Rango: -10 a 100 °C (opcional)</small>
+                <p-inputNumber name="temperatura" [(ngModel)]="model.temperatura" [step]="0.1" class="w-full" />
+                <small class="text-surface-500">(opcional)</small>
             </div>
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Olor</label>
