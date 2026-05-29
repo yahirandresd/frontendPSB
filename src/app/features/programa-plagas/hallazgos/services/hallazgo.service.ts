@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@/environments/environment';
 import { Hallazgo } from '../models/hallazgo';
-const BASE = environment.apiUrl + '/hallazgos-plagas'; // Ajusta la URL base según tu configuración de API
+const BASE = environment.apiUrl + '/hallazgo-plagas'; // Ajusta la URL base según tu configuración de API
 
 @Injectable({
     providedIn: 'root'

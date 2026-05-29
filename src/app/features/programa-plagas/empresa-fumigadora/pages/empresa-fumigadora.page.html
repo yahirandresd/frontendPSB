@@ -1,5 +1,3 @@
-
-
 <div class="card">
     <div class="flex items-center justify-between mb-6">
         <h5 class="text-xl font-semibold text-surface-900 dark:text-surface-0">
@@ -7,7 +5,7 @@
         </h5>
         <p-button label="Nueva Empresa" icon="pi pi-plus" (onClick)="abrirFormulario()" />
     </div>
-
+ 
     <p-table [value]="empresas" [loading]="cargando" [paginator]="true" [rows]="10"
              styleClass="p-datatable-gridlines" responsiveLayout="scroll">
         <ng-template pTemplate="header">
@@ -24,9 +22,9 @@
         <ng-template pTemplate="body" let-e>
             <tr>
                 <td>{{ e.nit }}</td>
-                <td class="font-medium">{{ e.nombreEmpresa }}</td>
-                <td>{{ e.numCertSanitario }}</td>
-                <td>{{ e.fechaVencCert | date:'dd/MM/yyyy' }}</td>
+                <td class="font-medium">{{ e.nombre_empresa }}</td>
+                <td>{{ e.numCerSanitario }}</td>
+                <td>{{ e.fechaVencCer | date:'dd/MM/yyyy' }}</td>
                 <td>
                     <p-tag [value]="certificadoVigente(e) ? 'VIGENTE' : 'VENCIDO'"
                            [severity]="certificadoVigente(e) ? 'success' : 'danger'" />
@@ -49,16 +47,17 @@
         </ng-template>
     </p-table>
 </div>
-
+ 
 <p-dialog [(visible)]="mostrarFormulario"
           [header]="empresaSeleccionada ? 'Editar Empresa' : 'Nueva Empresa Fumigadora'"
           [modal]="true" [style]="{ width: '640px' }" [closable]="true">
     <app-empresa-fumigadora-form
         [empresa]="empresaSeleccionada"
+        [programaPlagasId]="programaPlagasId"
         (guardado)="onGuardado()"
         (cancelado)="mostrarFormulario = false" />
 </p-dialog>
-
+ 
 <p-dialog [(visible)]="mostrarDetalle" header="Detalle de Empresa Fumigadora"
           [modal]="true" [style]="{ width: '500px' }">
     @if (empresaSeleccionada) {
@@ -66,24 +65,25 @@
             <span class="text-muted-color">NIT</span>
             <span class="font-medium">{{ empresaSeleccionada.nit }}</span>
             <span class="text-muted-color">Nombre</span>
-            <span>{{ empresaSeleccionada.nombreEmpresa }}</span>
+            <span>{{ empresaSeleccionada.nombre_empresa }}</span>
             <span class="text-muted-color">Cert. Sanitario</span>
-            <span>{{ empresaSeleccionada.numCertSanitario }}</span>
+            <span>{{ empresaSeleccionada.numCerSanitario }}</span>
             <span class="text-muted-color">Venc. Certificado</span>
-            <span>{{ empresaSeleccionada.fechaVencCert | date:'dd/MM/yyyy' }}</span>
+            <span>{{ empresaSeleccionada.fechaVencCer | date:'dd/MM/yyyy' }}</span>
             <span class="text-muted-color">Estado Certificado</span>
             <p-tag [value]="certificadoVigente(empresaSeleccionada) ? 'VIGENTE' : 'VENCIDO'"
                    [severity]="certificadoVigente(empresaSeleccionada) ? 'success' : 'danger'" />
             <span class="text-muted-color">Registro SDS</span>
-            <span>{{ empresaSeleccionada.registroSDS || '—' }}</span>
+            <span>{{ empresaSeleccionada.registroSds || '—' }}</span>
             <span class="text-muted-color">Teléfono</span>
             <span>{{ empresaSeleccionada.telefonoContacto || '—' }}</span>
         </div>
     }
     <ng-template pTemplate="footer">
-        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="mostrarDetalle = false" />
+        <p-button label="Cerrar" severity="secondary" [outlined]="true"
+                  (onClick)="mostrarDetalle = false" />
     </ng-template>
 </p-dialog>
-
+ 
 <p-confirmDialog />
 <p-toast />

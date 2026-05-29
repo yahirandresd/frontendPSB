@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -22,7 +22,11 @@ export class TipoPlagaComponent implements OnInit {
     private service = inject(TipoPlagaService);
     guardando = false;
 
-    form: Partial<TipoPlaga> = { nombre: '', categoria: '', riesgoSanitario: '' };
+    form: Partial<TipoPlaga> = {
+        nombre: '',
+        categoria: '',
+        riesgoSanitario: '',
+    };
 
     readonly categorias = [
         { label: 'Roedor', value: 'roedor' },
@@ -35,6 +39,20 @@ export class TipoPlagaComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.tipoPlaga) this.form = { ...this.tipoPlaga };
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['tipoPlaga']) {
+            if (this.tipoPlaga) {
+                this.form = { ...this.tipoPlaga };
+            } else {
+                this.form = {
+                    nombre: '',
+                    categoria: '',
+                    riesgoSanitario: '',
+                };
+            }
+        }
     }
 
     async onGuardar(): Promise<void> {

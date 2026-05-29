@@ -3,5 +3,5 @@ export interface ProgramaPlagas {
   programaId: string;
   alcance: string;
   objetivo: string;
-  procedimientoGeneral: string;
+  procGeneral: string; 
 }

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { TipoPlaga } from '../models/tipo-plaga';
 import { environment } from '@/environments/environment';
 
-const BASE = environment.apiUrl + '/tipo-plagas';
+const BASE = environment.apiUrl + '/tipo-plaga';
 
 @Injectable({
     providedIn: 'root'

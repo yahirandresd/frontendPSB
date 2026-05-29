@@ -1,11 +1,13 @@
 export interface Plaguicida {
   id: string;
-  programaPlagaId: string;
+  programaPlagasId: string;
   codigoRegistro: string;
   nombreComercial: string;
   ingredienteActivo: string;
-  categoriaOMS: string;   // 'Ia' | 'Ib' | 'II' | 'III' | 'U'
+  categoriaOms: string;   // 'Ia' | 'Ib' | 'II' | 'III' | 'U'
   dosisAplicacion: string;
-  registroICA: string;
+  registroIca: string;
   fichaTecnicaUrl?: string;
+  accionesCorrectivasPlagas?: string;
+
 }
