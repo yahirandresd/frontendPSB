@@ -32,6 +32,7 @@ export class AnalisisLaboratorioFormComponent implements OnInit, OnChanges, HasU
     fuenteAguaItems: FuenteAgua[] = [];
     model: any = {};
     private initialModel = '';
+    today = new Date();
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {

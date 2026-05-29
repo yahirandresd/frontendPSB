@@ -34,6 +34,7 @@ export class MantenimientoLavadoFormComponent implements OnInit, OnChanges, HasU
     tipoLimpiezaOptions = [{"label":"Lavado Interno","value":"lavado_interno"},{"label":"Lavado Externo","value":"lavado_externo"},{"label":"Desinfección","value":"desinfeccion"},{"label":"Lavado General","value":"lavado_general"},{"label":"Otro","value":"otro"}];
     model: any = {};
     private initialModel = '';
+    today = new Date();
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {

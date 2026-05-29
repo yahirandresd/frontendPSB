@@ -6,7 +6,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AnalisisLaboratorioService } from '../../services/analisis-laboratorio.service';
 import { AnalisisLaboratorio } from '../../models/analisis-laboratorio.interface';
 import { FuenteAguaService } from '../../../fuente-agua/services/fuente-agua.service';
@@ -14,10 +15,10 @@ import { FuenteAguaService } from '../../../fuente-agua/services/fuente-agua.ser
 @Component({
     selector: 'app-analisis-laboratorio-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ToastModule, TooltipModule],
+    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule, TooltipModule],
     templateUrl: './analisis-laboratorio-list.component.html',
     styleUrls: ['./analisis-laboratorio-list.component.scss'],
-    providers: [MessageService],
+    providers: [ConfirmationService, MessageService],
 })
 export class AnalisisLaboratorioListComponent implements OnInit {
     private service = inject(AnalisisLaboratorioService);
@@ -26,6 +27,7 @@ export class AnalisisLaboratorioListComponent implements OnInit {
     items = signal<AnalisisLaboratorio[]>([]);
     fuenteMap = signal<Map<string, string>>(new Map());
     loading = signal(false);
+    private confirmationService = inject(ConfirmationService);
     ngOnInit() { this.cargar(); }
     async cargar() {
         this.loading.set(true);
@@ -38,5 +40,24 @@ export class AnalisisLaboratorioListComponent implements OnInit {
             this.fuenteMap.set(new Map(fuentes.map(f => [f.id, f.nombre])));
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar' }); }
         finally { this.loading.set(false); }
+    }
+    confirmarEliminar(item: AnalisisLaboratorio) {
+        this.confirmationService.confirm({
+            message: '¿Estás seguro de eliminar este análisis de laboratorio?',
+            header: 'Confirmar eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: async () => {
+                try {
+                    await firstValueFrom(this.service.delete(item.id));
+                    this.items.update(list => list.filter(i => i.id !== item.id));
+                    this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Análisis de laboratorio eliminado correctamente' });
+                } catch {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el análisis de laboratorio' });
+                }
+            },
+        });
     }
 }

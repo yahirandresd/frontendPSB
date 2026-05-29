@@ -7,7 +7,8 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ControlPotabilidadService } from '../../services/control-potabilidad.service';
 import { ControlPotabilidad } from '../../models/control-potabilidad.interface';
 import { FuenteAguaService } from '../../../fuente-agua/services/fuente-agua.service';
@@ -15,10 +16,10 @@ import { FuenteAguaService } from '../../../fuente-agua/services/fuente-agua.ser
 @Component({
     selector: 'app-control-potabilidad-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TableModule, ButtonModule, TagModule, ToastModule, TooltipModule],
+    imports: [CommonModule, RouterModule, TableModule, ButtonModule, TagModule, ConfirmDialogModule, ToastModule, TooltipModule],
     templateUrl: './control-potabilidad-list.component.html',
     styleUrls: ['./control-potabilidad-list.component.scss'],
-    providers: [MessageService],
+    providers: [ConfirmationService, MessageService],
 })
 export class ControlPotabilidadListComponent implements OnInit {
     private service = inject(ControlPotabilidadService);
@@ -27,6 +28,7 @@ export class ControlPotabilidadListComponent implements OnInit {
     items = signal<ControlPotabilidad[]>([]);
     fuenteMap = signal<Map<string, string>>(new Map());
     loading = signal(false);
+    private confirmationService = inject(ConfirmationService);
     ngOnInit() { this.cargar(); }
     async cargar() {
         this.loading.set(true);
@@ -39,5 +41,24 @@ export class ControlPotabilidadListComponent implements OnInit {
             this.fuenteMap.set(new Map(fuentes.map(f => [f.id, f.nombre])));
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar' }); }
         finally { this.loading.set(false); }
+    }
+    confirmarEliminar(item: ControlPotabilidad) {
+        this.confirmationService.confirm({
+            message: '¿Estás seguro de eliminar este control de potabilidad?',
+            header: 'Confirmar eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: async () => {
+                try {
+                    await firstValueFrom(this.service.delete(item.id));
+                    this.items.update(list => list.filter(i => i.id !== item.id));
+                    this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Control de potabilidad eliminado correctamente' });
+                } catch {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el control de potabilidad' });
+                }
+            },
+        });
     }
 }

@@ -39,7 +39,7 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Último Lavado</label>
-                <p-datepicker name="fechaUltimoLavado" [(ngModel)]="model.fechaUltimoLavado" [showIcon]="true" class="w-full" />
+                <p-datepicker name="fechaUltimoLavado" [(ngModel)]="model.fechaUltimoLavado" [showIcon]="true" [readonlyInput]="true" [maxDate]="today" class="w-full" />
                 <small class="text-surface-500">Fecha del último lavado (opcional)</small>
             </div>
 
@@ -72,7 +72,7 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Próxima Limpieza</label>
-                <p-datepicker name="proximaLimpieza" [(ngModel)]="model.proximaLimpieza" [showIcon]="true" class="w-full" />
+                <p-datepicker name="proximaLimpieza" [(ngModel)]="model.proximaLimpieza" [showIcon]="true" [readonlyInput]="true" [minDate]="today" class="w-full" />
                 <small class="text-surface-500">Fecha estimada próxima limpieza</small>
             </div>
         </div>

@@ -49,7 +49,7 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Fecha Muestreo</label>
-                            <p-datepicker #fechaMuestreo="ngModel" name="fechaMuestreo" [(ngModel)]="model.fechaMuestreo" [showIcon]="true" class="w-full" required />
+                            <p-datepicker #fechaMuestreo="ngModel" name="fechaMuestreo" [(ngModel)]="model.fechaMuestreo" [showIcon]="true" [readonlyInput]="true" [maxDate]="today" class="w-full" required />
                             <small class="text-surface-500">Fecha de toma de muestra</small>
                             @if (fechaMuestreo.invalid && (fechaMuestreo.dirty || fechaMuestreo.touched || form.submitted)) {
                                 @if (fechaMuestreo.errors?.['required']) {
@@ -60,7 +60,7 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Fecha Entrega Resultado</label>
-                            <p-datepicker name="fechaEntregaResultado" [(ngModel)]="model.fechaEntregaResultado" [showIcon]="true" class="w-full" />
+                            <p-datepicker name="fechaEntregaResultado" [(ngModel)]="model.fechaEntregaResultado" [showIcon]="true" [readonlyInput]="true" [maxDate]="today" class="w-full" />
                             <small class="text-surface-500">Fecha de entrega de resultados (opcional)</small>
                         </div>
 
