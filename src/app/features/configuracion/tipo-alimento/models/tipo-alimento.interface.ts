@@ -1,9 +1,8 @@
 export type NivelRiesgo = 'ALTO' | 'MEDIO' | 'BAJO';
 
 export interface TipoAlimento {
-    id: string;
-    empresa_id: string;
+    id: number;
     nombre: string;
+    descripcion: string;
     nivel_riesgo: NivelRiesgo;
-    descripcion?: string;
 }
