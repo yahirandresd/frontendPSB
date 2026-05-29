@@ -1,97 +1,115 @@
 <p-toast />
 
 @if (!programa()) {
-    <div class="card">
-        <p class="text-muted-color">Programa no encontrado.</p>
-        <a routerLink="/programa-residuos/programas" class="text-primary">Volver al listado</a>
-    </div>
+<div class="card">
+    <p class="text-muted-color">Programa no encontrado.</p>
+    <a routerLink="/programa-residuos/programas" class="text-primary">Volver al listado</a>
+</div>
 } @else {
-    <div class="card mb-4">
-        <div class="flex flex-wrap justify-between items-start gap-4">
-            <div>
-                <h3 class="text-xl font-semibold m-0">{{ programa()!.nombre }}</h3>
-                <p class="text-muted-color text-sm mt-1 mb-0">{{ programa()!.responsable }}</p>
-            </div>
-            <div class="flex gap-2 items-center">
-                <p-tag [value]="labelFrecuencia(programa()!.frecuencia)" severity="info" />
-                <p-button label="Editar" icon="pi pi-pencil" [outlined]="true" [routerLink]="['/programa-residuos/programas', programaId, 'editar']" />
-            </div>
+<div class="card mb-4">
+    <div class="flex flex-wrap justify-between items-start gap-4">
+        <div>
+            <h3 class="text-xl font-semibold m-0">{{ programa()!.nombre }}</h3>
+            <p class="text-muted-color text-sm mt-1 mb-0">{{ programa()!.responsable }}</p>
+        </div>
+        <div class="flex gap-2 items-center">
+            <p-tag [value]="labelFrecuencia(programa()!.frecuencia)" severity="info" />
+            <p-button label="Editar" icon="pi pi-pencil" [outlined]="true"
+                [routerLink]="['/programa-residuos/programas', programaId, 'editar']" />
         </div>
     </div>
+</div>
 
-    <div class="card">
-        <p-tabs value="0">
-            <p-tablist>
-                <p-tab value="0">Información</p-tab>
-                <p-tab value="1">Registros de Actividad</p-tab>
-                <p-tab value="2">Checklist de Control</p-tab>
-                <p-tab value="3">Evidencias</p-tab>
-                <p-tab value="4">Historial</p-tab>
-            </p-tablist>
-            <p-tabpanels>
-                <p-tabpanel value="0">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <span class="text-muted-color text-sm block font-semibold mb-1">Descripción General</span>
-                            <p class="m-0 leading-relaxed">{{ programa()!.descripcion }}</p>
-                        </div>
-                        <div>
-                            <span class="text-muted-color text-sm block font-semibold mb-1">Objetivo del Residuo</span>
-                            <p class="m-0 leading-relaxed">{{ programa()!.programaResiduo?.objetivo }}</p>
-                        </div>
-                        <div>
-                            <span class="text-muted-color text-sm block font-semibold mb-1">Alcance</span>
-                            <p class="m-0 leading-relaxed">{{ programa()!.programaResiduo?.alcance }}</p>
-                        </div>
-                        <div class="md:col-span-2">
-                            <span class="text-muted-color text-sm block font-semibold mb-1">Procedimiento General</span>
-                            <p class="m-0 leading-relaxed p-3 bg-surface-card border border-surface rounded-lg whitespace-pre-line">{{ programa()!.programaResiduo?.procedimiento_general }}</p>
-                        </div>
-                        <div>
-                            <span class="text-muted-color text-sm block font-semibold mb-1">Fecha de Creación</span>
-                            <p class="m-0 text-muted-color">{{ programa()!.createdAt | date:'yyyy-MM-dd HH:mm' }}</p>
-                        </div>
+<div class="card">
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Información</p-tab>
+            <p-tab value="1">Registros de Actividad</p-tab>
+            <p-tab value="2">Checklist de Control</p-tab>
+            <p-tab value="3">Evidencias</p-tab>
+            <p-tab value="4">Historial</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <span class="text-muted-color text-sm block font-semibold mb-1">Descripción General</span>
+                        <p class="m-0 leading-relaxed">{{ programa()!.descripcion }}</p>
                     </div>
-                </p-tabpanel>
-
-                <p-tabpanel value="1">
-                    <div class="flex justify-end mb-4">
-                        <p-button label="Nuevo registro" icon="pi pi-plus" (onClick)="openActividadDialog()" />
+                    <div>
+                        <span class="text-muted-color text-sm block font-semibold mb-1">Objetivo del Residuo</span>
+                        <p class="m-0 leading-relaxed">{{ programa()!.programaResiduo?.objetivo }}</p>
                     </div>
-                    <p-table [value]="actividades()" [rowHover]="true" dataKey="id">
-                        <ng-template #header>
-                            <tr>
-                                <th>Tipo Actividad</th>
-                                <th>Resultado General</th>
-                                <th>Responsable</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template #body let-a>
-                            <tr>
-                                <td>{{ labelTipo(a.tipo_actividad) }}</td>
-                                <td>{{ a.resultado_general }}</td>
-                                <td>{{ a.responsable }}</td>
-                                <td>{{ a.fecha }}</td>
-                                <td><p-tag [value]="labelActEstado(a.estado)" [severity]="severityActEstado(a.estado)" /></td>
-                                <td>
-                                    @if (a.estado !== 'completado') {
-                                        <p-button icon="pi pi-check" [rounded]="true" [text]="true" (onClick)="completarActividad(a.id)" />
-                                    }
-                                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openActividadDialog(a)" />
-                                    <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="eliminarActividad(a.id)" />
-                                </td>
-                            </tr>
-                        </ng-template>
-                        <ng-template #emptymessage>
-                            <tr><td colspan="6" class="text-center py-4 text-muted-color">Sin registros de actividad cargados</td></tr>
-                        </ng-template>
-                    </p-table>
-                </p-tabpanel>
+                    <div>
+                        <span class="text-muted-color text-sm block font-semibold mb-1">Alcance</span>
+                        <p class="m-0 leading-relaxed">{{ programa()!.programaResiduo?.alcance }}</p>
+                    </div>
+                    <div class="md:col-span-2">
+                        <span class="text-muted-color text-sm block font-semibold mb-1">Procedimiento General</span>
+                        <p
+                            class="m-0 leading-relaxed p-3 bg-surface-card border border-surface rounded-lg whitespace-pre-line">
+                            {{ programa()!.programaResiduo?.procedimiento_general }}</p>
+                    </div>
+                    <div>
+                        <span class="text-muted-color text-sm block font-semibold mb-1">Fecha de Creación</span>
+                        <p class="m-0 text-muted-color">{{ programa()!.createdAt | date:'yyyy-MM-dd HH:mm' }}</p>
+                    </div>
+                </div>
+            </p-tabpanel>
 
-                <p-tabpanel value="2">
+            <p-tabpanel value="1">
+                <div class="flex justify-end mb-4">
+                    <p-button label="Nuevo registro" icon="pi pi-plus" (onClick)="openActividadDialog()" />
+                </div>
+                <p-table [value]="actividades()" [rowHover]="true" dataKey="id">
+                    <ng-template #header>
+                        <tr>
+                            <th>Tipo Actividad</th>
+                            <th>Resultado General</th>
+                            <th>Responsable</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-a>
+                        <tr>
+                            <td>{{ labelTipo(a.tipo_actividad) }}</td>
+                            <td>{{ a.resultado_general }}</td>
+                            <td>{{ a.responsable }}</td>
+                            <td>{{ a.fecha }}</td>
+                            <td><p-tag [value]="labelActEstado(a.estado)" [severity]="severityActEstado(a.estado)" />
+                            </td>
+                            <td>
+                                @if (a.estado !== 'completado') {
+                                <p-button icon="pi pi-check" [rounded]="true" [text]="true"
+                                    (onClick)="completarActividad(a.id)" />
+                                }
+                                <p-button icon="pi pi-pencil" [rounded]="true" [text]="true"
+                                    (onClick)="openActividadDialog(a)" />
+                                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                                    (onClick)="eliminarActividad(a.id)" />
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template #emptymessage>
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted-color">Sin registros de actividad
+                                cargados</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+
+            <p-tabpanel value="2">
+                @if (!latestRegistroResiduo()) {
+                    <div class="text-center py-10 border border-dashed border-surface rounded-xl">
+                        <i class="pi pi-clipboard text-4xl text-muted-color mb-3"></i>
+                        <h4 class="m-0 mb-2 font-medium">No hay un registro activo</h4>
+                        <p class="text-muted-color mb-6 max-w-md mx-auto">Para poder asignar tareas o marcar un checklist, primero debes iniciar un registro de control para este programa.</p>
+                        <p-button label="Iniciar Registro Automático" icon="pi pi-play" (onClick)="iniciarRegistro()" />
+                    </div>
+                } @else {
                     @let pct = progresoChecklist();
                     <div class="mb-6">
                         <div class="flex justify-between mb-2">
@@ -99,91 +117,106 @@
                             <span [style.color]="progresoColor(pct)">{{ pct }}%</span>
                         </div>
                         <p-progressbar [value]="pct" [showValue]="false" />
-                        <p class="text-sm text-muted-color mt-2">
-                            {{ checklistResumen().completados }} completados ·
-                            {{ checklistResumen().pendientes }} pendientes
-                        </p>
+                        <div class="flex justify-between items-center mt-2">
+                            <p class="text-sm text-muted-color m-0">
+                                {{ checklistResumen().completados }} completados ·
+                                {{ checklistResumen().pendientes }} pendientes
+                            </p>
+                            <p-button label="Añadir Tarea" icon="pi pi-plus" [outlined]="true" size="small" (onClick)="openChecklistDialog()" />
+                        </div>
                     </div>
                     <ul class="list-none p-0 m-0 flex flex-col gap-3">
                         @for (item of latestRegistroResiduo()?.checklistResiduo; track item.id) {
-                            <li class="flex gap-3 items-start p-3 rounded-lg border border-surface">
-                                <p-checkbox [binary]="true" [ngModel]="item.porcentaje_cumplimiento === 100" (ngModelChange)="toggleCheck(item.id)" />
-                                <div class="flex-1">
-                                    <span class="font-medium" [class.line-through]="item.porcentaje_cumplimiento === 100" [class.text-muted-color]="item.porcentaje_cumplimiento === 100">
-                                        {{ item.titulo }}
-                                    </span>
-                                    @if (item.descripcion) {
-                                        <span class="text-xs text-muted-color block mt-1">{{ item.descripcion }}</span>
-                                    }
-                                </div>
-                            </li>
+                        <li class="flex gap-3 items-start p-3 rounded-lg border border-surface">
+                            <p-checkbox [binary]="true" [ngModel]="item.porcentaje_cumplimiento === 100"
+                                (ngModelChange)="toggleCheck(item.id)" />
+                            <div class="flex-1">
+                                <span class="font-medium" [class.line-through]="item.porcentaje_cumplimiento === 100"
+                                    [class.text-muted-color]="item.porcentaje_cumplimiento === 100">
+                                    {{ item.titulo }}
+                                </span>
+                                @if (item.descripcion) {
+                                <span class="text-xs text-muted-color block mt-1">{{ item.descripcion }}</span>
+                                }
+                            </div>
+                        </li>
                         } @empty {
-                            <p class="text-muted-color">No hay checklists asociados al último registro de este programa.</p>
+                            <div class="text-center py-6">
+                                <p class="text-muted-color mb-4">No hay tareas ni checklists asociados al último registro de este programa.</p>
+                                <p-button label="Añadir Tarea al Checklist" icon="pi pi-plus" (onClick)="openChecklistDialog()" />
+                            </div>
                         }
                     </ul>
-                </p-tabpanel>
+                }
+            </p-tabpanel>
 
-                <p-tabpanel value="3">
-                    <div class="flex flex-wrap gap-3 mb-4 items-end">
-                        <div class="flex-1 min-w-48">
-                            <label class="block text-sm font-medium mb-1">Nombre del archivo</label>
-                            <input pInputText [(ngModel)]="nuevaEvidenciaNombre" class="w-full" placeholder="Ej. Acta de disposición final" />
-                        </div>
-                        <p-fileupload mode="basic" chooseLabel="Subir evidencia" accept="image/*,.pdf" (onSelect)="onUploadEvidencia()" />
+            <p-tabpanel value="3">
+                <div class="flex flex-wrap gap-3 mb-4 items-end">
+                    <div class="flex-1 min-w-48">
+                        <label class="block text-sm font-medium mb-1">Nombre del archivo</label>
+                        <input pInputText [(ngModel)]="nuevaEvidenciaNombre" class="w-full"
+                            placeholder="Ej. Acta de disposición final" />
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @for (ev of evidencias(); track ev.id) {
-                            <div class="border border-surface rounded-lg p-4">
-                                <i class="pi pi-file text-2xl text-primary mb-2"></i>
-                                <p class="font-medium m-0">{{ ev.descripcion }}</p>
-                                <p class="text-xs text-muted-color m-0 mt-1">{{ ev.fecha }}</p>
-                                <p-tag [value]="ev.tipo_archivo" severity="secondary" class="mt-2" />
-                                <p-button icon="pi pi-trash" [text]="true" severity="danger" class="mt-2 block" (onClick)="eliminarEvidencia(ev.id)" />
-                            </div>
-                        } @empty {
-                            <p class="text-muted-color col-span-full">No hay evidencias registradas en las actividades de este programa.</p>
-                        }
+                    <p-fileupload mode="basic" chooseLabel="Subir evidencia" accept="image/*,.pdf"
+                        (onSelect)="onUploadEvidencia($event)" />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for (ev of evidencias(); track ev.id) {
+                    <div class="border border-surface rounded-lg p-4">
+                        <i class="pi pi-file text-2xl text-primary mb-2"></i>
+                        <p class="font-medium m-0">{{ ev.descripcion }}</p>
+                        <p class="text-xs text-muted-color m-0 mt-1">{{ ev.fecha }}</p>
+                        <p-tag [value]="ev.tipo_archivo" severity="secondary" class="mt-2" />
+                        <p-button icon="pi pi-trash" [text]="true" severity="danger" class="mt-2 block"
+                            (onClick)="eliminarEvidencia(ev.id)" />
                     </div>
-                </p-tabpanel>
+                    } @empty {
+                    <p class="text-muted-color col-span-full">No hay evidencias registradas en las actividades de este
+                        programa.</p>
+                    }
+                </div>
+            </p-tabpanel>
 
-                <p-tabpanel value="4">
-                    <p-timeline [value]="historialTimeline()" align="left">
-                        <ng-template #content let-event>
+            <p-tabpanel value="4">
+                <p-timeline [value]="historialTimeline()" align="left">
+                    <ng-template #content let-event>
+                        @if (event) {
                             <p class="font-medium m-0">{{ event.status }}</p>
                             <p class="text-sm text-muted-color m-0">{{ event.user }} · {{ event.date }}</p>
-                        </ng-template>
-                    </p-timeline>
-                </p-tabpanel>
-            </p-tabpanels>
-        </p-tabs>
-    </div>
+                        }
+                    </ng-template>
+                </p-timeline>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>
 }
 
-<p-dialog
-    [header]="actividadEditId() ? 'Editar actividad/registro' : 'Nuevo registro de actividad'"
-    [visible]="actividadDialog()"
-    (visibleChange)="actividadDialog.set($event)"
-    [modal]="true"
-    [style]="{ width: '32rem' }"
->
+<p-dialog [header]="actividadEditId() ? 'Editar actividad/registro' : 'Nuevo registro de actividad'"
+    [visible]="actividadDialog()" (visibleChange)="actividadDialog.set($event)" [modal]="true"
+    [style]="{ width: '32rem' }">
     <div class="flex flex-col gap-3">
         <label class="font-medium text-sm">Tipo de actividad</label>
-        <p-select [(ngModel)]="actForm.tipo_actividad" [options]="tipoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione Tipo" class="w-full" />
-        
+        <p-select [(ngModel)]="actForm.tipo_actividad" [options]="tipoOptions" optionLabel="label" optionValue="value"
+            placeholder="Seleccione Tipo" class="w-full" />
+
         <label class="font-medium text-sm">Resultado General / Descripción</label>
-        <textarea pTextarea [(ngModel)]="actForm.resultado_general" rows="2" class="w-full" placeholder="Detalle el resultado de la actividad..."></textarea>
-        
+        <textarea pTextarea [(ngModel)]="actForm.resultado_general" rows="2" class="w-full"
+            placeholder="Detalle el resultado de la actividad..."></textarea>
+
         <label class="font-medium text-sm">Responsable</label>
         <input pInputText placeholder="Nombre del responsable" [(ngModel)]="actForm.responsable" class="w-full" />
-        
+
         <label class="font-medium text-sm">Fecha</label>
         <input pInputText type="date" [(ngModel)]="actForm.fecha" class="w-full" />
-        
+
         <label class="font-medium text-sm">Estado de Registro</label>
-        <p-select [(ngModel)]="actForm.estado" [options]="estadoActOptions" optionLabel="label" optionValue="value" class="w-full" />
-        
+        <p-select [(ngModel)]="actForm.estado" [options]="estadoActOptions" optionLabel="label" optionValue="value"
+            class="w-full" />
+
         <label class="font-medium text-sm">Observaciones Adicionales</label>
-        <textarea pTextarea [(ngModel)]="actForm.observaciones" rows="2" class="w-full" placeholder="Escriba aquí observaciones de control..."></textarea>
+        <textarea pTextarea [(ngModel)]="actForm.observaciones" rows="2" class="w-full"
+            placeholder="Escriba aquí observaciones de control..."></textarea>
     </div>
     <ng-template #footer>
         <p-button label="Cancelar" severity="secondary" (onClick)="actividadDialog.set(false)" />
@@ -191,3 +224,25 @@
     </ng-template>
 </p-dialog>
 
+<p-dialog
+    header="Añadir Tarea al Checklist"
+    [visible]="checklistDialog()"
+    (visibleChange)="checklistDialog.set($event)"
+    [modal]="true"
+    [style]="{ width: '28rem' }"
+>
+    <div class="flex flex-col gap-3 mt-2">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Título de la Tarea</label>
+            <input pInputText [(ngModel)]="checklistForm.titulo" class="w-full" placeholder="Ej. Revisión de contenedores..." />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Descripción o Detalle (opcional)</label>
+            <textarea pTextarea [(ngModel)]="checklistForm.descripcion" rows="2" class="w-full" placeholder="Detalles de lo que se debe revisar..."></textarea>
+        </div>
+    </div>
+    <ng-template #footer>
+        <p-button label="Cancelar" severity="secondary" (onClick)="checklistDialog.set(false)" />
+        <p-button label="Guardar Tarea" (onClick)="guardarChecklistItem()" />
+    </ng-template>
+</p-dialog>

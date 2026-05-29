@@ -1,7 +1,13 @@
 <p-toast />
 
 <div class="card">
-    <h3 class="text-xl font-semibold mt-0 mb-4">Gestión de recolecciones</h3>
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
+        <div>
+            <h3 class="text-xl font-semibold mt-0 mb-1">Gestion de recolecciones</h3>
+            <p class="text-sm text-muted-color m-0">Consulta, edita y registra nuevas recolecciones ligadas al backend.</p>
+        </div>
+        <p-button label="Nueva recoleccion" icon="pi pi-plus" (onClick)="abrirCrear()" />
+    </div>
 
     <p-table [value]="recolecciones()" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="id">
         <ng-template #header>
@@ -11,7 +17,7 @@
                 <th>Tipo Residuo</th>
                 <th>Cantidad (kg)</th>
                 <th>Responsable</th>
-                <th>Vehículo</th>
+                <th>Vehiculo</th>
                 <th>Observaciones</th>
                 <th>Estado Registro</th>
                 <th>Acciones</th>
@@ -25,7 +31,7 @@
                 <td>{{ r.cantidad_recolectada }} kg</td>
                 <td>{{ r.responsable }}</td>
                 <td>{{ r.vehiculo }}</td>
-                <td>{{ r.observaciones }}</td>
+                <td>{{ r.observaciones || '-' }}</td>
                 <td><p-tag [value]="labelEstado(r.estado)" [severity]="severityEstado(r.estado)" /></td>
                 <td>
                     <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="abrirEditar(r)" />
@@ -33,13 +39,109 @@
             </tr>
         </ng-template>
         <ng-template #emptymessage>
-            <tr><td colspan="9" class="text-center py-6 text-muted-color">Sin recolecciones registradas.</td></tr>
+            <tr>
+                <td colspan="9" class="text-center py-6 text-muted-color">Sin recolecciones registradas.</td>
+            </tr>
         </ng-template>
     </p-table>
 </div>
 
 <p-dialog
-    header="Actualizar Recolección"
+    header="Nueva recoleccion"
+    [visible]="createDialog()"
+    (visibleChange)="createDialog.set($event)"
+    [modal]="true"
+    [style]="{ width: '38rem' }"
+>
+    <div class="flex flex-col gap-4 mt-2">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Registro de actividad</label>
+            <p-select
+                [(ngModel)]="createForm.registroResiduoId"
+                [options]="registrosDisponibles()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un registro"
+                class="w-full"
+                (ngModelChange)="onRegistroChange($event)"
+            />
+            @if (!registrosDisponibles().length) {
+                <small class="text-muted-color">Primero debes crear un registro de actividad en un programa de residuos.</small>
+            }
+        </div>
+
+        <!-- SELECTOR DE TIPO DE RESIDUO -->
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Tipo de Residuo</label>
+            <p-select
+                [(ngModel)]="createForm.tipoResiduoId"
+                [options]="tiposResiduosOptions()"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un tipo de residuo"
+                class="w-full"
+                (ngModelChange)="onTipoResiduoChange($event)"
+            />
+            @if (tiposResiduos().length === 0 && createForm.registroResiduoId) {
+                <small class="text-muted-color">No hay tipos de residuos disponibles para este programa.</small>
+            }
+        </div>
+
+        <!-- INFORMACIÓN REACTIVA DEL TIPO DE RESIDUO -->
+        @if (tipoResiduoSeleccionado()) {
+            <div class="flex flex-col gap-3 p-3 bg-surface-50 border border-surface-200 rounded-md">
+                <!-- Indicador de color -->
+                <div class="flex items-center gap-3">
+                    <label class="font-medium text-sm">Color Contenedor:</label>
+                    <div
+                        class="w-8 h-8 rounded-full border border-surface-300"
+                        [style]="{ backgroundColor: tipoResiduoSeleccionado()!.color_contenedor }"
+                        [title]="tipoResiduoSeleccionado()!.color_contenedor"
+                    ></div>
+                    <span class="text-sm text-muted-color">{{ tipoResiduoSeleccionado()!.color_contenedor }}</span>
+                </div>
+
+                <!-- Descripción -->
+                <div class="flex flex-col gap-1">
+                    <label class="font-medium text-sm">Descripción:</label>
+                    <p class="text-sm m-0 text-surface-700">{{ tipoResiduoSeleccionado()!.descripcion }}</p>
+                </div>
+
+                <!-- Indicador de Peligro -->
+                @if (tipoResiduoSeleccionado()!.es_peligroso) {
+                    <div class="flex items-center gap-2 p-2 bg-red-50 border border-red-200 rounded">
+                        <i class="pi pi-exclamation-triangle text-red-600"></i>
+                        <span class="text-sm font-medium text-red-700">⚠️ RESIDUO PELIGROSO - Manipular con precaución</span>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Fecha</label>
+            <input pInputText type="date" [(ngModel)]="createForm.fecha" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Responsable</label>
+            <input pInputText [(ngModel)]="createForm.responsable" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Cantidad recolectada (kg)</label>
+            <input pInputText type="number" [(ngModel)]="createForm.cantidad_recolectada" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Observaciones</label>
+            <textarea pTextarea [(ngModel)]="createForm.observaciones" rows="3" class="w-full"></textarea>
+        </div>
+    </div>
+    <ng-template #footer>
+        <p-button label="Cancelar" severity="secondary" (onClick)="createDialog.set(false)" />
+        <p-button label="Guardar" (onClick)="guardarNueva()" [disabled]="!registrosDisponibles().length" />
+    </ng-template>
+</p-dialog>
+
+<p-dialog
+    header="Actualizar recoleccion"
     [visible]="editDialog()"
     (visibleChange)="editDialog.set($event)"
     [modal]="true"
@@ -47,7 +149,7 @@
 >
     <div class="flex flex-col gap-4 mt-2">
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Cantidad Recolectada (kg)</label>
+            <label class="font-medium text-sm">Cantidad recolectada (kg)</label>
             <input pInputText type="number" [(ngModel)]="editForm.cantidad_recolectada" class="w-full" />
         </div>
         <div class="flex flex-col gap-1">
@@ -55,7 +157,7 @@
             <input pInputText [(ngModel)]="editForm.responsable" class="w-full" />
         </div>
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Observaciones / Detalles</label>
+            <label class="font-medium text-sm">Observaciones / detalles</label>
             <textarea pTextarea [(ngModel)]="editForm.observaciones" rows="3" class="w-full"></textarea>
         </div>
     </div>
@@ -64,4 +166,3 @@
         <p-button label="Guardar" (onClick)="guardar()" />
     </ng-template>
 </p-dialog>
-

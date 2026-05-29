@@ -25,9 +25,15 @@ export class ProgramaCreateComponent {
     private readonly toast = inject(MessageService);
 
     onSubmit(dto: CreateProgramaResiduoDto): void {
-        const created = this.store.createPrograma(dto);
-        this.toast.add({ severity: 'success', summary: 'Creado', detail: 'Programa registrado' });
-        this.router.navigate(['/programa-residuos/programas', created.id]);
+        this.store.createPrograma(dto).subscribe({
+            next: (created) => {
+                this.toast.add({ severity: 'success', summary: 'Creado', detail: 'Programa registrado' });
+                this.router.navigate(['/programa-residuos/programas', created.id]);
+            },
+            error: (err) => {
+                this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el programa' });
+            }
+        });
     }
 }
 

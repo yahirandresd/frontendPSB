@@ -162,11 +162,13 @@ export class PrDashboardComponent {
         });
         this.chartResiduosOpts.set(this.barOpts(textColor, borderColor, textMuted));
 
-        const acts = progs.flatMap((p) => p.programaResiduo?.registros || []);
-        const completadas = acts.filter((a) => a.registro?.estado === EstadoRegistro.COMPLETADO).length;
-        const pendientes = acts.length - completadas;
+        const checklistItems = progs.flatMap((p) =>
+            (p.programaResiduo?.registros || []).flatMap((rr) => rr.checklistResiduo || [])
+        );
+        const completadas = checklistItems.filter((item) => item.porcentaje_cumplimiento === 100).length;
+        const pendientes = checklistItems.length - completadas;
         this.chartActividades.set({
-            labels: ['Completadas', 'Pendientes / en proceso'],
+            labels: ['Tareas marcadas', 'Tareas sin marcar'],
             datasets: [{ data: [completadas, pendientes], backgroundColor: ['#10b981', '#f59e0b'] }]
         });
         this.chartActividadesOpts.set(this.pieOpts(textColor));

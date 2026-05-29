@@ -143,6 +143,12 @@ export class ProgramaDetalleComponent {
 
     nuevaEvidenciaNombre = '';
 
+    checklistDialog = signal(false);
+    checklistForm = {
+        titulo: '',
+        descripcion: ''
+    };
+
     openActividadDialog(act?: { id: string; tipo_actividad: string; resultado_general: string; fecha: string; responsable: string; estado: EstadoRegistro; observaciones: string }): void {
         if (act) {
             this.actividadEditId.set(act.id);
@@ -169,43 +175,124 @@ export class ProgramaDetalleComponent {
     }
 
     guardarActividad(): void {
+        if (!this.actForm.resultado_general.trim() || !this.actForm.fecha || !this.actForm.responsable.trim()) {
+            this.toast.add({ severity: 'warn', summary: 'Atención', detail: 'Completa resultado, responsable y fecha' });
+            return;
+        }
+
         const editId = this.actividadEditId();
         if (editId) {
-            this.store.updateActividad(this.programaId, editId, { ...this.actForm });
+            this.store.updateActividad(this.programaId, editId, { ...this.actForm }).subscribe({
+                next: () => {
+                    this.actividadDialog.set(false);
+                    this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Actualizada correctamente' });
+                },
+                error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la actividad' })
+            });
         } else {
-            this.store.addActividad(this.programaId, { ...this.actForm });
+            this.store.addActividad(this.programaId, { ...this.actForm }).subscribe({
+                next: () => {
+                    this.actividadDialog.set(false);
+                    this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Guardada correctamente' });
+                },
+                error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar la actividad' })
+            });
         }
-        this.actividadDialog.set(false);
-        this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Guardada correctamente' });
     }
 
     eliminarActividad(id: string): void {
-        this.store.deleteActividad(this.programaId, id);
-        this.toast.add({ severity: 'info', summary: 'Eliminada', detail: 'Actividad eliminada' });
+        this.store.deleteActividad(this.programaId, id).subscribe({
+            next: () => this.toast.add({ severity: 'info', summary: 'Eliminada', detail: 'Actividad eliminada' }),
+            error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar la actividad' })
+        });
     }
 
     completarActividad(actId: string): void {
-        this.store.updateActividad(this.programaId, actId, { estado: EstadoRegistro.COMPLETADO });
+        this.store.updateActividad(this.programaId, actId, { estado: EstadoRegistro.COMPLETADO }).subscribe({
+            next: () => this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Marcada como completada' }),
+            error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo completar la actividad' })
+        });
     }
 
     toggleCheck(itemId: string): void {
         this.store.toggleChecklist(this.programaId, itemId);
     }
 
-    onUploadEvidencia(): void {
-        const nombre = this.nuevaEvidenciaNombre.trim() || 'Evidencia cargada';
-        this.store.addEvidencia(this.programaId, {
-            nombre,
-            tipo: 'documento',
-            fecha: new Date().toISOString().slice(0, 10),
-            usuario: 'Carlos Arbeláez'
+    openChecklistDialog(): void {
+        this.checklistForm = { titulo: '', descripcion: '' };
+        this.checklistDialog.set(true);
+    }
+
+    iniciarRegistro(): void {
+        const act = {
+            tipo_actividad: 'inspeccion',
+            resultado_general: 'Registro inicial de control',
+            fecha: new Date().toISOString().split('T')[0],
+            responsable: 'Sistema',
+            estado: 'pendiente' as EstadoRegistro,
+            observaciones: 'Registro creado automáticamente para habilitar el checklist'
+        };
+        this.store.addActividad(this.programaId, act).subscribe({
+            next: () => this.toast.add({ severity: 'success', summary: 'Éxito', detail: 'Registro de control iniciado' }),
+            error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo iniciar el registro' })
         });
-        this.nuevaEvidenciaNombre = '';
-        this.toast.add({ severity: 'success', summary: 'Evidencia', detail: 'Archivo registrado (demo)' });
+    }
+
+    guardarChecklistItem(): void {
+        const latestReg = this.latestRegistroResiduo();
+        if (!latestReg) {
+            this.toast.add({ severity: 'error', summary: 'Error', detail: 'No hay un registro activo para añadir esta tarea' });
+            return;
+        }
+
+        if (!this.checklistForm.titulo.trim()) {
+            this.toast.add({ severity: 'warn', summary: 'Atención', detail: 'El título es obligatorio' });
+            return;
+        }
+
+        this.store.addChecklistItem(this.programaId, latestReg.id, {
+            titulo: this.checklistForm.titulo,
+            descripcion: this.checklistForm.descripcion,
+            porcentaje_cumplimiento: 0
+        });
+        
+        this.checklistDialog.set(false);
+        this.toast.add({ severity: 'success', summary: 'Éxito', detail: 'Tarea añadida al checklist' });
+    }
+
+    onUploadEvidencia(event: { originalEvent: Event; files: File[] }): void {
+        const file = event.files?.[0];
+        if (!file) {
+            this.toast.add({ severity: 'warn', summary: 'Evidencia', detail: 'No se seleccionó ningún archivo' });
+            return;
+        }
+        if (!this.latestRegistroResiduo()) {
+            this.toast.add({ severity: 'warn', summary: 'Evidencia', detail: 'Primero crea un registro de actividad para asociar la evidencia' });
+            return;
+        }
+        const nombre = this.nuevaEvidenciaNombre.trim() || file.name;
+        this.store.addEvidencia(this.programaId, file, {
+            nombre,
+            tipo: file.type || 'documento',
+            fecha: new Date().toISOString().slice(0, 10),
+            usuario: 'Sistema'
+        }).subscribe({
+            next: () => {
+                this.toast.add({ severity: 'success', summary: 'Evidencia', detail: 'Archivo cargado y registrado correctamente' });
+                this.nuevaEvidenciaNombre = '';
+            },
+            error: (err) => {
+                console.error('Error uploading evidence:', err);
+                this.toast.add({ severity: 'error', summary: 'Evidencia', detail: 'Error al cargar la evidencia' });
+            }
+        });
     }
 
     eliminarEvidencia(id: number): void {
-        this.store.deleteEvidencia(this.programaId, id);
+        this.store.deleteEvidencia(this.programaId, id).subscribe({
+            next: () => this.toast.add({ severity: 'info', summary: 'Evidencia', detail: 'Evidencia eliminada correctamente' }),
+            error: () => this.toast.add({ severity: 'error', summary: 'Evidencia', detail: 'No se pudo eliminar la evidencia' })
+        });
     }
 
     labelTipo(t: string): string {
