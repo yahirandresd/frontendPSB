@@ -5,26 +5,31 @@
     </div>
     <p-table [value]="items()" [loading]="loading()" [paginator]="true" [rows]="10" stripedRows dataKey="id">
         <ng-template #header><tr>
-                <th>#</th>
                 <th>Fuente Agua</th>
                 <th>Capacidad (Litros)</th>
                 <th>Material Grado Alimenticio</th>
                 <th>Fecha Último Lavado</th>
                 <th>Tiene Tapa</th>
-                <th class="w-24">Acciones</th>
+                <th class="w-32">Acciones</th>
             </tr></ng-template>
         <ng-template #body let-item>            <tr>
-                <td>{{ item.fuenteAguaId }}</td>
-                <td>{{ item.fuenteAguaId }}</td>
+                <td>{{ fuenteMap().get(item.fuenteAguaId) || '...' }}</td>
                 <td>{{ item.capacidadLitros }}</td>
                 <td>{{ item.materialGradoAlimenticio }}</td>
                 <td>{{ item.fechaUltimoLavado }}</td>
                 <td><i [class]="item.tieneTapa ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i></td>
-                <td><p-button icon="pi pi-pencil" severity="secondary" rounded [routerLink]="[item.id, 'editar']" /></td>
+                <td>
+                    <div class="flex gap-2">
+                        <p-button icon="pi pi-eye" severity="info" rounded pTooltip="Ver detalle" tooltipPosition="top" [routerLink]="[item.id]" />
+                        <p-button icon="pi pi-pencil" severity="secondary" rounded pTooltip="Editar" tooltipPosition="top" [routerLink]="[item.id, 'editar']" />
+                        <p-button icon="pi pi-trash" severity="danger" rounded pTooltip="Eliminar" tooltipPosition="top" (onClick)="confirmarEliminar(item)" />
+                    </div>
+                </td>
             </tr></ng-template>
         <ng-template #emptymessage>
-            <tr><td colspan="7" class="text-center text-muted-color py-6">No hay registros</td></tr>
+            <tr><td colspan="6" class="text-center text-muted-color py-6">No hay registros</td></tr>
         </ng-template>
     </p-table>
 </div>
+<p-confirmDialog />
 <p-toast />

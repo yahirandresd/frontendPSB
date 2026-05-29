@@ -33,6 +33,7 @@ export class ControlPotabilidadFormComponent implements OnInit, OnChanges, HasUn
     saborOptions = [{"label":"Normal","value":"normal"},{"label":"Aceptable","value":"aceptable"},{"label":"Desagradable","value":"desagradable"},{"label":"N/A","value":"na"}];
     model: any = {};
     private initialModel = '';
+    today = new Date();
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {

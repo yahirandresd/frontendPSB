@@ -17,7 +17,7 @@
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Programa Agua</label>
-                <p-select #programaAguaId="ngModel" name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <p-select #programaAguaId="ngModel" name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="objetivo" optionValue="id" placeholder="Seleccione" class="w-full" required />
                 <small class="text-surface-500">Seleccione el programa de agua</small>
                 @if (programaAguaId.invalid && (programaAguaId.dirty || programaAguaId.touched || form.submitted)) {
                     @if (programaAguaId.errors?.['required']) {
@@ -69,7 +69,7 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Cierre</label>
-                <p-datepicker name="fechaCierre" [(ngModel)]="model.fechaCierre" [showIcon]="true" class="w-full" />
+                <p-datepicker name="fechaCierre" [(ngModel)]="model.fechaCierre" [showIcon]="true" [readonlyInput]="true" [maxDate]="today" class="w-full" />
                 <small class="text-surface-500">Fecha de cierre del registro</small>
             </div>
         </div>

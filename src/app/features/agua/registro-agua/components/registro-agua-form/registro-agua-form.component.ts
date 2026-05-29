@@ -32,6 +32,7 @@ export class RegistroAguaFormComponent implements OnInit, OnChanges, HasUnsavedC
     resultadoGeneralOptions = [{"label":"Conforme","value":"conforme"},{"label":"No Conforme","value":"no_conforme"},{"label":"En Proceso","value":"en_proceso"}];
     model: any = {};
     private initialModel = '';
+    today = new Date();
 
     ngOnInit() {
         this.programaAguaService.getAll().subscribe((items: any[]) => this.programaAguaItems = items);

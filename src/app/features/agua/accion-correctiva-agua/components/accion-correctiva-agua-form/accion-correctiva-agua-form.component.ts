@@ -34,6 +34,7 @@ export class AccionCorrectivaAguaFormComponent implements OnInit, OnChanges, Has
     origenOptions = [{"label":"Control Diario","value":"control_diario"},{"label":"Análisis Laboratorio","value":"analisis_laboratorio"},{"label":"Mantenimiento","value":"mantenimiento"},{"label":"Auditoría","value":"auditoria"},{"label":"Otro","value":"otro"}];
     model: any = {};
     private initialModel = '';
+    today = new Date();
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {

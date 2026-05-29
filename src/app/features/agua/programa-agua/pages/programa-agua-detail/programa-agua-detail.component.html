@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">
+            Detalle de Programa de Agua
+        </div>
+        <p-button label="Volver" severity="secondary" icon="pi pi-arrow-left" (onClick)="volver()" />
+    </div>
+    @if (loading()) {
+        <div class="text-center p-4">Cargando...</div>
+    } @else if (item(); as data) {
+        <div class="grid grid-cols-12 gap-4 p-3 surface-ground border-round">
+            <div class="col-span-12">
+                <label class="block text-muted-color font-medium mb-1">Objetivo</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.objetivo }}</span>
+            </div>
+            <div class="col-span-12">
+                <label class="block text-muted-color font-medium mb-1">Alcance</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.alcance }}</span>
+            </div>
+            <div class="col-span-12">
+                <label class="block text-muted-color font-medium mb-1">Procedimiento General</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.procedimientoGeneral }}</span>
+            </div>
+        </div>
+    } @else {
+        <div class="text-center p-4 text-muted-color">Programa de agua no encontrado</div>
+    }
+</div>

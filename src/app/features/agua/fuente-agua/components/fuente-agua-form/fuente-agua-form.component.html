@@ -6,7 +6,7 @@
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Programa Agua</label>
-                <p-select #programaAguaId="ngModel" name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <p-select #programaAguaId="ngModel" name="programaAguaId" [(ngModel)]="model.programaAguaId" [options]="programaAguaItems" optionLabel="objetivo" optionValue="id" placeholder="Seleccione" class="w-full" required />
                 <small class="text-surface-500">Seleccione el programa de agua asociado</small>
                 @if (programaAguaId.invalid && (programaAguaId.dirty || programaAguaId.touched || form.submitted)) {
                     @if (programaAguaId.errors?.['required']) {

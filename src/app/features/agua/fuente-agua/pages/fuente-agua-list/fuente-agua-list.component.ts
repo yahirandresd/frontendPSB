@@ -5,28 +5,59 @@ import { firstValueFrom } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { FuenteAguaService } from '../../services/fuente-agua.service';
 import { FuenteAgua } from '../../models/fuente-agua.interface';
+import { ProgramaAguaService } from '../../../programa-agua/services/programa-agua.service';
 
 @Component({
     selector: 'app-fuente-agua-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ToastModule],
+    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule, TooltipModule],
     templateUrl: './fuente-agua-list.component.html',
     styleUrls: ['./fuente-agua-list.component.scss'],
-    providers: [MessageService],
+    providers: [ConfirmationService, MessageService],
 })
 export class FuenteAguaListComponent implements OnInit {
     private service = inject(FuenteAguaService);
+    private programaAguaService = inject(ProgramaAguaService);
     private messageService = inject(MessageService);
     items = signal<FuenteAgua[]>([]);
+    programaMap = signal<Map<string, string>>(new Map());
     loading = signal(false);
+    private confirmationService = inject(ConfirmationService);
     ngOnInit() { this.cargar(); }
     async cargar() {
         this.loading.set(true);
-        try { this.items.set(await firstValueFrom(this.service.getAll())); }
-        catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar' }); }
+        try {
+            const [data, programas] = await Promise.all([
+                firstValueFrom(this.service.getAll()),
+                firstValueFrom(this.programaAguaService.getAll()),
+            ]);
+            this.items.set(data);
+            this.programaMap.set(new Map(programas.map(p => [p.id, p.objetivo])));
+        } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar' }); }
         finally { this.loading.set(false); }
+    }
+    confirmarEliminar(item: FuenteAgua) {
+        this.confirmationService.confirm({
+            message: '¿Estás seguro de eliminar esta fuente de agua?',
+            header: 'Confirmar eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: async () => {
+                try {
+                    await firstValueFrom(this.service.delete(item.id));
+                    this.items.update(list => list.filter(i => i.id !== item.id));
+                    this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Fuente de agua eliminada correctamente' });
+                } catch {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar la fuente de agua' });
+                }
+            },
+        });
     }
 }

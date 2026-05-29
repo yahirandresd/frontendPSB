@@ -17,7 +17,7 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Programada</label>
-                <p-datepicker #fechaProgramada="ngModel" name="fechaProgramada" [(ngModel)]="model.fechaProgramada" [showIcon]="true" class="w-full" required />
+                <p-datepicker #fechaProgramada="ngModel" name="fechaProgramada" [(ngModel)]="model.fechaProgramada" [showIcon]="true" [readonlyInput]="true" [minDate]="today" class="w-full" required />
                 <small class="text-surface-500">Fecha programada para el mantenimiento</small>
                 @if (fechaProgramada.invalid && (fechaProgramada.dirty || fechaProgramada.touched || form.submitted)) {
                     @if (fechaProgramada.errors?.['required']) {
@@ -28,7 +28,7 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Ejecución</label>
-                <p-datepicker name="fechaEjecucion" [(ngModel)]="model.fechaEjecucion" [showIcon]="true" class="w-full" />
+                <p-datepicker name="fechaEjecucion" [(ngModel)]="model.fechaEjecucion" [showIcon]="true" [readonlyInput]="true" class="w-full" />
                 <small class="text-surface-500">Fecha de ejecución real (opcional)</small>
             </div>
 
@@ -98,7 +98,7 @@
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Próxima Limpieza</label>
-                <p-datepicker name="proximaLimpieza" [(ngModel)]="model.proximaLimpieza" [showIcon]="true" class="w-full" />
+                <p-datepicker name="proximaLimpieza" [(ngModel)]="model.proximaLimpieza" [showIcon]="true" [readonlyInput]="true" [minDate]="today" class="w-full" />
                 <small class="text-surface-500">Fecha estimada próxima limpieza</small>
             </div>
 

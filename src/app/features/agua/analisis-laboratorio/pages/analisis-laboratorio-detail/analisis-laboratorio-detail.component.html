@@ -1,0 +1,168 @@
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">
+            Detalle de Análisis de Laboratorio
+        </div>
+        <p-button label="Volver" severity="secondary" icon="pi pi-arrow-left" (onClick)="volver()" />
+    </div>
+    @if (loading()) {
+        <div class="text-center p-4">Cargando...</div>
+    } @else if (item(); as data) {
+        <p-tabs value="general">
+            <p-tablist>
+                <p-tab value="general">Información General</p-tab>
+                <p-tab value="fisicoquimicos">Fisicoquímicos</p-tab>
+                <p-tab value="microbiologicos">Microbiológicos</p-tab>
+                <p-tab value="complementarios">Complementarios</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="general">
+                    <div class="grid grid-cols-12 gap-4 p-3">
+                        <div class="col-span-6">
+                            <label class="block text-muted-color font-medium mb-1">N° Certificado</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.numeroCertificado }}</span>
+                        </div>
+                        <div class="col-span-6">
+                            <label class="block text-muted-color font-medium mb-1">Laboratorio Certificado</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.laboratorioCertificado }}</span>
+                        </div>
+                        <div class="col-span-6">
+                            <label class="block text-muted-color font-medium mb-1">Fecha Muestreo</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.fechaMuestreo | date:'dd/MM/yyyy' }}</span>
+                        </div>
+                        <div class="col-span-6">
+                            <label class="block text-muted-color font-medium mb-1">Fecha Entrega Resultado</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ (data.fechaEntregaResultado | date:'dd/MM/yyyy') || '-' }}</span>
+                        </div>
+                        <div class="col-span-6">
+                            <label class="block text-muted-color font-medium mb-1">Responsable Muestra</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.responsableMuestra }}</span>
+                        </div>
+                        <div class="col-span-6">
+                            <label class="block text-muted-color font-medium mb-1">Punto Muestreo</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.puntoMuestreo }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">IRCA</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.irca }}%</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Nivel Riesgo</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.nivelRiesgo || '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Resultado</label>
+                            <p-tag [value]="data.resultado" [severity]="data.resultado === 'apto' ? 'success' : 'danger'" />
+                        </div>
+                        <div class="col-span-12">
+                            <label class="block text-muted-color font-medium mb-1">Concepto</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.concepto || '-' }}</span>
+                        </div>
+                    </div>
+                </p-tabpanel>
+                <p-tabpanel value="fisicoquimicos">
+                    <div class="grid grid-cols-12 gap-4 p-3">
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Cloro Residual (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.cloroResidual }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">pH</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.ph }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Turbiedad (UNT)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.turbiedad }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Color Aparente (UPC)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.colorAparente }}</span>
+                        </div>
+                    </div>
+                </p-tabpanel>
+                <p-tabpanel value="microbiologicos">
+                    <div class="grid grid-cols-12 gap-4 p-3">
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Coliformes Totales (+)</label>
+                            <i [class]="data.coliformesTotalesPresentes ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">E. Coli (+)</label>
+                            <i [class]="data.eColiPresente ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Mesófilos (UFC/mL)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.mesofilos }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Col. Totales (UFC)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.coliformesTotalesUfc ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">E. Coli (UFC)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.eColiUfc ?? '-' }}</span>
+                        </div>
+                    </div>
+                </p-tabpanel>
+                <p-tabpanel value="complementarios">
+                    <div class="grid grid-cols-12 gap-4 p-3">
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Conductividad (µS/cm)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.conductividad ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Dureza Total (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.durezaTotal ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Nitritos (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.nitritos ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Nitratos (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.nitratos ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Hierro Total (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.hierroTotal ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Cloruros (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.cloruros ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Sulfatos (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.sulfatos ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Fluoruros (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.fluoruros ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Calcio (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.calcio ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Magnesio (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.magnesio ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Alcalinidad (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.alcalinidad ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Carbono Org. Total (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.carbonoOrganicoTotal ?? '-' }}</span>
+                        </div>
+                        <div class="col-span-3">
+                            <label class="block text-muted-color font-medium mb-1">Tensoactivos (mg/L)</label>
+                            <span class="text-surface-900 dark:text-surface-0">{{ data.tensoactivos ?? '-' }}</span>
+                        </div>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    } @else {
+        <div class="text-center p-4 text-muted-color">Análisis de laboratorio no encontrado</div>
+    }
+</div>

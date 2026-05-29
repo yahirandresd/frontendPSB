@@ -27,6 +27,7 @@ export class InsumoQuimicoFormComponent implements OnInit, OnChanges, HasUnsaved
     unidadOptions = [{"label":"Litros","value":"L"},{"label":"Mililitros","value":"mL"},{"label":"Kilogramos","value":"kg"},{"label":"Gramos","value":"g"},{"label":"Unidades","value":"unidades"}];
     model: any = {};
     private initialModel = '';
+    today = new Date();
 
     ngOnInit() {
         if (this.insumoQuimico) {

@@ -31,6 +31,7 @@ export class TanqueAlmacenamientoFormComponent implements OnInit, OnChanges, Has
     tipoOptions = [{"label":"Tanque Plástico","value":"tanque_plastico"},{"label":"Tanque Metálico","value":"tanque_metalico"},{"label":"Tanque Concreto","value":"tanque_concreto"},{"label":"Otro","value":"otro"}];
     model: any = {};
     private initialModel = '';
+    today = new Date();
 
     ngOnInit() {
         this.fuenteAguaService.getAll().subscribe((items: any[]) => this.fuenteAguaItems = items);
