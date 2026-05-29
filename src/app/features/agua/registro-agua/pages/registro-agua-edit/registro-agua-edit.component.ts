@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { RegistroAguaFormComponent } from '../../components/registro-agua-form/registro-agua-form.component';
 import { RegistroAguaService } from '../../services/registro-agua.service';
 import { RegistroAgua } from '../../models/registro-agua.interface';
@@ -15,13 +16,18 @@ import { RegistroAgua } from '../../models/registro-agua.interface';
     styleUrls: ['./registro-agua-edit.component.scss'],
     providers: [MessageService],
 })
-export class RegistroAguaEditComponent implements OnInit {
+export class RegistroAguaEditComponent implements OnInit, HasUnsavedChanges {
+    @ViewChild(RegistroAguaFormComponent) form!: RegistroAguaFormComponent;
     private service = inject(RegistroAguaService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private messageService = inject(MessageService);
     registroAgua = signal<RegistroAgua | undefined>(undefined);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     ngOnInit() { this.cargar(); }
     async cargar() {
         const id = this.route.snapshot.paramMap.get('id');
@@ -40,5 +46,5 @@ export class RegistroAguaEditComponent implements OnInit {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/registro-agua']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/registro-agua']); }
 }

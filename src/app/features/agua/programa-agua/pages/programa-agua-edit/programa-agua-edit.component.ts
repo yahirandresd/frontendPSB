@@ -1,8 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { ProgramaAguaFormComponent } from '../../components/programa-agua-form/programa-agua-form.component';
 import { ProgramaAguaService } from '../../services/programa-agua.service';
 import { ProgramaAgua } from '../../models/programa-agua.interface';
@@ -16,7 +17,8 @@ import { UpdateProgramaAguaDto } from '../../models/update-programa-agua.dto';
     styleUrls: ['./programa-agua-edit.component.scss'],
     providers: [MessageService],
 })
-export class ProgramaAguaEditComponent implements OnInit {
+export class ProgramaAguaEditComponent implements OnInit, HasUnsavedChanges {
+    @ViewChild(ProgramaAguaFormComponent) form!: ProgramaAguaFormComponent;
     private service = inject(ProgramaAguaService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
@@ -24,6 +26,9 @@ export class ProgramaAguaEditComponent implements OnInit {
 
     programaAgua = signal<ProgramaAgua | undefined>(undefined);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
 
     ngOnInit() { this.cargarPrograma(); }
 
@@ -54,5 +59,5 @@ export class ProgramaAguaEditComponent implements OnInit {
         }
     }
 
-    onCancel() { this.router.navigate(['/programa-agua']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua']); }
 }

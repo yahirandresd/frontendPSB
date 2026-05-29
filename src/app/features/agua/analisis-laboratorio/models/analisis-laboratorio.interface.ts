@@ -23,6 +23,22 @@ export interface AnalisisLaboratorio {
     resultado?: string;
     linkDocumentoPdf?: string;
     fotoEvidencia?: string;
+    concepto?: string;
+    coliformesTotalesUfc?: number;
+    eColiUfc?: number;
+    conductividad?: number;
+    durezaTotal?: number;
+    nitritos?: number;
+    nitratos?: number;
+    hierroTotal?: number;
+    cloruros?: number;
+    sulfatos?: number;
+    fluoruros?: number;
+    calcio?: number;
+    magnesio?: number;
+    alcalinidad?: number;
+    carbonoOrganicoTotal?: number;
+    tensoactivos?: number;
 }
 export interface CreateAnalisisLaboratorioDto {
     fuenteAguaId: string;
@@ -41,6 +57,22 @@ export interface CreateAnalisisLaboratorioDto {
     mesofilos?: number;
     linkDocumentoPdf?: string;
     fotoEvidencia?: string;
+    concepto?: string;
+    coliformesTotalesUfc?: number;
+    eColiUfc?: number;
+    conductividad?: number;
+    durezaTotal?: number;
+    nitritos?: number;
+    nitratos?: number;
+    hierroTotal?: number;
+    cloruros?: number;
+    sulfatos?: number;
+    fluoruros?: number;
+    calcio?: number;
+    magnesio?: number;
+    alcalinidad?: number;
+    carbonoOrganicoTotal?: number;
+    tensoactivos?: number;
 }
 export interface UpdateAnalisisLaboratorioDto {
     numeroCertificado?: string;
@@ -58,4 +90,20 @@ export interface UpdateAnalisisLaboratorioDto {
     mesofilos?: number;
     linkDocumentoPdf?: string;
     fotoEvidencia?: string;
+    concepto?: string;
+    coliformesTotalesUfc?: number;
+    eColiUfc?: number;
+    conductividad?: number;
+    durezaTotal?: number;
+    nitritos?: number;
+    nitratos?: number;
+    hierroTotal?: number;
+    cloruros?: number;
+    sulfatos?: number;
+    fluoruros?: number;
+    calcio?: number;
+    magnesio?: number;
+    alcalinidad?: number;
+    carbonoOrganicoTotal?: number;
+    tensoactivos?: number;
 }

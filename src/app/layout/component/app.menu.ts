@@ -40,7 +40,7 @@ import { RouterModule } from '@angular/router';
             <li>
                 <a routerLink="/registro" routerLinkActive="active">
                     <i class="pi pi-book"></i>
-                    <span>Registro</span>
+                    <span>Registros Diarios</span>
                 </a>
             </li>
 
@@ -70,9 +70,20 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
-                <a routerLink="/registros" routerLinkActive="active">
-                    <i class="pi pi-folder"></i>
-                    <span>Registros diarios</span>
+                <a routerLink="/programa-residuos" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }">
+                    <i class="pi pi-box"></i>
+                    <span>Programa Residuos</span>
+                </a>
+                <a routerLink="/limpieza/programas" routerLinkActive="active">
+                    <i class="pi pi-sparkles"></i>
+                    <span>Programas de Limpieza</span>
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/limpieza/equipos" routerLinkActive="active">
+                    <i class="pi pi-wrench"></i>
+                    <span>Equipos y Áreas</span>
                 </a>
             </li>
 

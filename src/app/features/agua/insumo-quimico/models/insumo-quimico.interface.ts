@@ -6,6 +6,12 @@ export interface InsumoQuimico {
     lote?: string;
     fechaVencimiento?: string;
     concentracion?: number;
+    fabricante?: string;
+    uso?: string;
+    stock?: number;
+    unidad?: string;
+    fichaTecnica?: string;
+    condicionesAlmacenamiento?: string;
 }
 export interface CreateInsumoQuimicoDto {
     mantenimientoId: string;
@@ -14,6 +20,12 @@ export interface CreateInsumoQuimicoDto {
     lote?: string;
     fechaVencimiento?: string;
     concentracion?: number;
+    fabricante?: string;
+    uso?: string;
+    stock?: number;
+    unidad?: string;
+    fichaTecnica?: string;
+    condicionesAlmacenamiento?: string;
 }
 export interface UpdateInsumoQuimicoDto {
     nombre?: string;
@@ -21,4 +33,10 @@ export interface UpdateInsumoQuimicoDto {
     lote?: string;
     fechaVencimiento?: string;
     concentracion?: number;
+    fabricante?: string;
+    uso?: string;
+    stock?: number;
+    unidad?: string;
+    fichaTecnica?: string;
+    condicionesAlmacenamiento?: string;
 }

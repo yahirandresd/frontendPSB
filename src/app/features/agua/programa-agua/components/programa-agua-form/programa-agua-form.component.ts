@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
@@ -17,7 +18,7 @@ interface ProgramaAguaFormModel {
     templateUrl: './programa-agua-form.component.html',
     styleUrls: ['./programa-agua-form.component.scss'],
 })
-export class ProgramaAguaFormComponent implements OnInit {
+export class ProgramaAguaFormComponent implements OnInit, OnChanges, HasUnsavedChanges {
     @Input() programaAgua?: ProgramaAgua;
     @Input() saving = false;
 
@@ -29,8 +30,7 @@ export class ProgramaAguaFormComponent implements OnInit {
         alcance: '',
         procedimientoGeneral: '',
     };
-
-    submitted = false;
+    private initialModel = '';
 
     ngOnInit() {
         if (this.programaAgua) {
@@ -40,13 +40,28 @@ export class ProgramaAguaFormComponent implements OnInit {
                 procedimientoGeneral: this.programaAgua.procedimientoGeneral,
             };
         }
+        this.initialModel = JSON.stringify(this.model);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['programaAgua'] && this.programaAgua) {
+            this.model = {
+                objetivo: this.programaAgua.objetivo,
+                alcance: this.programaAgua.alcance,
+                procedimientoGeneral: this.programaAgua.procedimientoGeneral,
+            };
+        }
+        this.initialModel = JSON.stringify(this.model);
     }
 
     onSubmit() {
-        this.submitted = true;
         if (!this.model.objetivo || !this.model.alcance || !this.model.procedimientoGeneral) return;
         this.formSubmit.emit(this.model);
     }
 
-    onCancel() { this.cancel.emit(); }
+    hasUnsavedChanges(): boolean { return JSON.stringify(this.model) !== this.initialModel; }
+
+    markAsPristine(): void { this.initialModel = JSON.stringify(this.model); }
+
+    onCancel() { this.markAsPristine(); this.cancel.emit(); }
 }

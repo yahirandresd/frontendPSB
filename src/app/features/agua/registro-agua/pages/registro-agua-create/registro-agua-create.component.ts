@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { RegistroAguaFormComponent } from '../../components/registro-agua-form/registro-agua-form.component';
 import { RegistroAguaService } from '../../services/registro-agua.service';
 
@@ -14,11 +15,16 @@ import { RegistroAguaService } from '../../services/registro-agua.service';
     styleUrls: ['./registro-agua-create.component.scss'],
     providers: [MessageService],
 })
-export class RegistroAguaCreateComponent {
+export class RegistroAguaCreateComponent implements HasUnsavedChanges {
+    @ViewChild(RegistroAguaFormComponent) form!: RegistroAguaFormComponent;
     private service = inject(RegistroAguaService);
     private router = inject(Router);
     private messageService = inject(MessageService);
     saving = signal(false);
+
+    hasUnsavedChanges(): boolean { return this.form.hasUnsavedChanges(); }
+    markAsPristine(): void { this.form.markAsPristine(); }
+
     async onSubmit(data: any) {
         this.saving.set(true);
         try {
@@ -28,5 +34,5 @@ export class RegistroAguaCreateComponent {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear' }); }
         finally { this.saving.set(false); }
     }
-    onCancel() { this.router.navigate(['/programa-agua/registro-agua']); }
+    onCancel() { this.markAsPristine(); this.router.navigate(['/programa-agua/registro-agua']); }
 }

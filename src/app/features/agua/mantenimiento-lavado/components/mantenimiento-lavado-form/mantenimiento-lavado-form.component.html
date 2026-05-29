@@ -2,26 +2,45 @@
     <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-6">
         {{ mantenimientoLavado ? 'Editar' : 'Nuevo' }} Mantenimiento Lavado
     </div>
-    <form #form="ngForm" (ngSubmit)="onSubmit()">
+    <form #form="ngForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Fuente Agua</label>
-                <p-select name="fuenteAguaId" [(ngModel)]="model.fuenteAguaId" [options]="fuenteAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <p-select #fuenteAguaId="ngModel" name="fuenteAguaId" [(ngModel)]="model.fuenteAguaId" [options]="fuenteAguaItems" optionLabel="nombre" optionValue="id" placeholder="Seleccione" class="w-full" required />
+                <small class="text-surface-500">Seleccione la fuente de agua</small>
+                @if (fuenteAguaId.invalid && (fuenteAguaId.dirty || fuenteAguaId.touched || form.submitted)) {
+                    @if (fuenteAguaId.errors?.['required']) {
+                        <small class="text-red-500">La fuente de agua es requerida</small>
+                    }
+                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Programada</label>
-                <p-datepicker name="fechaProgramada" [(ngModel)]="model.fechaProgramada" [showIcon]="true" class="w-full" required />
+                <p-datepicker #fechaProgramada="ngModel" name="fechaProgramada" [(ngModel)]="model.fechaProgramada" [showIcon]="true" class="w-full" required />
+                <small class="text-surface-500">Fecha programada para el mantenimiento</small>
+                @if (fechaProgramada.invalid && (fechaProgramada.dirty || fechaProgramada.touched || form.submitted)) {
+                    @if (fechaProgramada.errors?.['required']) {
+                        <small class="text-red-500">La fecha programada es requerida</small>
+                    }
+                }
             </div>
 
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Fecha Ejecución</label>
                 <p-datepicker name="fechaEjecucion" [(ngModel)]="model.fechaEjecucion" [showIcon]="true" class="w-full" />
+                <small class="text-surface-500">Fecha de ejecución real (opcional)</small>
             </div>
 
             <div class="col-span-6">
                 <label class="block font-medium mb-1">Método Limpieza</label>
-                <input pInputText name="metodoLimpieza" [(ngModel)]="model.metodoLimpieza" class="w-full" required />
+                <input #metodoLimpieza="ngModel" pInputText name="metodoLimpieza" [(ngModel)]="model.metodoLimpieza" class="w-full" required />
+                <small class="text-surface-500">Describa el método utilizado</small>
+                @if (metodoLimpieza.invalid && (metodoLimpieza.dirty || metodoLimpieza.touched || form.submitted)) {
+                    @if (metodoLimpieza.errors?.['required']) {
+                        <small class="text-red-500">El método de limpieza es requerido</small>
+                    }
+                }
             </div>
 
             <div class="col-span-12">
@@ -32,6 +51,60 @@
             <div class="col-span-3">
                 <label class="block font-medium mb-1">Estado</label>
                 <p-select name="estado" [(ngModel)]="model.estado" [options]="estadoOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Estado actual del mantenimiento</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Tipo Limpieza</label>
+                <p-select name="tipoLimpieza" [(ngModel)]="model.tipoLimpieza" [options]="tipoLimpiezaOptions" optionLabel="label" optionValue="value" placeholder="Seleccione" class="w-full" />
+                <small class="text-surface-500">Tipo de limpieza realizada</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Producto Utilizado</label>
+                <input pInputText name="productoUtilizado" [(ngModel)]="model.productoUtilizado" class="w-full" />
+                <small class="text-surface-500">Nombre del producto químico utilizado</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Concentración (%)</label>
+                <p-inputNumber name="concentracionProducto" [(ngModel)]="model.concentracionProducto"  [step]="0.1" class="w-full" />
+                <small class="text-surface-500">Concentración del producto</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Tiempo Contacto (min)</label>
+                <p-inputNumber name="tiempoContacto" [(ngModel)]="model.tiempoContacto" class="w-full" />
+                <small class="text-surface-500">Tiempo de contacto en minutos</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Volumen Agua (L)</label>
+                <p-inputNumber name="volumenAgua" [(ngModel)]="model.volumenAgua" class="w-full" />
+                <small class="text-surface-500">Volumen de agua utilizado</small>
+            </div>
+
+            <div class="col-span-12">
+                <label class="block font-medium mb-1">Proceso</label>
+                <textarea pTextarea name="proceso" [(ngModel)]="model.proceso" rows="2" class="w-full"></textarea>
+                <small class="text-surface-500">Descripción del proceso realizado</small>
+            </div>
+
+            <div class="col-span-6">
+                <label class="block font-medium mb-1">Responsable</label>
+                <input pInputText name="responsable" [(ngModel)]="model.responsable" class="w-full" />
+                <small class="text-surface-500">Nombre del responsable</small>
+            </div>
+
+            <div class="col-span-3">
+                <label class="block font-medium mb-1">Próxima Limpieza</label>
+                <p-datepicker name="proximaLimpieza" [(ngModel)]="model.proximaLimpieza" [showIcon]="true" class="w-full" />
+                <small class="text-surface-500">Fecha estimada próxima limpieza</small>
+            </div>
+
+            <div class="col-span-3 flex items-center gap-2 mt-6">
+                <p-checkbox name="cumple" [(ngModel)]="model.cumple" [binary]="true" inputId="cumple" />
+                <label for="cumple">Cumple Norma</label>
             </div>
         </div>
 
@@ -55,7 +128,7 @@
         </div>
 
         <div class="flex justify-end gap-2 mt-4">
-            <p-button label="Cancelar" severity="secondary" (onClick)="onCancel()" />
+            <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
             <p-button type="submit" label="Guardar" [loading]="saving" />
         </div>
     </form>
