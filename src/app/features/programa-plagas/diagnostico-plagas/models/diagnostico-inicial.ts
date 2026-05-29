@@ -1,11 +1,10 @@
 
-
 export interface DiagnosticoInicial {
   id: string;
-  programaId: string;
+  programaPlagasId: string;  // ← corregido (era programaId)
   fecha: Date;
-  areasEvaluadas: string[];
-  plagasIdentificadas: string[];
+  areasEvaluadas: string;    // ← string, no array
+  plagasIdentificadas: string; // ← string, no array
   nivelRiesgo: string;
   observaciones: string;
 }

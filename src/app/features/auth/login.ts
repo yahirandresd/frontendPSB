@@ -1,43 +1,53 @@
-
-import { RouterModule, Router } from '@angular/router';
-import { FormsModule,  } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-
-import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { MessageModule } from 'primeng/message';
-
-
 import { AuthService } from './services/auth.service';
+
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, InputTextModule, PasswordModule, IconFieldModule, InputIconModule, MessageModule, AppFloatingConfigurator, ReactiveFormsModule, CommonModule],
+    encapsulation: ViewEncapsulation.None,
+    imports: [ReactiveFormsModule],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     private fb = inject(FormBuilder);
     private router = inject(Router);
     private authService = inject(AuthService);
 
     loginForm: FormGroup = this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
+        email:    ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
-    loading = signal(false);
+    loading      = signal(false);
     errorMessage = signal('');
+    showPassword = signal(false);
+    isDark       = signal(false);
 
-    async onSubmit() {
+    ngOnInit(): void {
+        try {
+            const stored = localStorage.getItem('sanify-theme');
+            if (stored) {
+                this.isDark.set(stored === 'dark');
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                this.isDark.set(true);
+            }
+        } catch { /* SSR guard */ }
+    }
+
+    toggleTheme(): void {
+        const next = !this.isDark();
+        this.isDark.set(next);
+        try { localStorage.setItem('sanify-theme', next ? 'dark' : 'light'); } catch {}
+    }
+
+    togglePassword(): void {
+        this.showPassword.update(v => !v);
+    }
+
+    async onSubmit(): Promise<void> {
         if (this.loginForm.invalid) {
             this.loginForm.markAllAsTouched();
             return;
@@ -52,7 +62,7 @@ export class LoginComponent {
         this.loading.set(false);
 
         if (error) {
-            this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
+            this.errorMessage.set('Credenciales incorrectas. Verifica tu correo y contraseña.');
             return;
         }
 

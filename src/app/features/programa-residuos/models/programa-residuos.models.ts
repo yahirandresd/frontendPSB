@@ -128,7 +128,9 @@ export interface Recoleccion {
     responsable: string;
     cantidad_recolectada: number;
     observaciones: string;
+    tipoResiduoId?: string;
     registroResiduo?: RegistroResiduo;
+    tipoResiduo?: TipoResiduo;
     disposicionFinal?: DisposicionFinal;
 }
 
@@ -169,4 +171,17 @@ export interface CreateProgramaResiduoDto {
 }
 
 export type UpdateProgramaResiduoDto = Partial<CreateProgramaResiduoDto>;
+
+export interface CreateRecoleccionDto {
+    fecha: string;
+    responsable: string;
+    cantidad_recolectada: number;
+    observaciones?: string;
+    registroResiduoId: string;
+    tipoResiduoId?: string;
+}
+
+export type UpdateRecoleccionDto = Partial<
+    Pick<Recoleccion, 'fecha' | 'responsable' | 'cantidad_recolectada' | 'observaciones'>
+>;
 

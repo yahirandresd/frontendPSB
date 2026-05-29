@@ -1,12 +1,12 @@
-export type EstadoTrampa = 'activa' | 'inactiva' | 'mantenimiento';
-
 export interface Trampa {
   id: string;
+  areaPlagaId: string;
   codigo: string;
-  tipo: string;          // 'cebo' | 'insectocutor' | 'trampa-adhesiva' | 'jaula'
-  areaId: string;
+  tipo: string;
   ubicacion: string;
-  estado: EstadoTrampa;
-  fechaInstalacion: Date;
-  ultimaRevision: Date;
+  estado: string;
+  fecha_instalacion: Date;
+  fecha_revision: Date;
+  accionesCorrectivas?: string[];
 }
+ 

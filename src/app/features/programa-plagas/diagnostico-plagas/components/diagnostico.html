@@ -1,69 +1,40 @@
 <div class="flex flex-col gap-4">
-
-    <!-- Fecha -->
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Fecha <span class="text-red-500">*</span></label>
-        <input pInputText
-               type="date"
-               [(ngModel)]="form.fecha"
-               class="w-full" />
+        <input pInputText type="date" [(ngModel)]="form.fecha" class="w-full" />
     </div>
-
-    <!-- Nivel de Riesgo -->
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Nivel de Riesgo <span class="text-red-500">*</span></label>
-        <p-select
-            [(ngModel)]="form.nivelRiesgo"
-            [options]="['bajo', 'medio', 'alto']"
-            placeholder="Seleccione el nivel de riesgo"
-            styleClass="w-full" />
+        <p-select [(ngModel)]="form.nivelRiesgo"
+                  [options]="nivelesRiesgo"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Seleccione el nivel de riesgo"
+                  styleClass="w-full" />
     </div>
-
-    <!-- Áreas Evaluadas -->
-    <div class="flex flex-col gap-2">
+ 
+    <!-- String simple, no array -->
+    <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Áreas Evaluadas</label>
-        <div class="flex gap-2">
-            <input pInputText
-                   [(ngModel)]="nuevaArea"
-                   placeholder="Agregar área..."
-                   class="flex-1"
-                   (keyup.enter)="agregarArea()" />
-            <p-button icon="pi pi-plus" severity="secondary" [outlined]="true"
-                      (onClick)="agregarArea()" />
-        </div>
-        @if (form.areasEvaluadas && form.areasEvaluadas.length > 0) {
-            <div class="flex flex-wrap gap-2">
-                @for (area of form.areasEvaluadas; track area) {
-                    <p-chip [label]="area" [removable]="true"
-                            (onRemove)="quitarArea(area)" />
-                }
-            </div>
-        }
+        <textarea pTextarea
+                  [(ngModel)]="form.areasEvaluadas"
+                  placeholder="Ej: Bodega, Cocina, Baños..."
+                  rows="2"
+                  class="w-full"></textarea>
     </div>
-
-    <!-- Plagas Identificadas -->
-    <div class="flex flex-col gap-2">
+ 
+    <!-- String simple, no array -->
+    <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Plagas Identificadas</label>
-        <div class="flex gap-2">
-            <input pInputText
-                   [(ngModel)]="nuevaPlaga"
-                   placeholder="Agregar plaga..."
-                   class="flex-1"
-                   (keyup.enter)="agregarPlaga()" />
-            <p-button icon="pi pi-plus" severity="secondary" [outlined]="true"
-                      (onClick)="agregarPlaga()" />
-        </div>
-        @if (form.plagasIdentificadas && form.plagasIdentificadas.length > 0) {
-            <div class="flex flex-wrap gap-2">
-                @for (plaga of form.plagasIdentificadas; track plaga) {
-                    <p-chip [label]="plaga" [removable]="true"
-                            (onRemove)="quitarPlaga(plaga)" />
-                }
-            </div>
-        }
+        <textarea pTextarea
+                  [(ngModel)]="form.plagasIdentificadas"
+                  placeholder="Ej: Cucarachas, Roedores..."
+                  rows="2"
+                  class="w-full"></textarea>
     </div>
-
-    <!-- Observaciones -->
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Observaciones</label>
         <textarea pTextarea
@@ -72,13 +43,13 @@
                   rows="3"
                   class="w-full"></textarea>
     </div>
-
-    <!-- Botones -->
+ 
     <div class="flex justify-end gap-2 mt-2">
         <p-button label="Cancelar" severity="secondary" [outlined]="true"
                   (onClick)="onCancelar()" />
         <p-button label="Guardar" icon="pi pi-check" [loading]="guardando"
                   (onClick)="onGuardar()" />
     </div>
-
+ 
 </div>
+ 

@@ -1,5 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -12,33 +14,65 @@ import { firstValueFrom } from 'rxjs';
 import { AccionesCorrectivasPlagasService } from '../services/acciones-correctivas-plagas.service';
 import { AccionCorrectivaPlagas } from '../models/accion-correctiva-plagas';
 import { AccionCorrectivaPlagasComponent } from '../components/acciones-correctivas-plagas.component';
+import { environment } from '@/environments/environment';
 
 @Component({
     selector: 'app-accion-correctiva-plagas-page',
     standalone: true,
     imports: [CommonModule, TableModule, ButtonModule, DialogModule,
-              TagModule, TooltipModule, ConfirmDialogModule, ToastModule, AccionCorrectivaPlagasComponent],
+        TagModule, TooltipModule, ConfirmDialogModule, ToastModule,
+        AccionCorrectivaPlagasComponent],
     providers: [ConfirmationService, MessageService],
-    templateUrl: './accion-correctiva-plagas-page.component.html'
+    templateUrl: './acciones-correctivas-plagas.page.html'
 })
 export class AccionCorrectivaPlagasPageComponent implements OnInit {
+    constructor() { this.cdr = inject(ChangeDetectorRef); }
+
     private service = inject(AccionesCorrectivasPlagasService);
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
+    private route = inject(ActivatedRoute);
+    private http = inject(HttpClient);
+    private cdr: ChangeDetectorRef;
 
     acciones: AccionCorrectivaPlagas[] = [];
     accionSeleccionada: AccionCorrectivaPlagas | null = null;
+    hallazgoPlagaId = '';
+    plaguicidas: { label: string; value: string }[] = [];
     cargando = false;
     mostrarFormulario = false;
     mostrarDetalle = false;
 
-    ngOnInit(): void { this.cargarAcciones(); }
+    ngOnInit(): void {
+        // Lee :hallazgoId de la ruta actual o del padre
+        this.hallazgoPlagaId =
+            this.route.snapshot.params['hallazgoId'] ??
+            this.route.snapshot.parent?.params['hallazgoId'] ?? '';
+        console.log('hallazgoPlagaId en page:', this.hallazgoPlagaId); // ← agregar
+        console.log('URL actual:', this.route.snapshot.url);
+        console.log('params:', this.route.snapshot.params);
+        this.cargarPlaguicidas();
+        this.cargarAcciones();
+    }
+
+    cargarPlaguicidas(): void {
+        this.http
+            .get<{ id: string; nombreComercial: string }[]>(`${environment.apiUrl}/plaguicida`)
+            .subscribe({
+                next: data => {
+                    this.plaguicidas = data.map(p => ({ label: p.nombreComercial, value: p.id }));
+                }
+            });
+    }
 
     cargarAcciones(): void {
         this.cargando = true;
-        this.service.listar().subscribe({
-            next: (data) => { this.acciones = data; this.cargando = false; },
-            error: () => { this.cargando = false; this.mostrarError('Error al cargar acciones'); }
+        const obs$ = this.hallazgoPlagaId
+            ? this.service.listarPorHallazgo(this.hallazgoPlagaId)
+            : this.service.listar();
+        obs$.subscribe({
+            next: data => { this.acciones = [...data]; this.cargando = false; this.cdr.detectChanges(); },
+            error: () => { this.cargando = false; this.cdr.detectChanges(); this.mostrarError('Error al cargar acciones'); }
         });
     }
 

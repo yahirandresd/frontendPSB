@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Trampa } from '../models/trampa';
 import { environment } from '@/environments/environment';
 
-const BASE = environment.apiUrl + '/trampas';
+const BASE = environment.apiUrl + '/trampa';
 
 @Injectable({
     providedIn: 'root'

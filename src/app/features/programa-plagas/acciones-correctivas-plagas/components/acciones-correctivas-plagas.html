@@ -30,6 +30,15 @@
         <textarea pTextarea [(ngModel)]="form.descripcion" rows="4"
                   class="w-full" placeholder="Describa la acción correctiva..."></textarea>
     </div>
+    <div class="flex flex-col gap-1">
+    <label class="font-medium text-sm">Plaguicida <span class="text-red-500">*</span></label>
+    <p-select [(ngModel)]="form.plaguicidaId"
+              [options]="plaguicidas"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Seleccione el plaguicida"
+              styleClass="w-full" />
+</div>
 
     <div class="flex justify-end gap-2 mt-2">
         <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />

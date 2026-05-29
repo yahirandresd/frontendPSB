@@ -3,8 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cronograma } from '../models/cronograma';
 import { environment } from '@/environments/environment.prod';
-const BASE = environment.apiUrl + '/cronograma'; // Ajusta la URL base según tu configuración de API
-
+const BASE = environment.apiUrl + '/cronograma-plagas'; 
 @Injectable({
     providedIn: 'root'
 })

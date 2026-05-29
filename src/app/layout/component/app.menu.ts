@@ -56,24 +56,9 @@ import { RouterModule } from '@angular/router';
                     <i class="pi pi-box"></i>
                     <span>Programa Residuos</span>
                 </a>
-                <a routerLink="/limpieza/programas" routerLinkActive="active">
-                    <i class="pi pi-sparkles"></i>
-                    <span>Programas de Limpieza</span>
-                </a>
             </li>
 
             <li>
-                <a routerLink="/limpieza/equipos" routerLinkActive="active">
-                    <i class="pi pi-wrench"></i>
-                    <span>Equipos y Áreas</span>
-                </a>
-            </li>
-
-            <li>
-                <a routerLink="/programa-residuos" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }">
-                    <i class="pi pi-box"></i>
-                    <span>Programa Residuos</span>
-                </a>
                 <a routerLink="/limpieza/programas" routerLinkActive="active">
                     <i class="pi pi-sparkles"></i>
                     <span>Programas de Limpieza</span>
