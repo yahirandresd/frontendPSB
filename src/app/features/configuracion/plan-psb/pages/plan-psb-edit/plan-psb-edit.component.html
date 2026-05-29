@@ -1,0 +1,4 @@
+@if (plan()) {
+    <app-plan-psb-form [plan]="plan()" [saving]="saving()" (formSubmit)="onSubmit($event)" (cancel)="onCancel()" />
+}
+<p-toast />

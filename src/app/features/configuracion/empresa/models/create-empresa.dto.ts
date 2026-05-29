@@ -1,9 +1,9 @@
 export interface CreateEmpresaDto {
     nombre: string;
     nit: string;
-    tipo_negocio: string;
+    tipoNegocio: string;
     direccion: string;
     representante: string;
-    registro_sanitario_funcionamiento?: string;
-    resolucion_invima?: string;
+    registroSanitarioFuncionamiento?: string;
+    resolucionInvima?: string;
 }
