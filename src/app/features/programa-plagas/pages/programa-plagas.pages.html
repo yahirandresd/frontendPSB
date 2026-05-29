@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-
+ 
     <!-- Header del programa -->
     <div class="card">
         @if (cargando) {
@@ -19,7 +19,7 @@
                               severity="secondary" [outlined]="true"
                               (onClick)="mostrarFormulario = true" />
                 </div>
-
+ 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm mt-2">
                     <div class="flex flex-col gap-1">
                         <span class="text-muted-color font-medium">Alcance</span>
@@ -27,13 +27,13 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <span class="text-muted-color font-medium">Procedimiento General</span>
-                        <span>{{ programa.procedimientoGeneral || '—' }}</span>
+                        <span>{{ programa.procGeneral || '—' }}</span>
                     </div>
                 </div>
             </div>
         }
     </div>
-
+ 
     <!-- Estadísticas -->
     <div>
         <h6 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-3">
@@ -59,7 +59,7 @@
             }
         </div>
     </div>
-
+ 
     <!-- Accesos directos a secciones -->
     <div>
         <h6 class="text-base font-semibold text-surface-700 dark:text-surface-200 mb-3">
@@ -87,11 +87,14 @@
             }
         </div>
     </div>
-
+ 
 </div>
-
+ 
+<!-- ← Router outlet para rutas hijas: registro-plagas, hallazgos, etc. -->
+<router-outlet />
+ 
 <p-toast />
-
+ 
 <!-- Dialog editar programa -->
 <p-dialog
     [(visible)]="mostrarFormulario"

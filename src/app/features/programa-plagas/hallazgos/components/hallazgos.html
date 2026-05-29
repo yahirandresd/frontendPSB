@@ -1,30 +1,52 @@
 <div class="flex flex-col gap-4">
-
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Fecha <span class="text-red-500">*</span></label>
         <input pInputText type="date" [(ngModel)]="form.fecha" class="w-full" />
     </div>
-
+ 
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Tipo de Plaga <span class="text-red-500">*</span></label>
+        <p-select [(ngModel)]="form.tipoPlagaId"
+                  [options]="tiposPlaga"
+                  optionLabel="label"
+                  optionValue="value"
+                  placeholder="Seleccione el tipo de plaga"
+                  styleClass="w-full" />
+    </div>
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Severidad <span class="text-red-500">*</span></label>
         <p-select [(ngModel)]="form.severidad" [options]="severidades"
                   optionLabel="label" optionValue="value"
                   placeholder="Seleccione la severidad" styleClass="w-full" />
     </div>
-
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Estado</label>
         <p-select [(ngModel)]="form.estado" [options]="estados"
                   optionLabel="label" optionValue="value"
                   placeholder="Seleccione el estado" styleClass="w-full" />
     </div>
-
+ 
     <div class="flex flex-col gap-1">
         <label class="font-medium text-sm">Descripción <span class="text-red-500">*</span></label>
-        <textarea pTextarea [(ngModel)]="form.descripcion" rows="4"
+        <textarea pTextarea [(ngModel)]="form.descripcion" rows="3"
                   class="w-full" placeholder="Describa el hallazgo encontrado..."></textarea>
     </div>
-
+ 
+    <!-- accionesCorrectivas es string[] — se edita como texto separado por líneas
+         y se convierte a array en el componente antes de enviar -->
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">
+            Acciones Correctivas <span class="text-red-500">*</span>
+            <span class="text-xs text-muted-color ml-1">(una por línea)</span>
+        </label>
+        <textarea pTextarea [(ngModel)]="accionesCorrectivasTexto" rows="4"
+                  class="w-full"
+                  placeholder="Escriba cada acción correctiva en una línea separada..."></textarea>
+    </div>
+ 
     <div class="flex justify-end gap-2 mt-2">
         <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="onCancelar()" />
         <p-button label="Guardar" icon="pi pi-check" [loading]="guardando" (onClick)="onGuardar()" />

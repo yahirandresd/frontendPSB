@@ -1,8 +1,9 @@
 export interface Evidencia {
   id: string;
-  accionCorrectivaId: string;
-  tipoArchivo: 'imagen' | 'pdf' | 'video';
+  registroPlagasId: string;
+  tipoArchivo: string;
   urlArchivo: string;
   descripcion: string;
-  fechaCarga: Date;
+  fecha_carga: Date;  // ← snake_case, así lo espera el backend
 }
+ 

@@ -1,10 +1,11 @@
 export interface EmpresaFumigadora {
   id: string;
-  programaPlagaId: string;
+  programaPlagasId: string;  // ← corregido (era programaPlagaId)
   nit: string;
-  nombreEmpresa: string;
-  numCertSanitario: string;
-  fechaVencCert: Date;
-  registroSDS: string;
+  nombre_empresa: string;
+  numCerSanitario: string;   // ← corregido (era numCertSanitario)
+  fechaVencCer: Date;        // ← corregido (era fechaVencCert)
+  registroSds: string;       // ← corregido (era registroSDS)
   telefonoContacto: string;
 }
+ 
