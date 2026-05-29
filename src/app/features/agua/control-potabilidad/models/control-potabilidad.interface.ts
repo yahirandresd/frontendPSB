@@ -1,6 +1,7 @@
 export interface ControlPotabilidad {
     id: string;
     fuenteAguaId: string;
+    fuenteAgua?: { id: string; nombre: string };
     registroAguaId?: string;
     fechaHora: string;
     cloroResidual: number;

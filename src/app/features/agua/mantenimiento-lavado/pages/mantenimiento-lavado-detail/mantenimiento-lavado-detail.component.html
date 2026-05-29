@@ -1,0 +1,72 @@
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">
+            Detalle de Mantenimiento y Lavado
+        </div>
+        <p-button label="Volver" severity="secondary" icon="pi pi-arrow-left" (onClick)="volver()" />
+    </div>
+    @if (loading()) {
+        <div class="text-center p-4">Cargando...</div>
+    } @else if (item(); as data) {
+        <div class="grid grid-cols-12 gap-4 p-3 surface-ground border-round">
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Fecha Programada</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.fechaProgramada | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Fecha Ejecución</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ (data.fechaEjecucion | date:'dd/MM/yyyy') || '-' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Método Limpieza</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.metodoLimpieza }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Tipo Limpieza</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.tipoLimpieza || '-' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Estado</label>
+                <p-tag [value]="data.estado" />
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Cumple Norma</label>
+                <i [class]="data.cumple ? 'pi pi-check text-green-500' : 'pi pi-times text-red-500'"></i>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Producto Utilizado</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.productoUtilizado || '-' }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Concentración (%)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.concentracionProducto ?? '-' }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Tiempo Contacto (min)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.tiempoContacto ?? '-' }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Volumen Agua (L)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.volumenAgua ?? '-' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Responsable</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.responsable || '-' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Próxima Limpieza</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ (data.proximaLimpieza | date:'dd/MM/yyyy') || '-' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Proceso</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.proceso || '-' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Observaciones</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.observaciones || '-' }}</span>
+            </div>
+        </div>
+    } @else {
+        <div class="text-center p-4 text-muted-color">Mantenimiento no encontrado</div>
+    }
+</div>

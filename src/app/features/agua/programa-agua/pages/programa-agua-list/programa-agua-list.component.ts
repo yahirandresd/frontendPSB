@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProgramaAguaService } from '../../services/programa-agua.service';
 import { ProgramaAgua } from '../../models/programa-agua.interface';
@@ -22,7 +23,7 @@ interface AguaModule {
 @Component({
     selector: 'app-programa-agua-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TableModule, ButtonModule, CardModule, ConfirmDialogModule, ToastModule, AccordionModule],
+    imports: [CommonModule, RouterModule, TableModule, ButtonModule, CardModule, ConfirmDialogModule, ToastModule, AccordionModule, TooltipModule],
     templateUrl: './programa-agua-list.component.html',
     styleUrls: ['./programa-agua-list.component.scss'],
     providers: [ConfirmationService, MessageService],

@@ -1,0 +1,64 @@
+<div class="card">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">
+            Detalle de Control de Potabilidad
+        </div>
+        <p-button label="Volver" severity="secondary" icon="pi pi-arrow-left" (onClick)="volver()" />
+    </div>
+    @if (loading()) {
+        <div class="text-center p-4">Cargando...</div>
+    } @else if (item(); as data) {
+        <div class="grid grid-cols-12 gap-4 p-3 surface-ground border-round">
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Fecha y Hora</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.fechaHora | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Punto de Captación</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.puntoCaptacion }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Cloro Residual (mg/L)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.cloroResidual }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">pH</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.ph }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Turbiedad (UNT)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.turbiedad }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Color Aparente (UPC)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.colorAparente }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Temperatura (°C)</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.temperatura ?? '-' }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Olor</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.olor || '-' }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Sabor</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.sabor || '-' }}</span>
+            </div>
+            <div class="col-span-3">
+                <label class="block text-muted-color font-medium mb-1">Cumple Norma</label>
+                <p-tag [value]="data.cumpleNorma ? 'Sí' : 'No'" [severity]="data.cumpleNorma ? 'success' : 'danger'" />
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Responsable de la Muestra</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.responsableMuestra }}</span>
+            </div>
+            <div class="col-span-6">
+                <label class="block text-muted-color font-medium mb-1">Observaciones</label>
+                <span class="text-surface-900 dark:text-surface-0">{{ data.observaciones || '-' }}</span>
+            </div>
+        </div>
+    } @else {
+        <div class="text-center p-4 text-muted-color">Control de potabilidad no encontrado</div>
+    }
+</div>
