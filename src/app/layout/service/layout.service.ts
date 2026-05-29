@@ -52,18 +52,9 @@ export class LayoutService {
 
     transitionComplete = signal<boolean>(false);
 
-    private initialized = false;
-
     constructor() {
         effect(() => {
-            const config = this.layoutConfig();
-
-            if (!this.initialized || !config) {
-                this.initialized = true;
-                return;
-            }
-
-            this.handleDarkModeTransition(config);
+            this.handleDarkModeTransition(this.layoutConfig());
         });
     }
 

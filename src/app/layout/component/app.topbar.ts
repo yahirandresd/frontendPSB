@@ -4,12 +4,13 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
+import { AppUserDrop } from './app.user-drop.component';
 import { LayoutService } from '@/app/layout/service/layout.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, AppUserDrop],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -106,7 +107,7 @@ import { LayoutService } from '@/app/layout/service/layout.service';
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
-                <div class="relative">
+                <!-- <div class="relative">
                     <button
                         class="layout-topbar-action layout-topbar-action-highlight"
                         pStyleClass="@next"
@@ -119,7 +120,7 @@ import { LayoutService } from '@/app/layout/service/layout.service';
                         <i class="pi pi-palette"></i>
                     </button>
                     <app-configurator />
-                </div>
+                </div> -->
             </div>
 
             <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
@@ -136,10 +137,7 @@ import { LayoutService } from '@/app/layout/service/layout.service';
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-user"></i>
-                        <span>Profile</span>
-                    </button>
+                    <app-user-drop />
                 </div>
             </div>
         </div>
