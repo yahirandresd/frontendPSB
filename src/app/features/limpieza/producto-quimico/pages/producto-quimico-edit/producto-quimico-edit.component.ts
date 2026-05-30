@@ -1,6 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';
@@ -12,7 +14,7 @@ import { UpdateProductoQuimicoDto } from '../../models/update-producto-quimico.d
 @Component({
     selector: 'app-producto-quimico-edit',
     standalone: true,
-    imports: [ProductoQuimicoFormComponent, ToastModule, ProgressSpinnerModule],
+    imports: [ProductoQuimicoFormComponent, ButtonModule, ToastModule, ProgressSpinnerModule],
     providers: [MessageService],
     templateUrl: './producto-quimico-edit.component.html',
     styleUrls: ['./producto-quimico-edit.component.scss']
@@ -21,10 +23,13 @@ export class ProductoQuimicoEditComponent implements OnInit {
     private service = inject(ProductoQuimicoService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
+    private location = inject(Location);
     private messageService = inject(MessageService);
 
     producto = signal<ProductoQuimico | null>(null);
     cargando = signal(true);
+
+    volver(): void { this.location.back(); }
 
     async ngOnInit(): Promise<void> {
         const id = this.route.snapshot.paramMap.get('id')!;

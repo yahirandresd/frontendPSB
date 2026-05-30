@@ -1,10 +1,15 @@
 <p-toast />
 
 <div class="card">
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo equipo / área</h2>
-        <p class="text-muted-color mt-1">Registra un nuevo equipo, área o utensilio</p>
+    <div class="flex items-center gap-3 mb-6">
+        <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" (onClick)="volver()" />
+        <div>
+            <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo equipo / área</h2>
+            <p class="text-muted-color mt-1">Registra un nuevo equipo, área o utensilio</p>
+        </div>
     </div>
 
-    <app-equipo-area-form (formSubmit)="onFormSubmit($any($event))" />
+    <app-equipo-area-form
+        (formSubmit)="onFormSubmit($any($event))"
+        (cancelar)="volver()" />
 </div>

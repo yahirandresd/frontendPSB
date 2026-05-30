@@ -18,6 +18,7 @@ import { UpdateProductoQuimicoDto } from '../../models/update-producto-quimico.d
 export class ProductoQuimicoFormComponent implements OnInit {
     @Input() producto?: ProductoQuimico;
     @Output() formSubmit = new EventEmitter<CreateProductoQuimicoDto | UpdateProductoQuimicoDto>();
+    @Output() cancelar = new EventEmitter<void>();
 
     private fb = inject(FormBuilder);
 

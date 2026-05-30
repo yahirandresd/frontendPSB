@@ -2,23 +2,23 @@
 <p-confirmDialog />
 
 <!-- Grid de módulos de limpieza -->
-<div class="grid grid-cols-12 gap-4 mb-6">
-    <div class="col-span-12">
-        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-4">
-            Gestión de Limpieza y Desinfección
-        </div>
+<div class="mb-6">
+    <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold mb-4">
+        Gestión de Limpieza y Desinfección
     </div>
-    @for (m of modules; track m.label) {
-        <div class="col-span-12 lg:col-span-3">
-            <p-card>
-                <a [routerLink]="m.route" class="block text-center p-4 no-underline">
-                    <lucide-icon [name]="m.icon" [size]="36" color="var(--p-primary-color)" class="block mx-auto"></lucide-icon>
-                    <div class="text-surface-900 dark:text-surface-0 font-semibold mt-2">{{ m.label }}</div>
-                    <div class="text-sm text-muted-color mt-1">{{ m.description }}</div>
-                </a>
-            </p-card>
-        </div>
-    }
+    <div class="flex justify-center gap-4 flex-wrap">
+        @for (m of modules; track m.label) {
+            <div class="w-64">
+                <p-card>
+                    <a [routerLink]="m.route" class="block text-center p-4 no-underline">
+                        <lucide-icon [name]="m.icon" [size]="36" color="var(--p-primary-color)" class="block mx-auto"></lucide-icon>
+                        <div class="text-surface-900 dark:text-surface-0 font-semibold mt-2">{{ m.label }}</div>
+                        <div class="text-sm text-muted-color mt-1">{{ m.description }}</div>
+                    </a>
+                </p-card>
+            </div>
+        }
+    </div>
 </div>
 
 <!-- Tabla de Programas de Limpieza -->
@@ -28,10 +28,6 @@
             <span class="font-semibold">Programas de Limpieza</span>
         </p-accordion-header>
         <p-accordion-content>
-            <div class="flex justify-end mb-4">
-                <button pButton label="Nuevo programa" icon="pi pi-plus" (click)="irACrear()"></button>
-            </div>
-
             <p-table
                 [value]="programas()"
                 [loading]="cargando()"
@@ -43,18 +39,18 @@
 
                 <ng-template pTemplate="header">
                     <tr>
+                        <th>Programa PSB</th>
                         <th>Objetivo</th>
                         <th>Alcance</th>
-                        <th>Procedimiento general</th>
                         <th class="w-32">Acciones</th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-prog>
                     <tr>
+                        <td class="font-semibold">{{ nombrePrograma(prog.programaId) }}</td>
                         <td>{{ prog.objetivo | slice:0:80 }}{{ prog.objetivo.length > 80 ? '...' : '' }}</td>
                         <td>{{ prog.alcance | slice:0:60 }}{{ prog.alcance.length > 60 ? '...' : '' }}</td>
-                        <td>{{ (prog.procedimientoGeneral | slice:0:60) || '—' }}{{ prog.procedimientoGeneral?.length > 60 ? '...' : '' }}</td>
                         <td>
                             <div class="flex gap-2">
                                 <button pButton icon="pi pi-eye" severity="info" [text]="true" [rounded]="true"

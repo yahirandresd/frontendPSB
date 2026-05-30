@@ -1,7 +1,10 @@
+import { MetodoValidacion } from './verificacion-limpieza.interface';
+
 export interface UpdateVerificacionLimpiezaDto {
-    verificadoPor?: string;
-    fecha?: string;
-    resultado?: 'aprobado' | 'rechazado' | 'observacion';
-    observaciones?: string;
-    accionCorrectiva?: string;
+    resultado?: string;
+    unidad?: string;
+    limiteAceptable?: string;
+    metodoValidacion?: MetodoValidacion;
+    loteReactivo?: string;
+    fechaVencimientoReactivo?: string;
 }

@@ -1,8 +1,14 @@
+import { TipoVerificacion, MetodoValidacion } from './verificacion-limpieza.interface';
+
 export interface CreateVerificacionLimpiezaDto {
-    registroId: string;
-    verificadoPor: string;
-    fecha: string;
-    resultado: 'aprobado' | 'rechazado' | 'observacion';
-    observaciones?: string;
-    accionCorrectiva?: string;
+    registroLimpiezaId: string;
+    responsableId: string;
+    tipo: TipoVerificacion;
+    resultado: string;
+    fechaPrueba: string;
+    unidad?: string;
+    limiteAceptable?: string;
+    metodoValidacion?: MetodoValidacion;
+    loteReactivo?: string;
+    fechaVencimientoReactivo?: string;
 }

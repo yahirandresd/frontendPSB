@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ProgramaLimpiezaService } from '../../services/programa-limpieza.service';
 import { ProgramaLimpiezaFormComponent } from '../../components/programa-limpieza-form/programa-limpieza-form.component';
@@ -11,7 +13,7 @@ import { UpdateProgramaLimpiezaDto } from '../../models/update-programa-limpieza
 @Component({
     selector: 'app-programa-limpieza-edit',
     standalone: true,
-    imports: [ProgramaLimpiezaFormComponent, ToastModule],
+    imports: [ProgramaLimpiezaFormComponent, ButtonModule, ToastModule],
     providers: [MessageService],
     templateUrl: './programa-limpieza-edit.component.html',
     styleUrls: ['./programa-limpieza-edit.component.scss']
@@ -19,11 +21,14 @@ import { UpdateProgramaLimpiezaDto } from '../../models/update-programa-limpieza
 export class ProgramaLimpiezaEditComponent implements OnInit {
     private service = inject(ProgramaLimpiezaService);
     private router = inject(Router);
+    private location = inject(Location);
     private route = inject(ActivatedRoute);
     private messageService = inject(MessageService);
 
     programa = signal<ProgramaLimpieza | undefined>(undefined);
     private id = this.route.snapshot.paramMap.get('id')!;
+
+    volver(): void { this.location.back(); }
 
     async ngOnInit(): Promise<void> {
         try {

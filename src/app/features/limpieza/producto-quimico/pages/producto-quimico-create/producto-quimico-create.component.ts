@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ProductoQuimicoService } from '../../services/producto-quimico.service';
@@ -11,7 +13,7 @@ import { UpdateProductoQuimicoDto } from '../../models/update-producto-quimico.d
 @Component({
     selector: 'app-producto-quimico-create',
     standalone: true,
-    imports: [ProductoQuimicoFormComponent, ToastModule],
+    imports: [ProductoQuimicoFormComponent, ButtonModule, ToastModule],
     providers: [MessageService],
     templateUrl: './producto-quimico-create.component.html',
     styleUrls: ['./producto-quimico-create.component.scss']
@@ -19,7 +21,10 @@ import { UpdateProductoQuimicoDto } from '../../models/update-producto-quimico.d
 export class ProductoQuimicoCreateComponent {
     private service = inject(ProductoQuimicoService);
     private router = inject(Router);
+    private location = inject(Location);
     private messageService = inject(MessageService);
+
+    volver(): void { this.location.back(); }
 
     async onSubmit(dto: CreateProductoQuimicoDto | UpdateProductoQuimicoDto): Promise<void> {
         try {

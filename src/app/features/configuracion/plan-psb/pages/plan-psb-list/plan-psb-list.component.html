@@ -73,6 +73,14 @@
                             styleClass="flex-1"
                             [routerLink]="[plan.id, 'editar']"
                         />
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            [outlined]="true"
+                            (onClick)="confirmarEliminar(plan)"
+                            pTooltip="Eliminar"
+                            tooltipPosition="top"
+                        />
                     </div>
                 </div>
             }
@@ -81,3 +89,4 @@
 </div>
 
 <p-toast />
+<p-confirmDialog [style]="{ width: '28rem' }" />

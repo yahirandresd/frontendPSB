@@ -63,6 +63,23 @@
                     }
                 </div>
 
+                <div class="col-span-12 flex flex-col gap-1.5">
+                    <label class="text-sm font-semibold text-surface-700 dark:text-surface-200">
+                        Descripción <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        pInputText
+                        formControlName="descripcion"
+                        class="w-full"
+                        placeholder="Ej: Plan anual de saneamiento para la línea de lácteos"
+                    />
+                    @if (f['descripcion'].touched && f['descripcion'].invalid) {
+                        <small class="text-red-500 flex items-center gap-1">
+                            <i class="pi pi-exclamation-circle text-xs"></i> La descripción es requerida
+                        </small>
+                    }
+                </div>
+
             </div>
         </div>
 

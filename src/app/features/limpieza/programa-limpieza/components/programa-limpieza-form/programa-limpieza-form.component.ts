@@ -17,6 +17,7 @@ import { UpdateProgramaLimpiezaDto } from '../../models/update-programa-limpieza
 export class ProgramaLimpiezaFormComponent implements OnInit {
     @Input() programa?: ProgramaLimpieza;
     @Output() formSubmit = new EventEmitter<CreateProgramaLimpiezaDto | UpdateProgramaLimpiezaDto>();
+    @Output() cancelar = new EventEmitter<void>();
 
     private fb = inject(FormBuilder);
 

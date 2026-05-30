@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { SlicePipe } from '@angular/common';
+import { Location, SlicePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -27,6 +27,7 @@ export class RegistroLimpiezaListComponent implements OnInit {
     private route = inject(ActivatedRoute);
     private messageService = inject(MessageService);
     private confirmationService = inject(ConfirmationService);
+    private location = inject(Location);
 
     programaId = this.route.snapshot.paramMap.get('programaId')!;
     items = signal<RegistroLimpieza[]>([]);
@@ -42,6 +43,8 @@ export class RegistroLimpiezaListComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los registros' });
         }
     }
+
+    volver(): void { this.location.back(); }
 
     navigateToCreate(): void {
         this.router.navigate(['crear'], { relativeTo: this.route });

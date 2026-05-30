@@ -11,9 +11,8 @@ export class VerificacionLimpiezaService {
     private http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/verificaciones-limpieza`;
 
-    getAll(): Observable<VerificacionLimpieza[]>                                               { return this.http.get<VerificacionLimpieza[]>(this.url); }
+    getByRegistro(registroLimpiezaId: string): Observable<VerificacionLimpieza[]>               { return this.http.get<VerificacionLimpieza[]>(`${this.url}/por-registro-limpieza/${registroLimpiezaId}`); }
     getById(id: string): Observable<VerificacionLimpieza>                                      { return this.http.get<VerificacionLimpieza>(`${this.url}/${id}`); }
-    getByRegistro(registroId: string): Observable<VerificacionLimpieza[]>                      { return this.http.get<VerificacionLimpieza[]>(`${this.url}/por-registro/${registroId}`); }
     create(dto: CreateVerificacionLimpiezaDto): Observable<VerificacionLimpieza>               { return this.http.post<VerificacionLimpieza>(this.url, dto); }
     update(id: string, dto: UpdateVerificacionLimpiezaDto): Observable<VerificacionLimpieza>   { return this.http.patch<VerificacionLimpieza>(`${this.url}/${id}`, dto); }
     delete(id: string): Observable<void>                                                       { return this.http.delete<void>(`${this.url}/${id}`); }

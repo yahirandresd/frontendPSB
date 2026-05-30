@@ -1,33 +1,67 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Verificado por <span class="text-red-500">*</span></label>
-            <input pInputText formControlName="verificadoPor" placeholder="Nombre del verificador" />
+            <label class="font-medium text-sm">Responsable <span class="text-red-500">*</span></label>
+            <p-select formControlName="responsableId" [options]="usuarios()" optionLabel="label" optionValue="value"
+                placeholder="Selecciona responsable" [filter]="true" filterBy="label" />
         </div>
 
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Fecha <span class="text-red-500">*</span></label>
-            <input pInputText formControlName="fecha" type="date" />
+            <label class="font-medium text-sm">Tipo de verificación <span class="text-red-500">*</span></label>
+            <p-select formControlName="tipo" [options]="tipoOpciones" optionLabel="label" optionValue="value"
+                placeholder="Selecciona tipo" />
         </div>
 
-        <div class="flex flex-col gap-1 md:col-span-2">
+        <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Resultado <span class="text-red-500">*</span></label>
-            <p-select formControlName="resultado" [options]="resultadoOpciones" optionLabel="label" optionValue="value" placeholder="Selecciona resultado" />
+            <input pInputText formControlName="resultado" placeholder="Ej: Conforme, 0.5 RLU, Negativo..." />
         </div>
-    </div>
 
-    <div class="flex flex-col gap-1">
-        <label class="font-medium text-sm">Observaciones</label>
-        <textarea pTextarea formControlName="observaciones" rows="3" placeholder="Observaciones de la verificación..."></textarea>
-    </div>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Fecha de prueba <span class="text-red-500">*</span></label>
+            <input pInputText formControlName="fechaPrueba" type="date" />
+        </div>
 
-    <div class="flex flex-col gap-1">
-        <label class="font-medium text-sm">Acción correctiva</label>
-        <textarea pTextarea formControlName="accionCorrectiva" rows="3" placeholder="Acción correctiva si aplica..."></textarea>
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Unidad</label>
+            <input pInputText formControlName="unidad" placeholder="Ej: RLU, UFC/cm², %" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Límite aceptable</label>
+            <input pInputText formControlName="limiteAceptable" placeholder="Ej: &lt; 500 RLU" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Método de validación</label>
+            <p-select formControlName="metodoValidacion" [options]="metodoOpciones" optionLabel="label" optionValue="value"
+                placeholder="Selecciona método" [showClear]="true" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Lote del reactivo</label>
+            <input pInputText formControlName="loteReactivo" placeholder="Nro. de lote" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">
+                Fecha vencimiento reactivo
+                @if (form.get('metodoValidacion')?.value === 'ATP' || form.get('metodoValidacion')?.value === 'ALERGENOS') {
+                    <span class="text-red-500">*</span>
+                }
+            </label>
+            <input pInputText formControlName="fechaVencimientoReactivo" type="date" />
+            @if (form.get('fechaVencimientoReactivo')?.hasError('vencido')) {
+                <small class="text-red-500">El reactivo está vencido</small>
+            }
+        </div>
+
     </div>
 
     <div class="flex justify-end gap-2 mt-2">
+        <p-button type="button" label="Cancelar" severity="secondary" (onClick)="cancelar.emit()" />
         <p-button
             type="submit"
             [label]="verificacion ? 'Actualizar' : 'Guardar'"

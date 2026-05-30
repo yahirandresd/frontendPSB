@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { VerificacionLimpiezaService } from '../../services/verificacion-limpieza.service';
 import { VerificacionLimpiezaFormComponent } from '../../components/verificacion-limpieza-form/verificacion-limpieza-form.component';
@@ -11,7 +13,7 @@ import { UpdateVerificacionLimpiezaDto } from '../../models/update-verificacion-
 @Component({
     selector: 'app-verificacion-limpieza-edit',
     standalone: true,
-    imports: [VerificacionLimpiezaFormComponent, ToastModule],
+    imports: [VerificacionLimpiezaFormComponent, ButtonModule, ToastModule],
     providers: [MessageService],
     templateUrl: './verificacion-limpieza-edit.component.html',
     styleUrls: ['./verificacion-limpieza-edit.component.scss']
@@ -19,12 +21,15 @@ import { UpdateVerificacionLimpiezaDto } from '../../models/update-verificacion-
 export class VerificacionLimpiezaEditComponent implements OnInit {
     private service = inject(VerificacionLimpiezaService);
     private router = inject(Router);
+    private location = inject(Location);
     private route = inject(ActivatedRoute);
     private messageService = inject(MessageService);
 
     verificacion = signal<VerificacionLimpieza | undefined>(undefined);
-    registroId = this.route.snapshot.paramMap.get('registroId')!;
+    registroLimpiezaId = this.route.snapshot.paramMap.get('registroId')!;
     private id = this.route.snapshot.paramMap.get('id')!;
+
+    volver(): void { this.location.back(); }
 
     async ngOnInit(): Promise<void> {
         try {

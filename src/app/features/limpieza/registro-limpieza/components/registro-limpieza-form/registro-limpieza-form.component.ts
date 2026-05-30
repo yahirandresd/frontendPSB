@@ -19,6 +19,7 @@ export class RegistroLimpiezaFormComponent implements OnInit {
     @Input() registro?: RegistroLimpieza;
     @Input() programaId!: string;
     @Output() formSubmit = new EventEmitter<CreateRegistroLimpiezaDto | UpdateRegistroLimpiezaDto>();
+    @Output() cancelar = new EventEmitter<void>();
 
     private fb = inject(FormBuilder);
 

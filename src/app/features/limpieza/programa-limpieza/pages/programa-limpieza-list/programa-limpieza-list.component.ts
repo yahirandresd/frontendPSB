@@ -12,6 +12,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { LucideAngularModule, LUCIDE_ICONS, LucideIconProvider, Wrench, FlaskConical, ClipboardList, FileText } from 'lucide-angular';
 import { ProgramaLimpiezaService } from '../../services/programa-limpieza.service';
 import { ProgramaLimpieza } from '../../models/programa-limpieza.interface';
+import { ProgramaService } from '@/app/features/programa/services/programa.service';
 
 interface LimpiezaModule {
     label: string;
@@ -36,18 +37,19 @@ interface LimpiezaModule {
 })
 export class ProgramaLimpiezaListComponent implements OnInit {
     private service = inject(ProgramaLimpiezaService);
+    private programaService = inject(ProgramaService);
     private router = inject(Router);
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
+
+    private programaMap = new Map<string, string>();
 
     programas = signal<ProgramaLimpieza[]>([]);
     cargando = signal(true);
 
     modules: LimpiezaModule[] = [
-        { label: 'Equipos y Áreas',    icon: 'wrench',         route: '/limpieza/equipos',            description: 'Equipos, áreas y utensilios de limpieza' },
-        { label: 'Productos Químicos', icon: 'flask-conical',  route: '/limpieza/productos-quimicos', description: 'Productos autorizados con registro INVIMA' },
-        { label: 'Pasos de Limpieza',  icon: 'clipboard-list', route: '/limpieza/programas',          description: 'Pasos definidos por programa de limpieza' },
-        { label: 'Registros',          icon: 'file-text',      route: '/limpieza/programas',          description: 'Registros diarios de ejecución y verificación' },
+        { label: 'Equipos y Áreas',    icon: 'wrench',        route: '/limpieza/equipos',            description: 'Equipos, áreas y utensilios de limpieza' },
+        { label: 'Productos Químicos', icon: 'flask-conical', route: '/limpieza/productos-quimicos', description: 'Productos autorizados con registro INVIMA' },
     ];
 
     async ngOnInit(): Promise<void> {
@@ -57,14 +59,20 @@ export class ProgramaLimpiezaListComponent implements OnInit {
     async cargar(): Promise<void> {
         this.cargando.set(true);
         try {
-            this.programas.set(await firstValueFrom(this.service.getAll()));
+            const [programas, planes] = await Promise.all([
+                firstValueFrom(this.service.getAll()),
+                firstValueFrom(this.programaService.getAll()).catch(() => [])
+            ]);
+            this.programaMap.clear();
+            planes.forEach(p => this.programaMap.set(p.id, p.planPsb?.nombre ?? p.nombre ?? '—'));
+            this.programas.set(programas);
         } finally {
             this.cargando.set(false);
         }
     }
 
-    irACrear(): void {
-        this.router.navigate(['/limpieza/programas/crear']);
+    nombrePrograma(programaId: string): string {
+        return this.programaMap.get(programaId) ?? programaId.slice(0, 8) + '…';
     }
 
     irAVer(id: string): void {

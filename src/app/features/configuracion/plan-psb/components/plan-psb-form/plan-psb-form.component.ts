@@ -47,6 +47,7 @@ export class PlanPsbFormComponent implements OnInit {
 
     form: FormGroup = this.fb.group({
         nombre:         ['', Validators.required],
+        descripcion:    ['', Validators.required],
         version:        [{ value: '1.0', disabled: true }],
         estado:         ['BORRADOR', Validators.required],
         empresaId:      [null, Validators.required],
@@ -57,7 +58,7 @@ export class PlanPsbFormComponent implements OnInit {
     get f() { return this.form.controls; }
 
     async ngOnInit() {
-        this.form.get('tipoAlimentoId')!.valueChanges.subscribe((id: number | null) => {
+        this.form.get('tipoAlimentoId')!.valueChanges.subscribe((id: string | null) => {
             const tipo = id !== null ? this.tiposAlimento().find(t => t.id === id) ?? null : null;
             const nivel = tipo ? (tipo.nivel_riesgo.toUpperCase() as NivelRiesgo) : null;
             this.nivelRiesgoActual.set(nivel);
@@ -66,6 +67,7 @@ export class PlanPsbFormComponent implements OnInit {
         if (this.modoEdicion) {
             this.form.patchValue({
                 nombre:         this.plan!.nombre,
+                descripcion:    this.plan!.descripcion ?? '',
                 estado:         this.plan!.estado.toUpperCase(),
                 empresaId:      this.plan!.empresa?.id ?? null,
                 tipoAlimentoId: this.plan!.tipoAlimento?.id ?? null,
@@ -102,15 +104,13 @@ export class PlanPsbFormComponent implements OnInit {
             return;
         }
         const { tipoAlimentoId, ...raw } = this.form.getRawValue();
+        const nivel_riesgo = this.nivelRiesgoActual()!;
 
         if (this.modoEdicion) {
-            this.formSubmit.emit({ ...raw, nivel_riesgo: this.nivelRiesgoActual()! } as PlanPsbFormValue);
-            return;
+            this.formSubmit.emit({ ...raw, nivel_riesgo } as PlanPsbFormValue);
+        } else {
+            this.formSubmit.emit({ ...raw, nivel_riesgo, tipoAlimentoId } as PlanPsbFormValue);
         }
-
-        const tipo = this.tiposAlimento().find(t => t.id === tipoAlimentoId);
-        if (!tipo) return;
-        this.formSubmit.emit({ ...raw, tipoAlimentoId, nivel_riesgo: tipo.nivel_riesgo.toUpperCase() as NivelRiesgo });
     }
 
     onCancel() { this.cancel.emit(); }

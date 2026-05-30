@@ -17,6 +17,7 @@ import { UpdateEquipoAreaDto } from '../../models/update-equipo-area.dto';
 export class EquipoAreaFormComponent implements OnInit {
     @Input() equipo?: EquipoArea;
     @Output() formSubmit = new EventEmitter<CreateEquipoAreaDto | UpdateEquipoAreaDto>();
+    @Output() cancelar = new EventEmitter<void>();
 
     private fb = inject(FormBuilder);
 

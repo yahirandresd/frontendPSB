@@ -9,7 +9,7 @@ import { UpdatePasoLimpiezaPqDto } from '../models/update-paso-limpieza-pq.dto';
 @Injectable({ providedIn: 'root' })
 export class PasoLimpiezaPqService {
     private http = inject(HttpClient);
-    private readonly url = `${environment.apiUrl}/paso-limpieza-pq`;
+    private readonly url = `${environment.apiUrl}/pasos-limpieza-pq`;
 
     getAll(): Observable<PasoLimpiezaPq[]>                              { return this.http.get<PasoLimpiezaPq[]>(this.url); }
     getById(id: string): Observable<PasoLimpiezaPq>                    { return this.http.get<PasoLimpiezaPq>(`${this.url}/${id}`); }
