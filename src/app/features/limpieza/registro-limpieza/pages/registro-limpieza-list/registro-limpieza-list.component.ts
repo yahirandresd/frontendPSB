@@ -47,6 +47,10 @@ export class RegistroLimpiezaListComponent implements OnInit {
         this.router.navigate(['crear'], { relativeTo: this.route });
     }
 
+    navigateToDetail(id: string): void {
+        this.router.navigate([id], { relativeTo: this.route });
+    }
+
     navigateToEdit(id: string): void {
         this.router.navigate([id, 'editar'], { relativeTo: this.route });
     }

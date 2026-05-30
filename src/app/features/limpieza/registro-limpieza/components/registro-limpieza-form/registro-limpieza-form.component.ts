@@ -46,8 +46,9 @@ export class RegistroLimpiezaFormComponent implements OnInit {
 
         if (this.registro) {
             this.form.patchValue({
-                ...this.registro,
-                fecha: this.registro.fecha.split('T')[0]
+                fecha:         this.registro.registro.fecha.split('T')[0],
+                observaciones: this.registro.registro.observaciones ?? '',
+                estado:        this.registro.registro.estado
             });
         }
     }
