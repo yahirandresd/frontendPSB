@@ -92,7 +92,7 @@
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Cloro Residual (mg/L)</label>
-                            <p-inputNumber #cloroResidual="ngModel" name="cloroResidual" [(ngModel)]="model.cloroResidual" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
+                            <p-inputNumber #cloroResidual="ngModel" name="cloroResidual" [(ngModel)]="model.cloroResidual" (ngModelChange)="recalcularIRCA()" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
                             @if (cloroResidual.invalid && (cloroResidual.dirty || cloroResidual.touched || form.submitted)) {
                                 @if (cloroResidual.errors?.['required']) {
                                     <small class="text-red-500">El cloro residual es requerido</small>
@@ -102,7 +102,7 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">pH</label>
-                            <p-inputNumber #ph="ngModel" name="ph" [(ngModel)]="model.ph" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="1" class="w-full" required />
+                            <p-inputNumber #ph="ngModel" name="ph" [(ngModel)]="model.ph" (ngModelChange)="recalcularIRCA()" [step]="0.1" [minFractionDigits]="1" [maxFractionDigits]="1" class="w-full" required />
                             @if (ph.invalid && (ph.dirty || ph.touched || form.submitted)) {
                                 @if (ph.errors?.['required']) {
                                     <small class="text-red-500">El pH es requerido</small>
@@ -112,7 +112,7 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Turbiedad (UNT)</label>
-                            <p-inputNumber #turbiedad="ngModel" name="turbiedad" [(ngModel)]="model.turbiedad" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
+                            <p-inputNumber #turbiedad="ngModel" name="turbiedad" [(ngModel)]="model.turbiedad" (ngModelChange)="recalcularIRCA()" [step]="0.1" [minFractionDigits]="2" [maxFractionDigits]="2" class="w-full" required />
                             @if (turbiedad.invalid && (turbiedad.dirty || turbiedad.touched || form.submitted)) {
                                 @if (turbiedad.errors?.['required']) {
                                     <small class="text-red-500">La turbiedad es requerida</small>
@@ -122,7 +122,7 @@
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Color Aparente (UPC)</label>
-                            <p-inputNumber #colorAparente="ngModel" name="colorAparente" [(ngModel)]="model.colorAparente" [step]="0.1" [minFractionDigits]="0" [maxFractionDigits]="0" class="w-full" required />
+                            <p-inputNumber #colorAparente="ngModel" name="colorAparente" [(ngModel)]="model.colorAparente" (ngModelChange)="recalcularIRCA()" [step]="0.1" [minFractionDigits]="0" [maxFractionDigits]="0" class="w-full" required />
                             @if (colorAparente.invalid && (colorAparente.dirty || colorAparente.touched || form.submitted)) {
                                 @if (colorAparente.errors?.['required']) {
                                     <small class="text-red-500">El color aparente es requerido</small>
@@ -135,18 +135,18 @@
                 <p-tabpanel value="2">
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-3 flex items-center gap-2 mt-6">
-                            <p-checkbox name="coliformesTotalesPresentes" [(ngModel)]="model.coliformesTotalesPresentes" [binary]="true" inputId="coliformesTotalesPresentes" />
+                            <p-checkbox name="coliformesTotalesPresentes" [(ngModel)]="model.coliformesTotalesPresentes" (ngModelChange)="recalcularIRCA()" [binary]="true" inputId="coliformesTotalesPresentes" />
                             <label for="coliformesTotalesPresentes">Coliformes Totales (+)</label>
                         </div>
 
                         <div class="col-span-3 flex items-center gap-2 mt-6">
-                            <p-checkbox name="eColiPresente" [(ngModel)]="model.eColiPresente" [binary]="true" inputId="eColiPresente" />
+                            <p-checkbox name="eColiPresente" [(ngModel)]="model.eColiPresente" (ngModelChange)="recalcularIRCA()" [binary]="true" inputId="eColiPresente" />
                             <label for="eColiPresente">E. Coli (+)</label>
                         </div>
 
                         <div class="col-span-3">
                             <label class="block font-medium mb-1">Mesofilos (UFC/mL)</label>
-                            <p-inputNumber name="mesofilos" [(ngModel)]="model.mesofilos" class="w-full" />
+                            <p-inputNumber name="mesofilos" [(ngModel)]="model.mesofilos" (ngModelChange)="recalcularIRCA()" class="w-full" />
                             <small class="text-surface-500">Unidades Formadoras de Colonias (opcional)</small>
                         </div>
 
@@ -282,6 +282,29 @@
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>
+
+        @if (ircaResult(); as result) {
+            <div class="card mt-4 p-3 bg-surface-50 dark:bg-surface-800">
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="col-span-3">
+                        <label class="block text-muted-color font-medium mb-1">IRCA</label>
+                        <span class="text-2xl font-bold text-surface-900 dark:text-surface-0">{{ result.irca }}%</span>
+                    </div>
+                    <div class="col-span-3">
+                        <label class="block text-muted-color font-medium mb-1">Nivel de Riesgo</label>
+                        <p-tag [value]="getNivelRiesgoLabel(result.nivelRiesgo)" [severity]="getNivelRiesgoSeverity(result.nivelRiesgo)" />
+                    </div>
+                    <div class="col-span-3">
+                        <label class="block text-muted-color font-medium mb-1">Resultado</label>
+                        <p-tag [value]="result.resultado === 'apto' ? 'Apto' : 'No Apto'" [severity]="result.resultado === 'apto' ? 'success' : 'danger'" />
+                    </div>
+                    <div class="col-span-3">
+                        <label class="block text-muted-color font-medium mb-1">Puntaje Incumplido</label>
+                        <span class="text-surface-900 dark:text-surface-0">{{ result.puntajeIncumplido }} / 93.5</span>
+                    </div>
+                </div>
+            </div>
+        }
 
         <div class="flex justify-end gap-2 mt-4">
             <p-button label="Volver atrás" severity="secondary" (onClick)="onCancel()" />
