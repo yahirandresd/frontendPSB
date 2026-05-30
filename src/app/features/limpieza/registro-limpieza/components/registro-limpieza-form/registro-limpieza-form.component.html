@@ -1,25 +1,38 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Fecha <span class="text-red-500">*</span></label>
-            <input pInputText formControlName="fecha" type="date" />
+    @if (registro) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1">
+                <label class="font-medium text-sm">Fecha</label>
+                <input pInputText formControlName="fecha" type="date" />
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="font-medium text-sm">Estado</label>
+                <input pInputText formControlName="estado" />
+            </div>
         </div>
 
         <div class="flex flex-col gap-1">
-            <label class="font-medium text-sm">Estado <span class="text-red-500">*</span></label>
-            <p-select formControlName="estado" [options]="estadoOpciones" optionLabel="label" optionValue="value" placeholder="Selecciona estado" />
+            <label class="font-medium text-sm">Realizado por</label>
+            <input pInputText formControlName="realizadoPor" />
         </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Observaciones</label>
+            <textarea pTextarea formControlName="observaciones" rows="3"></textarea>
+        </div>
+
+        <p-divider />
+    }
+
+    <div class="flex flex-col gap-1">
+        <label class="font-medium text-sm">Superficie limpiada <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="superficieLimpiada" placeholder="Ej. Mesa de preparación inox" />
     </div>
 
     <div class="flex flex-col gap-1">
-        <label class="font-medium text-sm">Realizado por <span class="text-red-500">*</span></label>
-        <input pInputText formControlName="realizadoPor" placeholder="Nombre del responsable" />
-    </div>
-
-    <div class="flex flex-col gap-1">
-        <label class="font-medium text-sm">Observaciones</label>
-        <textarea pTextarea formControlName="observaciones" rows="3" placeholder="Observaciones adicionales..."></textarea>
+        <label class="font-medium text-sm">Resultado inspección</label>
+        <input pInputText formControlName="resultadoInspeccion" placeholder="Ej. conforme" />
     </div>
 
     <div class="flex justify-end gap-2 mt-2">
