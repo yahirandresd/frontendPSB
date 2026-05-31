@@ -1,0 +1,78 @@
+<div class="flex flex-col gap-6">
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+
+        <!-- Nombre -->
+        <div class="flex flex-col gap-2">
+            <label for="nombre" class="font-semibold">Nombre del tipo de residuo <span class="text-red-500">*</span></label>
+            <input
+                id="nombre"
+                pInputText
+                formControlName="nombre"
+                placeholder="Ej. Orgánico, Plástico, Peligroso..."
+                [class.ng-invalid]="nombre?.invalid && nombre?.touched"
+            />
+            @if (nombre?.invalid && nombre?.touched) {
+                <small class="text-red-500">El nombre es requerido (mínimo 2 caracteres).</small>
+            }
+        </div>
+
+        <!-- Descripción -->
+        <div class="flex flex-col gap-2">
+            <label for="descripcion" class="font-semibold">Descripción <span class="text-red-500">*</span></label>
+            <textarea
+                id="descripcion"
+                pTextarea
+                formControlName="descripcion"
+                rows="3"
+                placeholder="Describe este tipo de residuo..."
+                [class.ng-invalid]="descripcion?.invalid && descripcion?.touched"
+                class="w-full"
+            ></textarea>
+            @if (descripcion?.invalid && descripcion?.touched) {
+                <small class="text-red-500">La descripción es requerida.</small>
+            }
+        </div>
+
+        <!-- Color del contenedor -->
+        <div class="flex flex-col gap-2">
+            <label class="font-semibold">Color del contenedor <span class="text-red-500">*</span></label>
+            <div class="flex items-center gap-3">
+                <p-colorpicker formControlName="color_contenedor" />
+                <span class="text-sm text-muted-color">
+                    Selecciona el color asociado al contenedor de este residuo
+                </span>
+            </div>
+        </div>
+
+        <!-- Es peligroso -->
+        <div class="flex items-center gap-3">
+            <p-checkbox
+                id="es_peligroso"
+                formControlName="es_peligroso"
+                [binary]="true"
+            />
+            <label for="es_peligroso" class="font-semibold cursor-pointer">
+                ¿Es un residuo peligroso?
+            </label>
+        </div>
+
+        <!-- Acciones -->
+        <div class="flex justify-end gap-3 pt-2">
+            <p-button
+                label="Cancelar"
+                severity="secondary"
+                [outlined]="true"
+                (onClick)="onCancelar()"
+                type="button"
+            />
+            <p-button
+                label="{{ tipoResiduo ? 'Guardar cambios' : 'Crear tipo de residuo' }}"
+                icon="pi pi-check"
+                type="submit"
+            />
+        </div>
+
+    </form>
+
+</div>

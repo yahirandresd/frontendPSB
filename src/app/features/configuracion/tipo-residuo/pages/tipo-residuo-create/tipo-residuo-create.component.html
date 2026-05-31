@@ -1,0 +1,16 @@
+<p-toast />
+
+<div class="card max-w-2xl mx-auto">
+    <div class="flex items-center gap-3 mb-6">
+        <i class="pi pi-trash text-2xl text-primary"></i>
+        <div>
+            <h2 class="m-0 text-xl font-bold">Nuevo tipo de residuo</h2>
+            <p class="m-0 text-muted-color text-sm">Complete el formulario para registrar un nuevo tipo de residuo global.</p>
+        </div>
+    </div>
+
+    <app-tipo-residuo-form
+        (formSubmit)="onCreate($event)"
+        (cancelar)="onCancelar()"
+    />
+</div>

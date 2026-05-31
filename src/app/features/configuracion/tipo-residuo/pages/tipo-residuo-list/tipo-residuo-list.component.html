@@ -1,0 +1,85 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="card">
+    <p-toolbar styleClass="mb-4">
+        <ng-template #start>
+            <p-button
+                label="Nuevo tipo de residuo"
+                icon="pi pi-plus"
+                routerLink="/catalogos/tipos-residuo/crear"
+            />
+        </ng-template>
+    </p-toolbar>
+
+    <p-table
+        #dt
+        [value]="tipos()"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['nombre', 'descripcion']"
+        [rowHover]="true"
+        [loading]="loading()"
+        dataKey="id"
+        [tableStyle]="{ 'min-width': '50rem' }"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between items-center">
+                <h5 class="m-0 font-semibold text-lg">Tipos de Residuo</h5>
+                <p-iconfield iconPosition="left">
+                    <p-inputicon class="pi pi-search" />
+                    <input
+                        pInputText
+                        type="text"
+                        placeholder="Buscar..."
+                        (input)="onGlobalFilter($event, dt)"
+                    />
+                </p-iconfield>
+            </div>
+        </ng-template>
+
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre" /></th>
+                <th>Descripción</th>
+                <th>Color</th>
+                <th>¿Peligroso?</th>
+                <th style="width: 8rem">Acciones</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-tipo>
+            <tr>
+                <td class="font-medium">{{ tipo.nombre }}</td>
+                <td>{{ tipo.descripcion }}</td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="inline-block w-5 h-5 rounded-full border border-surface-200"
+                            [style.background-color]="tipo.color_contenedor"
+                        ></span>
+                        <span class="text-sm text-muted-color">{{ tipo.color_contenedor }}</span>
+                    </div>
+                </td>
+                <td>
+                    <p-tag
+                        [value]="tipo.es_peligroso ? 'Sí' : 'No'"
+                        [severity]="severityPeligroso(tipo.es_peligroso)"
+                    />
+                </td>
+                <td>
+                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="editar(tipo.id)" />
+                    <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="eliminar(tipo.id, tipo.nombre)" />
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="5" class="text-center text-muted-color py-6">
+                    No hay tipos de residuo registrados.
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

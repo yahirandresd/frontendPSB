@@ -1,0 +1,23 @@
+<p-toast />
+
+<div class="card max-w-2xl mx-auto">
+    <div class="flex items-center gap-3 mb-6">
+        <i class="pi pi-pencil text-2xl text-primary"></i>
+        <div>
+            <h2 class="m-0 text-xl font-bold">Editar tipo de residuo</h2>
+            <p class="m-0 text-muted-color text-sm">Modifica los datos del tipo de residuo seleccionado.</p>
+        </div>
+    </div>
+
+    @if (tipoResiduo()) {
+        <app-tipo-residuo-form
+            [tipoResiduo]="tipoResiduo()"
+            (formSubmit)="onUpdate($event)"
+            (cancelar)="onCancelar()"
+        />
+    } @else {
+        <div class="flex justify-center py-8">
+            <i class="pi pi-spinner pi-spin text-4xl text-muted-color"></i>
+        </div>
+    }
+</div>

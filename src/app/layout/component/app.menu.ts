@@ -98,6 +98,13 @@ import { RouterModule } from '@angular/router';
                     <span>Usuarios</span>
                 </a>
             </li>
+
+            <li>
+                <a routerLink="/catalogos/tipos-residuo" routerLinkActive="active">
+                    <i class="pi pi-tags"></i>
+                    <span>Tipos de Residuo</span>
+                </a>
+            </li>
         </ul>
     `,
     styles: [`

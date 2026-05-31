@@ -61,6 +61,14 @@ export const appRoutes: Routes = [
             },
             // ── Usuarios ──
             { path: 'usuarios', loadChildren: () => import('./app/features/usuarios/usuarios.routes') },
+            // ── Catálogos globales ──
+            {
+                path: 'catalogos/tipos-residuo',
+                loadChildren: () =>
+                    import('./app/features/configuracion/tipo-residuo/tipo-residuo.routes').then(
+                        (m) => m.TIPO_RESIDUO_ROUTES
+                    )
+            },
         ]
     },
     {
