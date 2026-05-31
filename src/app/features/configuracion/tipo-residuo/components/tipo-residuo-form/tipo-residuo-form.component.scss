@@ -1,1 +1,39 @@
 // Styles handled by global PrimeNG + Tailwind
+
+.color-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--p-surface-300, #d1d5db);
+    border-radius: 0.5rem;
+    background: var(--p-surface-0, #fff);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--p-text-color, #374151);
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+        border-color: var(--p-primary-color, #6366f1);
+    }
+
+    &.selected {
+        border-color: var(--p-primary-color, #6366f1);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-color, #6366f1) 25%, transparent);
+    }
+}
+
+.color-swatch {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+
+    &[data-color='blanco'] { background-color: #ffffff; }
+    &[data-color='rojo']   { background-color: #ef4444; }
+    &[data-color='verde']  { background-color: #22c55e; }
+    &[data-color='negro']  { background-color: #111827; }
+}

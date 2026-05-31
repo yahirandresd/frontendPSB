@@ -37,12 +37,22 @@
         <!-- Color del contenedor -->
         <div class="flex flex-col gap-2">
             <label class="font-semibold">Color del contenedor <span class="text-red-500">*</span></label>
-            <div class="flex items-center gap-3">
-                <p-colorpicker formControlName="color_contenedor" />
-                <span class="text-sm text-muted-color">
-                    Selecciona el color asociado al contenedor de este residuo
-                </span>
+            <div class="flex flex-wrap gap-3">
+                @for (color of coloresContenedor; track color.value) {
+                    <button
+                        type="button"
+                        class="color-option-btn"
+                        [class.selected]="color_contenedor?.value === color.value"
+                        (click)="form.get('color_contenedor')?.setValue(color.value)"
+                    >
+                        <span class="color-swatch" [attr.data-color]="color.value"></span>
+                        <span class="color-label">{{ color.label }}</span>
+                    </button>
+                }
             </div>
+            @if (color_contenedor?.invalid && color_contenedor?.touched) {
+                <small class="text-red-500">Debes seleccionar un color.</small>
+            }
         </div>
 
         <!-- Es peligroso -->

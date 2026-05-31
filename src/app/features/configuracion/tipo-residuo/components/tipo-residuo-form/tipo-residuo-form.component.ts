@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { CheckboxModule } from 'primeng/checkbox';
-import { ColorPickerModule } from 'primeng/colorpicker';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TipoResiduo } from '../../models/tipo-residuo.interface';
 import { CreateTipoResiduoDto } from '../../models/create-tipo-residuo.dto';
 
@@ -19,7 +19,7 @@ import { CreateTipoResiduoDto } from '../../models/create-tipo-residuo.dto';
         InputTextModule,
         TextareaModule,
         CheckboxModule,
-        ColorPickerModule
+        SelectButtonModule
     ],
     templateUrl: './tipo-residuo-form.component.html',
     styleUrls: ['./tipo-residuo-form.component.scss']
@@ -34,7 +34,7 @@ export class TipoResiduoFormComponent implements OnInit {
     form = this.fb.group({
         nombre: ['', [Validators.required, Validators.minLength(2)]],
         descripcion: ['', [Validators.required]],
-        color_contenedor: ['#4CAF50', [Validators.required]],
+        color_contenedor: ['verde', [Validators.required]],
         es_peligroso: [false]
     });
 
@@ -44,6 +44,7 @@ export class TipoResiduoFormComponent implements OnInit {
                 nombre: this.tipoResiduo.nombre,
                 descripcion: this.tipoResiduo.descripcion,
                 color_contenedor: this.tipoResiduo.color_contenedor,
+
                 es_peligroso: this.tipoResiduo.es_peligroso
             });
         }
@@ -60,6 +61,13 @@ export class TipoResiduoFormComponent implements OnInit {
     onCancelar(): void {
         this.cancelar.emit();
     }
+
+    coloresContenedor = [
+        { label: 'Blanco', value: 'blanco' },
+        { label: 'Rojo',   value: 'rojo'   },
+        { label: 'Verde',  value: 'verde'  },
+        { label: 'Negro',  value: 'negro'  }
+    ];
 
     get nombre() { return this.form.get('nombre'); }
     get descripcion() { return this.form.get('descripcion'); }
