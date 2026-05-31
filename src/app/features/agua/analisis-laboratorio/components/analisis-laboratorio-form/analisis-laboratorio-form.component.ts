@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { HasUnsavedChanges } from '@/app/features/shared/interfaces/has-unsaved-changes.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,17 +8,19 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TagModule } from 'primeng/tag';
 import { FileUploadModule } from 'primeng/fileupload';
 import { Tabs, TabList, Tab, TabPanel, TabPanels } from 'primeng/tabs';
 import { environment } from '@/environments/environment';
 import { AnalisisLaboratorio } from '../../models/analisis-laboratorio.interface';
 import { FuenteAguaService } from '@/app/features/agua/fuente-agua/services/fuente-agua.service';
 import { FuenteAgua } from '@/app/features/agua/fuente-agua/models/fuente-agua.interface';
+import { calcularIRCA, getNivelRiesgoLabel, getNivelRiesgoSeverity, ResultadoIRCA } from '../../utils/irca.calculator';
 
 @Component({
     selector: 'app-analisis-laboratorio-form',
     standalone: true,
-    imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, InputNumberModule, DatePickerModule, SelectModule, CheckboxModule, FileUploadModule, Tabs, TabList, Tab, TabPanel, TabPanels],
+    imports: [CommonModule, FormsModule, ButtonModule, InputTextModule, InputNumberModule, DatePickerModule, SelectModule, CheckboxModule, TagModule, FileUploadModule, Tabs, TabList, Tab, TabPanel, TabPanels],
     templateUrl: './analisis-laboratorio-form.component.html',
     styleUrls: ['./analisis-laboratorio-form.component.scss'],
 })
@@ -33,6 +35,9 @@ export class AnalisisLaboratorioFormComponent implements OnInit, OnChanges, HasU
     model: any = {};
     private initialModel = '';
     today = new Date();
+    ircaResult = signal<ResultadoIRCA | null>(null);
+    getNivelRiesgoLabel = getNivelRiesgoLabel;
+    getNivelRiesgoSeverity = getNivelRiesgoSeverity;
     uploadUrl = `${environment.apiUrl}/uploads`;
 
     ngOnInit() {
@@ -49,6 +54,7 @@ export class AnalisisLaboratorioFormComponent implements OnInit, OnChanges, HasU
             };
         }
         this.initialModel = JSON.stringify(this.model);
+        this.recalcularIRCA();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -58,18 +64,38 @@ export class AnalisisLaboratorioFormComponent implements OnInit, OnChanges, HasU
             if (this.analisisLaboratorio.fechaEntregaResultado) this.model.fechaEntregaResultado = new Date(this.analisisLaboratorio.fechaEntregaResultado);
         }
         this.initialModel = JSON.stringify(this.model);
+        this.recalcularIRCA();
+    }
+
+    recalcularIRCA() {
+        const { cloroResidual, ph, turbiedad, colorAparente, coliformesTotalesPresentes, eColiPresente, mesofilos } = this.model;
+        if (cloroResidual == null || ph == null || turbiedad == null || colorAparente == null) {
+            this.ircaResult.set(null);
+            return;
+        }
+        this.ircaResult.set(calcularIRCA({
+            cloroResidual,
+            ph,
+            turbiedad,
+            colorAparente,
+            coliformesTotalesPresentes: !!coliformesTotalesPresentes,
+            eColiPresente: !!eColiPresente,
+            mesofilos: mesofilos ?? 0,
+        }));
     }
 
     onSubmit() {
-        const { fuenteAguaId, numeroCertificado, laboratorioCertificado, fechaMuestreo, responsableMuestra, puntoMuestreo, cloroResidual, ph, turbiedad, colorAparente } = this.model;
+        const { fuenteAguaId, numeroCertificado, laboratorioCertificado, fechaMuestreo, fechaEntregaResultado, responsableMuestra, puntoMuestreo, cloroResidual, ph, turbiedad, colorAparente, coliformesTotalesPresentes, eColiPresente, mesofilos, linkDocumentoPdf, fotoEvidencia, concepto, coliformesTotalesUfc, eColiUfc, conductividad, durezaTotal, nitritos, nitratos, hierroTotal, cloruros, sulfatos, fluoruros, calcio, magnesio, alcalinidad, carbonoOrganicoTotal, tensoactivos } = this.model;
         if (!fuenteAguaId || !numeroCertificado || !laboratorioCertificado || !fechaMuestreo || !responsableMuestra || !puntoMuestreo) return;
         if (cloroResidual === undefined || cloroResidual === null) return;
         if (ph === undefined || ph === null) return;
         if (turbiedad === undefined || turbiedad === null) return;
         if (colorAparente === undefined || colorAparente === null) return;
-        const data = { ...this.model };
-        if (data.fechaMuestreo instanceof Date) data.fechaMuestreo = data.fechaMuestreo.toISOString();
-        if (data.fechaEntregaResultado instanceof Date) data.fechaEntregaResultado = data.fechaEntregaResultado.toISOString();
+        const data = {
+            fuenteAguaId, numeroCertificado, laboratorioCertificado, responsableMuestra, puntoMuestreo, cloroResidual, ph, turbiedad, colorAparente, coliformesTotalesPresentes, eColiPresente, mesofilos, linkDocumentoPdf, fotoEvidencia, concepto, coliformesTotalesUfc, eColiUfc, conductividad, durezaTotal, nitritos, nitratos, hierroTotal, cloruros, sulfatos, fluoruros, calcio, magnesio, alcalinidad, carbonoOrganicoTotal, tensoactivos,
+            fechaMuestreo: fechaMuestreo instanceof Date ? fechaMuestreo.toISOString() : fechaMuestreo,
+            fechaEntregaResultado: fechaEntregaResultado instanceof Date ? fechaEntregaResultado.toISOString() : fechaEntregaResultado,
+        };
         this.formSubmit.emit(data);
     }
 
