@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +22,8 @@ import {
     FRECUENCIA_PROGRAMA_LABELS
 } from '../../../utils/programa-residuos.labels';
 import { EstadoRegistro, FrecuenciaPrograma, Programa } from '../../../models/programa-residuos.models';
+import { PlanPsbService } from '@/app/features/configuracion/plan-psb/services/plan-psb.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-programas-list',
@@ -46,17 +48,20 @@ import { EstadoRegistro, FrecuenciaPrograma, Programa } from '../../../models/pr
     templateUrl: './programas-list.component.html',
     styleUrls: ['./programas-list.component.scss']
 })
-export class ProgramasListComponent {
+export class ProgramasListComponent implements OnInit {
     @ViewChild('dt') table!: Table;
 
     private readonly store = inject(ProgramaResiduosStore);
     private readonly router = inject(Router);
     private readonly confirm = inject(ConfirmationService);
     private readonly toast = inject(MessageService);
+    private readonly planPsbService = inject(PlanPsbService);
 
     readonly estadoLabels = ESTADO_REGISTRO_LABELS;
     readonly estadoSeverity = ESTADO_REGISTRO_SEVERITY;
     readonly frecuenciaLabels = FRECUENCIA_PROGRAMA_LABELS;
+
+    readonly planMap = signal<Record<string, string>>({});
 
     readonly filtroFrecuencia = signal<FrecuenciaPrograma | null>(null);
     readonly frecuenciaOptions = (Object.keys(FRECUENCIA_PROGRAMA_LABELS) as FrecuenciaPrograma[]).map((k) => ({
@@ -69,6 +74,17 @@ export class ProgramasListComponent {
         const list = this.store.programasList();
         return freq ? list.filter((p) => p.frecuencia === freq) : list;
     });
+
+    async ngOnInit(): Promise<void> {
+        const planes = await firstValueFrom(this.planPsbService.getAll());
+        const map: Record<string, string> = {};
+        planes.forEach(p => { map[p.id] = p.nombre; });
+        this.planMap.set(map);
+    }
+
+    planNombre(planPsbId: string): string {
+        return this.planMap()[planPsbId] || planPsbId;
+    }
 
     progreso(p: Programa): number {
         const records = p.programaResiduo?.registros;
@@ -92,8 +108,12 @@ export class ProgramasListComponent {
         this.table.exportCSV();
     }
 
-    verDetalle(id: string): void {
-        this.router.navigate(['/programa-residuos/programas', id]);
+    navId(p: Programa): string {
+        return p.id || String(p.programaResiduo?.id ?? '');
+    }
+
+    verDetalle(p: Programa): void {
+        this.router.navigate(['/programa-residuos/programas', this.navId(p)]);
     }
 
     labelEstado(e: EstadoRegistro): string {

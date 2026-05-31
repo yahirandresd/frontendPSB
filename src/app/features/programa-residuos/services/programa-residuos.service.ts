@@ -42,14 +42,14 @@ export class ProgramaResiduosService {
     }
 
     // --- REGISTROS DE RESIDUOS (ACTIVIDADES) ---
+    getRegistrosByPrograma(programaResiduoId: number | string): Observable<RegistroResiduo[]> {
+        return this.http.get<RegistroResiduo[]>(`${this.baseUrl}/registro-residuos/por-programa/${programaResiduoId}`);
+    }
+
     createRegistro(dto: {
         tipo_actividad: string;
         resultado_general: string;
         programaResiduoId: string;
-        fecha?: string;
-        observaciones?: string;
-        responsable?: string;
-        estado?: string;
     }): Observable<RegistroResiduo> {
         return this.http.post<RegistroResiduo>(`${this.baseUrl}/registro-residuos`, dto);
     }
@@ -89,6 +89,14 @@ export class ProgramaResiduosService {
      */
     getTiposResiduoByPrograma(programaResiduoId: string): Observable<TipoResiduo[]> {
         return this.http.get<TipoResiduo[]>(`${this.baseUrl}/recoleccion/tipos-residuo-by-programa/${programaResiduoId}`);
+    }
+
+    getTiposResiduo(): Observable<TipoResiduo[]> {
+        return this.http.get<TipoResiduo[]>(`${this.baseUrl}/tipo-residuo`);
+    }
+
+    getRecolecciones(): Observable<Recoleccion[]> {
+        return this.http.get<Recoleccion[]>(`${this.baseUrl}/recoleccion`);
     }
 
     updateRecoleccion(id: string, dto: UpdateRecoleccionDto): Observable<Recoleccion> {
@@ -163,10 +171,6 @@ export class ProgramaResiduosService {
         tipo_actividad: string;
         resultado_general: string;
         programaResiduoId: string;
-        fecha?: string;
-        observaciones?: string;
-        responsable?: string;
-        estado?: string;
     }): Observable<RegistroResiduo> {
         return this.createRegistro(dto);
     }

@@ -13,26 +13,20 @@
         <ng-template #header>
             <tr>
                 <th>Fecha</th>
-                <th>Programa</th>
                 <th>Tipo Residuo</th>
                 <th>Cantidad (kg)</th>
                 <th>Responsable</th>
-                <th>Vehiculo</th>
                 <th>Observaciones</th>
-                <th>Estado Registro</th>
                 <th>Acciones</th>
             </tr>
         </ng-template>
         <ng-template #body let-r>
             <tr>
                 <td>{{ r.fecha }}</td>
-                <td>{{ r.programaNombre }}</td>
-                <td>{{ r.tipoResiduoName }}</td>
+                <td>{{ r.tipoResiduo?.nombre || '-' }}</td>
                 <td>{{ r.cantidad_recolectada }} kg</td>
                 <td>{{ r.responsable }}</td>
-                <td>{{ r.vehiculo }}</td>
                 <td>{{ r.observaciones || '-' }}</td>
-                <td><p-tag [value]="labelEstado(r.estado)" [severity]="severityEstado(r.estado)" /></td>
                 <td>
                     <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="abrirEditar(r)" />
                 </td>
@@ -74,7 +68,7 @@
         <div class="flex flex-col gap-1">
             <label class="font-medium text-sm">Tipo de Residuo</label>
             <p-select
-                [(ngModel)]="createForm.tipoResiduoId"
+                [(ngModel)]="selectedTipoResiduoId"
                 [options]="tiposResiduosOptions()"
                 optionLabel="label"
                 optionValue="value"

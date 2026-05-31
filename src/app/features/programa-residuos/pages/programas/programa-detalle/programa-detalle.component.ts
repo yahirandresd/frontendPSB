@@ -1,4 +1,5 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +18,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ProgramaResiduosStore } from '../../../services/programa-residuos.store';
+import { ProgramaResiduosService } from '../../../services/programa-residuos.service';
 import {
     EstadoRegistro,
     FrecuenciaPrograma,
@@ -31,6 +33,9 @@ import {
     progresoColor,
     TIPO_ACTIVIDAD_LABELS
 } from '../../../utils/programa-residuos.labels';
+import { PlanPsbService } from '@/app/features/configuracion/plan-psb/services/plan-psb.service';
+import { UsuarioService } from '@/app/features/usuarios/services/usuario.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-programa-detalle',
@@ -59,11 +64,48 @@ import {
 })
 export class ProgramaDetalleComponent {
     private readonly store = inject(ProgramaResiduosStore);
+    private readonly service = inject(ProgramaResiduosService);
     private readonly route = inject(ActivatedRoute);
     private readonly toast = inject(MessageService);
+    private readonly planPsbService = inject(PlanPsbService);
+    private readonly usuarioService = inject(UsuarioService);
+    private readonly destroyRef = inject(DestroyRef);
 
     readonly programaId = this.route.snapshot.paramMap.get('id')!;
     readonly programa = computed(() => this.store.getProgramaById(this.programaId));
+
+    readonly planNombre = signal('');
+    readonly usuarioOptions = signal<{ label: string; value: string }[]>([]);
+    readonly registros = signal<RegistroResiduo[]>([]);
+
+    constructor() {
+        effect(() => {
+            const planId = this.programa()?.planPsbId;
+            if (planId && !this.planNombre()) {
+                firstValueFrom(this.planPsbService.getById(planId))
+                    .then(plan => this.planNombre.set(plan.nombre))
+                    .catch(() => {});
+            }
+
+            const prId = this.programa()?.programaResiduo?.id;
+            if (prId) {
+                this.loadRegistros(prId);
+            }
+        });
+        firstValueFrom(this.usuarioService.getAll())
+            .then(usuarios => this.usuarioOptions.set(usuarios.map(u => ({ label: u.nombre, value: u.nombre }))))
+            .catch(() => {});
+    }
+
+    private loadRegistros(prId: string | number = this.programa()?.programaResiduo?.id ?? ''): void {
+        if (!prId) return;
+        this.service.getRegistrosByPrograma(prId)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: data => this.registros.set(data),
+                error: () => {}
+            });
+    }
 
     readonly estadoLabels = ESTADO_REGISTRO_LABELS;
     readonly estadoSeverity = ESTADO_REGISTRO_SEVERITY;
@@ -72,10 +114,15 @@ export class ProgramaDetalleComponent {
     readonly progresoColor = progresoColor;
 
     readonly latestRegistroResiduo = computed(() => {
-        const p = this.programa();
-        const regs = p?.programaResiduo?.registros;
+        const regs = this.registros();
         if (!regs || regs.length === 0) return null;
-        return regs[regs.length - 1];
+        const last = regs[regs.length - 1];
+        return {
+            ...last,
+            checklistResiduo: last.checklistResiduo ?? [],
+            evidencias: last.evidencias ?? [],
+            recolecciones: last.recolecciones ?? []
+        };
     });
 
     readonly progresoChecklist = computed(() => {
@@ -104,8 +151,7 @@ export class ProgramaDetalleComponent {
 
     readonly actividades = computed(() => {
         const p = this.programa();
-        const list = p?.programaResiduo?.registros || [];
-        return list.map((rr) => ({
+        return this.registros().map((rr) => ({
             id: rr.id,
             tipo_actividad: rr.tipo_actividad,
             resultado_general: rr.resultado_general,
@@ -116,10 +162,9 @@ export class ProgramaDetalleComponent {
         }));
     });
 
-    readonly evidencias = computed(() => {
-        const p = this.programa();
-        return p?.programaResiduo?.registros.flatMap(r => r.evidencias) || [];
-    });
+    readonly evidencias = computed(() =>
+        this.registros().flatMap(r => r.evidencias ?? [])
+    );
 
     actividadDialog = signal(false);
     actividadEditId = signal<string | null>(null);
@@ -185,6 +230,7 @@ export class ProgramaDetalleComponent {
             this.store.updateActividad(this.programaId, editId, { ...this.actForm }).subscribe({
                 next: () => {
                     this.actividadDialog.set(false);
+                    this.loadRegistros();
                     this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Actualizada correctamente' });
                 },
                 error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la actividad' })
@@ -193,6 +239,7 @@ export class ProgramaDetalleComponent {
             this.store.addActividad(this.programaId, { ...this.actForm }).subscribe({
                 next: () => {
                     this.actividadDialog.set(false);
+                    this.loadRegistros();
                     this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Guardada correctamente' });
                 },
                 error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar la actividad' })
@@ -202,14 +249,20 @@ export class ProgramaDetalleComponent {
 
     eliminarActividad(id: string): void {
         this.store.deleteActividad(this.programaId, id).subscribe({
-            next: () => this.toast.add({ severity: 'info', summary: 'Eliminada', detail: 'Actividad eliminada' }),
+            next: () => {
+                this.loadRegistros();
+                this.toast.add({ severity: 'info', summary: 'Eliminada', detail: 'Actividad eliminada' });
+            },
             error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar la actividad' })
         });
     }
 
     completarActividad(actId: string): void {
         this.store.updateActividad(this.programaId, actId, { estado: EstadoRegistro.COMPLETADO }).subscribe({
-            next: () => this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Marcada como completada' }),
+            next: () => {
+                this.loadRegistros();
+                this.toast.add({ severity: 'success', summary: 'Actividad', detail: 'Marcada como completada' });
+            },
             error: () => this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo completar la actividad' })
         });
     }

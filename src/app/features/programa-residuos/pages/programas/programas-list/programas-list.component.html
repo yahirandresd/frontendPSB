@@ -32,7 +32,7 @@
         [value]="programas()"
         [rows]="10"
         [paginator]="true"
-        [globalFilterFields]="['nombre', 'responsable', 'frecuencia']"
+        [globalFilterFields]="['nombre', 'responsable', 'frecuencia', 'planPsbId']"
         [rowHover]="true"
         dataKey="id"
         [tableStyle]="{ 'min-width': '60rem' }"
@@ -40,6 +40,7 @@
         <ng-template #header>
             <tr>
                 <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre" /></th>
+                <th>Plan PSB</th>
                 <th>Responsable</th>
                 <th>Frecuencia</th>
                 <th>Estado Último Registro</th>
@@ -50,10 +51,11 @@
         <ng-template #body let-p>
             <tr>
                 <td>
-                    <a [routerLink]="['/programa-residuos/programas', p.id]" class="text-primary font-medium no-underline">
+                    <a [routerLink]="['/programa-residuos/programas', navId(p)]" class="text-primary font-medium no-underline">
                         {{ p.nombre }}
                     </a>
                 </td>
+                <td>{{ planNombre(p.planPsbId) }}</td>
                 <td>{{ p.responsable }}</td>
                 <td>{{ labelFrecuencia(p.frecuencia) }}</td>
                 <td>
@@ -66,8 +68,8 @@
                     </div>
                 </td>
                 <td>
-                    <p-button icon="pi pi-eye" [rounded]="true" [text]="true" (onClick)="verDetalle(p.id)" />
-                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" [routerLink]="['/programa-residuos/programas', p.id, 'editar']" />
+                    <p-button icon="pi pi-eye" [rounded]="true" [text]="true" (onClick)="verDetalle(p)" />
+                    <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" [routerLink]="['/programa-residuos/programas', navId(p), 'editar']" />
                     <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="eliminar(p.id, p.nombre)" />
                 </td>
             </tr>

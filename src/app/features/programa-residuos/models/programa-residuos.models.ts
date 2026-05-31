@@ -178,7 +178,7 @@ export interface CreateRecoleccionDto {
     cantidad_recolectada: number;
     observaciones?: string;
     registroResiduoId: string;
-    tipoResiduoId?: string;
+    tipoResiduoId?: number;
 }
 
 export type UpdateRecoleccionDto = Partial<

@@ -54,6 +54,10 @@
                         <span class="text-muted-color text-sm block font-semibold mb-1">Fecha de Creación</span>
                         <p class="m-0 text-muted-color">{{ programa()!.createdAt | date:'yyyy-MM-dd HH:mm' }}</p>
                     </div>
+                    <div>
+                        <span class="text-muted-color text-sm block font-semibold mb-1">Plan PSB asociado</span>
+                        <p class="m-0">{{ planNombre() || programa()!.planPsbId }}</p>
+                    </div>
                 </div>
             </p-tabpanel>
 
@@ -205,7 +209,8 @@
             placeholder="Detalle el resultado de la actividad..."></textarea>
 
         <label class="font-medium text-sm">Responsable</label>
-        <input pInputText placeholder="Nombre del responsable" [(ngModel)]="actForm.responsable" class="w-full" />
+        <p-select [(ngModel)]="actForm.responsable" [options]="usuarioOptions()" optionLabel="label" optionValue="value"
+            placeholder="Seleccionar responsable" [filter]="true" filterPlaceholder="Buscar usuario..." class="w-full" />
 
         <label class="font-medium text-sm">Fecha</label>
         <input pInputText type="date" [(ngModel)]="actForm.fecha" class="w-full" />

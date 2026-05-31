@@ -134,7 +134,7 @@ export class ProgramaResiduosStore {
     }
 
     getProgramaById(id: string): Programa | undefined {
-        return this.programas().find((p) => p.id === id || p.programaResiduo?.id === id);
+        return this.programas().find((p) => p.id === id || String(p.programaResiduo?.id) === id);
     }
 
     createPrograma(dto: CreateProgramaResiduoDto): Observable<Programa> {
@@ -193,11 +193,7 @@ export class ProgramaResiduosStore {
             .createRegistro({
                 tipo_actividad: actividad.tipo_actividad,
                 resultado_general: actividad.resultado_general,
-                programaResiduoId: prId,
-                fecha: actividad.fecha,
-                observaciones: actividad.observaciones,
-                responsable: actividad.responsable,
-                estado: actividad.estado
+                programaResiduoId: String(prId)
             })
             .pipe(
                 map(() => {

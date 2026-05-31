@@ -1,4 +1,5 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, DestroyRef, inject, signal, computed } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -10,10 +11,12 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { forkJoin, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { ProgramaResiduosStore } from '../../../services/programa-residuos.store';
 import { ProgramaResiduosService } from '../../../services/programa-residuos.service';
 import { ESTADO_REGISTRO_LABELS, ESTADO_REGISTRO_SEVERITY, TagSeverity } from '../../../utils/programa-residuos.labels';
-import { CreateRecoleccionDto, EstadoRegistro, TipoResiduo } from '../../../models/programa-residuos.models';
+import { CreateRecoleccionDto, EstadoRegistro, Programa, Recoleccion, RegistroResiduo, TipoResiduo } from '../../../models/programa-residuos.models';
 
 @Component({
     selector: 'app-recolecciones-list',
@@ -38,14 +41,74 @@ export class RecoleccionesListComponent {
     private readonly store = inject(ProgramaResiduosStore);
     private readonly service = inject(ProgramaResiduosService);
     private readonly toast = inject(MessageService);
+    private readonly destroyRef = inject(DestroyRef);
 
-    readonly recolecciones = this.store.recoleccionesList;
-    readonly registrosDisponibles = this.store.registrosDisponiblesParaRecoleccion;
+    readonly recolecciones = signal<Recoleccion[]>([]);
     readonly estadoLabels = ESTADO_REGISTRO_LABELS;
     readonly estadoSeverity = ESTADO_REGISTRO_SEVERITY;
 
-    // Señales para gestionar tipos de residuos
+    readonly registrosDisponibles = signal<{
+        label: string;
+        value: string;
+        programaId: string;
+        programaResiduoId: string;
+        programaNombre: string;
+        fecha: string;
+        responsable: string;
+        estado: EstadoRegistro;
+    }[]>([]);
+
+    constructor() {
+        this.service.getTiposResiduo()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({ next: (tipos) => this.tiposResiduos.set(tipos), error: () => {} });
+
+        this.service.getRecolecciones()
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({ next: (recs) => this.recolecciones.set(recs), error: () => {} });
+
+        toObservable(this.store.programasList)
+            .pipe(
+                switchMap((programas) => {
+                    const conId = programas.filter((p) => p.programaResiduo?.id);
+                    if (!conId.length) return of([] as { programa: Programa; registros: RegistroResiduo[] }[]);
+                    return forkJoin(
+                        conId.map((p) =>
+                            this.service.getRegistrosByPrograma(p.programaResiduo!.id).pipe(
+                                map((registros) => ({ programa: p, registros: registros ?? [] }))
+                            )
+                        )
+                    );
+                }),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe((resultados) => {
+                const opciones = (resultados as { programa: Programa; registros: RegistroResiduo[] }[])
+                    .flatMap(({ programa, registros }) =>
+                        registros
+                            .filter(
+                                (rr) =>
+                                    rr.tipo_actividad === 'recoleccion' ||
+                                    rr.tipo_actividad === 'recoleccion_interna'
+                            )
+                            .map((rr) => ({
+                                label: `${programa.nombre} · ${rr.tipo_actividad} · ${rr.registro?.fecha || 'sin fecha'}`,
+                                value: String(rr.id),
+                                programaId: programa.id,
+                                programaResiduoId: String(programa.programaResiduo?.id ?? ''),
+                                programaNombre: programa.nombre,
+                                fecha: rr.registro?.fecha || '',
+                                responsable: programa.responsable,
+                                estado: (rr.registro?.estado as EstadoRegistro) || EstadoRegistro.PENDIENTE
+                            }))
+                    )
+                    .sort((a, b) => b.fecha.localeCompare(a.fecha));
+                this.registrosDisponibles.set(opciones);
+            });
+    }
+
     readonly tiposResiduos = signal<TipoResiduo[]>([]);
+
     readonly tiposResiduosOptions = computed(() =>
         this.tiposResiduos().map((tr) => ({
             label: tr.nombre,
@@ -55,6 +118,7 @@ export class RecoleccionesListComponent {
     );
 
     readonly tipoResiduoSeleccionado = signal<TipoResiduo | null>(null);
+    selectedTipoResiduoId = '';
 
     createDialog = signal(false);
     editDialog = signal(false);
@@ -70,6 +134,7 @@ export class RecoleccionesListComponent {
     abrirCrear(): void {
         this.createForm = this.createDefaultForm();
         this.tipoResiduoSeleccionado.set(null);
+        this.selectedTipoResiduoId = '';
         this.createDialog.set(true);
     }
 
@@ -95,6 +160,8 @@ export class RecoleccionesListComponent {
         if (!registroResiduoId) {
             this.tiposResiduos.set([]);
             this.tipoResiduoSeleccionado.set(null);
+            this.selectedTipoResiduoId = '';
+            this.createForm.tipoResiduoId = undefined;
             return;
         }
 
@@ -112,34 +179,23 @@ export class RecoleccionesListComponent {
             fecha: this.createForm.fecha || seleccionado.fecha || new Date().toISOString().slice(0, 10)
         };
 
-        // Cargar tipos de residuos del programa
-        if (seleccionado.programaResiduoId) {
-            this.service.getTiposResiduoByPrograma(seleccionado.programaResiduoId).subscribe({
-                next: (tipos) => {
-                    this.tiposResiduos.set(tipos);
-                    if (tipos.length > 0) {
-                        this.tipoResiduoSeleccionado.set(tipos[0]);
-                        this.createForm.tipoResiduoId = tipos[0].id;
-                    }
-                },
-                error: (err) => {
-                    console.error('Error cargando tipos de residuos:', err);
-                    this.toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los tipos de residuos' });
-                }
-            });
-        }
+        this.tipoResiduoSeleccionado.set(null);
+        this.selectedTipoResiduoId = '';
+        this.createForm.tipoResiduoId = undefined;
     }
 
     onTipoResiduoChange(tipoResiduoId: string | null): void {
         if (!tipoResiduoId) {
             this.tipoResiduoSeleccionado.set(null);
+            this.selectedTipoResiduoId = '';
             this.createForm.tipoResiduoId = undefined;
             return;
         }
 
-        const seleccionado = this.tiposResiduos().find((tr) => tr.id === tipoResiduoId);
+        const seleccionado = this.tiposResiduos().find((tr) => String(tr.id) === tipoResiduoId);
         this.tipoResiduoSeleccionado.set(seleccionado || null);
-        this.createForm.tipoResiduoId = tipoResiduoId;
+        this.selectedTipoResiduoId = tipoResiduoId;
+        this.createForm.tipoResiduoId = Number(tipoResiduoId);
     }
 
     guardarNueva(): void {
@@ -184,14 +240,13 @@ export class RecoleccionesListComponent {
     }
 
     private createDefaultForm(): CreateRecoleccionDto {
-        const primerRegistro = this.registrosDisponibles()[0];
+        const primerRegistro = this.registrosDisponibles()[0] ?? null;
         return {
             registroResiduoId: primerRegistro?.value || '',
             fecha: new Date().toISOString().slice(0, 10),
             responsable: primerRegistro?.responsable || '',
             cantidad_recolectada: 0,
-            observaciones: '',
-            tipoResiduoId: undefined
+            observaciones: ''
         };
     }
 }
