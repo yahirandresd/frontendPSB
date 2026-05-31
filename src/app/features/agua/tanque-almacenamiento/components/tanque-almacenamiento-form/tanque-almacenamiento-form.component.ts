@@ -55,11 +55,13 @@ export class TanqueAlmacenamientoFormComponent implements OnInit, OnChanges, Has
     }
 
     onSubmit() {
-        const { fuenteAguaId, capacidadLitros, materialGradoAlimenticio } = this.model;
+        const { fuenteAguaId, capacidadLitros, materialGradoAlimenticio, fechaUltimoLavado, tieneTapa, tapaBuenEstado, llavePaso, proximaLimpieza, tipo, ubicacion } = this.model;
         if (!fuenteAguaId || capacidadLitros === undefined || capacidadLitros === null || !materialGradoAlimenticio) return;
-        const data = { ...this.model };
-        if (data.fechaUltimoLavado instanceof Date) data.fechaUltimoLavado = data.fechaUltimoLavado.toISOString();
-        if (data.proximaLimpieza instanceof Date) data.proximaLimpieza = data.proximaLimpieza.toISOString();
+        const data = {
+            fuenteAguaId, capacidadLitros, materialGradoAlimenticio, tieneTapa, tapaBuenEstado, llavePaso, tipo, ubicacion,
+            fechaUltimoLavado: fechaUltimoLavado instanceof Date ? fechaUltimoLavado.toISOString() : fechaUltimoLavado,
+            proximaLimpieza: proximaLimpieza instanceof Date ? proximaLimpieza.toISOString() : proximaLimpieza,
+        };
         this.formSubmit.emit(data);
     }
 

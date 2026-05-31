@@ -54,15 +54,15 @@ export class ControlPotabilidadFormComponent implements OnInit, OnChanges, HasUn
     }
 
     onSubmit() {
-        const { fuenteAguaId, fechaHora, puntoCaptacion, cloroResidual, ph, turbiedad, colorAparente, responsableMuestra } = this.model;
+        const { fuenteAguaId, registroAguaId, fechaHora, cloroResidual, ph, turbiedad, colorAparente, temperatura, puntoCaptacion, responsableMuestra, observaciones, evidenciaFoto, olor, sabor } = this.model;
         if (!fuenteAguaId || !fechaHora || !puntoCaptacion || !responsableMuestra) return;
         if (cloroResidual === undefined || cloroResidual === null) return;
         if (ph === undefined || ph === null) return;
         if (turbiedad === undefined || turbiedad === null) return;
         if (colorAparente === undefined || colorAparente === null) return;
         const data = {
-            ...this.model,
-            fechaHora: this.model.fechaHora instanceof Date ? this.model.fechaHora.toISOString() : this.model.fechaHora,
+            fuenteAguaId, registroAguaId, cloroResidual, ph, turbiedad, colorAparente, temperatura, puntoCaptacion, responsableMuestra, observaciones, evidenciaFoto, olor, sabor,
+            fechaHora: fechaHora instanceof Date ? fechaHora.toISOString() : fechaHora,
         };
         this.formSubmit.emit(data);
     }

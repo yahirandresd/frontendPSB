@@ -3,9 +3,12 @@
 
 <div class="card">
     <div class="flex items-center justify-between mb-6">
-        <div>
-            <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Pasos de Limpieza</h2>
-            <p class="text-muted-color mt-1">Pasos del programa <span class="font-mono text-xs">{{ programaId | slice:0:8 }}...</span></p>
+        <div class="flex items-center gap-3">
+            <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" (onClick)="volver()" />
+            <div>
+                <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Pasos de Limpieza</h2>
+                <p class="text-muted-color mt-1">Pasos del programa <span class="font-mono text-xs">{{ programaId | slice:0:8 }}...</span></p>
+            </div>
         </div>
         <button pButton label="Nuevo paso" icon="pi pi-plus" (click)="irACrear()"></button>
     </div>
@@ -20,11 +23,11 @@
 
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="orden" class="w-20">Orden <p-sortIcon field="orden" /></th>
+                <th pSortableColumn="orden" class="w-16">N°</th>
                 <th>Tipo de acción</th>
                 <th>Descripción</th>
                 <th>Frecuencia</th>
-                <th>Concentración</th>
+                <th>Producto químico</th>
                 <th class="w-28">Acciones</th>
             </tr>
         </ng-template>
@@ -35,11 +38,30 @@
                 <td class="font-medium">{{ paso.tipoAccion }}</td>
                 <td><span class="line-clamp-2 text-sm">{{ paso.descripcion }}</span></td>
                 <td>{{ paso.frecuencia }}</td>
-                <td>{{ paso.concentracion || '—' }}</td>
                 <td>
-                    <div class="flex gap-2">
-                        <button pButton icon="pi pi-pencil" severity="secondary" [text]="true" [rounded]="true" (click)="irAEditar(paso.id)" pTooltip="Editar"></button>
-                        <button pButton icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true" (click)="confirmarEliminar(paso)" pTooltip="Eliminar"></button>
+                    @if (productosDelPaso(paso.id).length > 0) {
+                        <div class="flex flex-col gap-1">
+                            @for (pq of productosDelPaso(paso.id); track pq.id) {
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-medium text-surface-900 dark:text-surface-0">
+                                        {{ nombreProducto(pq) }}
+                                    </span>
+                                    <span class="text-xs text-muted-color">
+                                        {{ pq.concentracionValor }} {{ pq.concentracionUnidad }} · {{ pq.tiempoContactoMin }} min
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    } @else {
+                        <span class="text-muted-color text-sm italic">Sin producto</span>
+                    }
+                </td>
+                <td>
+                    <div class="flex gap-1">
+                        <button pButton icon="pi pi-pencil" severity="secondary" [text]="true" [rounded]="true"
+                            (click)="irAEditar(paso.id)" pTooltip="Editar"></button>
+                        <button pButton icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
+                            (click)="confirmarEliminar(paso)" pTooltip="Eliminar"></button>
                     </div>
                 </td>
             </tr>

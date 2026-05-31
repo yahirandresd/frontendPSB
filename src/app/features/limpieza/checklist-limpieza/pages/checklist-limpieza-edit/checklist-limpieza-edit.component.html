@@ -1,15 +1,20 @@
 <p-toast />
 
 <div class="card">
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Editar ítem del checklist</h2>
-        <p class="text-muted-color mt-1">Modifica el estado del paso verificado</p>
+    <div class="flex items-center gap-3 mb-6">
+        <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" (onClick)="volver()" />
+        <div>
+            <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Editar ítem del checklist</h2>
+            <p class="text-muted-color mt-1">Modifica el estado del paso verificado</p>
+        </div>
     </div>
 
     @if (item()) {
         <app-checklist-limpieza-form
             [item]="item()"
-            [registroId]="registroId"
-            (formSubmit)="onFormSubmit($any($event))" />
+            [programaId]="programaId"
+            [registroLimpiezaId]="registroLimpiezaId"
+            (formSubmit)="onFormSubmit($any($event))"
+            (cancelar)="volver()" />
     }
 </div>

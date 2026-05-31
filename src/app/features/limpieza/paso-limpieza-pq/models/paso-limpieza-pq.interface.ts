@@ -1,11 +1,13 @@
+import { ConcentracionUnidad } from './create-paso-limpieza-pq.dto';
+
 export interface PasoLimpiezaPq {
     id: string;
-    pasoId: string;
-    nombreProducto: string;
-    concentracion?: string;
-    dosis?: string;
-    unidadMedida?: string;
-    tiempoContacto?: string;
+    pasoLimpiezaId: string;
+    productoQuimicoId: string;
+    nombreProducto?: string;
+    concentracionValor: number;
+    concentracionUnidad: ConcentracionUnidad;
+    tiempoContactoMin: number;
     createdAt: string;
     updatedAt: string;
 }

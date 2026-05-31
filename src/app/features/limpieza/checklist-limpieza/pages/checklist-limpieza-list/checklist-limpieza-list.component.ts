@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -8,12 +9,14 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { ChecklistLimpiezaService } from '../../services/checklist-limpieza.service';
-import { ChecklistLimpieza } from '../../models/checklist-limpieza.interface';
+import { ChecklistLimpieza, EstadoChecklist } from '../../models/checklist-limpieza.interface';
+
+type Severity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';
 
 @Component({
     selector: 'app-checklist-limpieza-list',
     standalone: true,
-    imports: [TableModule, ButtonModule, ToastModule, ConfirmDialogModule, TagModule],
+    imports: [TableModule, ButtonModule, ToastModule, ConfirmDialogModule, TagModule, SlicePipe],
     providers: [MessageService, ConfirmationService],
     templateUrl: './checklist-limpieza-list.component.html',
     styleUrls: ['./checklist-limpieza-list.component.scss']
@@ -65,5 +68,25 @@ export class ChecklistLimpiezaListComponent implements OnInit {
         } catch {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el ítem' });
         }
+    }
+
+    estadoSeverity(estado: EstadoChecklist | undefined): Severity {
+        if (!estado) return 'secondary';
+        const map: Record<EstadoChecklist, Severity> = {
+            APROBADO:   'success',
+            RECHAZADO:  'danger',
+            OBSERVACION:'warn'
+        };
+        return map[estado] ?? 'secondary';
+    }
+
+    estadoLabel(estado: EstadoChecklist | undefined): string {
+        if (!estado) return '—';
+        const map: Record<EstadoChecklist, string> = {
+            APROBADO:    'Aprobado',
+            RECHAZADO:   'Rechazado',
+            OBSERVACION: 'Observación'
+        };
+        return map[estado];
     }
 }

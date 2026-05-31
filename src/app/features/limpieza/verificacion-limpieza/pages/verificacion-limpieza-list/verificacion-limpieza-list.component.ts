@@ -9,7 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { VerificacionLimpiezaService } from '../../services/verificacion-limpieza.service';
-import { VerificacionLimpieza } from '../../models/verificacion-limpieza.interface';
+import { VerificacionLimpieza, TipoVerificacion } from '../../models/verificacion-limpieza.interface';
 
 type Severity = 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast';
 
@@ -70,21 +70,25 @@ export class VerificacionLimpiezaListComponent implements OnInit {
         }
     }
 
-    resultadoSeverity(resultado: string): Severity {
-        const map: Record<string, Severity> = {
-            aprobado:    'success',
-            rechazado:   'danger',
-            observacion: 'warn'
+    tipoSeverity(tipo: TipoVerificacion): Severity {
+        const map: Record<TipoVerificacion, Severity> = {
+            ATP:            'info',
+            VISUAL:         'secondary',
+            MICROBIOLOGICO: 'warn',
+            ALERGENOS:      'danger',
+            QUIMICO:        'success'
         };
-        return map[resultado] ?? 'secondary';
+        return map[tipo] ?? 'secondary';
     }
 
-    resultadoLabel(resultado: string): string {
-        const map: Record<string, string> = {
-            aprobado:    'Aprobado',
-            rechazado:   'Rechazado',
-            observacion: 'Observación'
+    tipoLabel(tipo: TipoVerificacion): string {
+        const map: Record<TipoVerificacion, string> = {
+            ATP:            'ATP',
+            VISUAL:         'Visual',
+            MICROBIOLOGICO: 'Microbiológico',
+            ALERGENOS:      'Alérgenos',
+            QUIMICO:        'Químico'
         };
-        return map[resultado] ?? resultado;
+        return map[tipo] ?? tipo;
     }
 }

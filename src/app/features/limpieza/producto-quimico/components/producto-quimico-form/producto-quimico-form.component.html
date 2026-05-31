@@ -64,6 +64,7 @@
     </div>
 
     <div class="flex justify-end gap-2 pt-2">
+        <p-button type="button" label="Cancelar" severity="secondary" (onClick)="cancelar.emit()" />
         <button pButton type="submit" [label]="producto ? 'Guardar cambios' : 'Crear producto'"
             icon="pi pi-check"></button>
     </div>

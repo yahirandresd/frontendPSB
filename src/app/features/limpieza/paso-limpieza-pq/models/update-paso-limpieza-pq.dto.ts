@@ -1,7 +1,7 @@
+import { ConcentracionUnidad } from './create-paso-limpieza-pq.dto';
+
 export interface UpdatePasoLimpiezaPqDto {
-    nombreProducto?: string;
-    concentracion?: string;
-    dosis?: string;
-    unidadMedida?: string;
-    tiempoContacto?: string;
+    concentracionValor?: number;
+    concentracionUnidad?: ConcentracionUnidad;
+    tiempoContactoMin?: number;
 }

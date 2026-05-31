@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { EquipoAreaService } from '../../services/equipo-area.service';
 import { EquipoAreaFormComponent } from '../../components/equipo-area-form/equipo-area-form.component';
@@ -11,7 +13,7 @@ import { UpdateEquipoAreaDto } from '../../models/update-equipo-area.dto';
 @Component({
     selector: 'app-equipo-area-edit',
     standalone: true,
-    imports: [EquipoAreaFormComponent, ToastModule],
+    imports: [EquipoAreaFormComponent, ButtonModule, ToastModule],
     providers: [MessageService],
     templateUrl: './equipo-area-edit.component.html',
     styleUrls: ['./equipo-area-edit.component.scss']
@@ -19,11 +21,14 @@ import { UpdateEquipoAreaDto } from '../../models/update-equipo-area.dto';
 export class EquipoAreaEditComponent implements OnInit {
     private service = inject(EquipoAreaService);
     private router = inject(Router);
+    private location = inject(Location);
     private route = inject(ActivatedRoute);
     private messageService = inject(MessageService);
 
     equipo = signal<EquipoArea | undefined>(undefined);
     private id = this.route.snapshot.paramMap.get('id')!;
+
+    volver(): void { this.location.back(); }
 
     async ngOnInit(): Promise<void> {
         try {

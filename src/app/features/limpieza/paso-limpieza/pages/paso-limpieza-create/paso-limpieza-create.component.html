@@ -1,12 +1,20 @@
 <p-toast />
 
 <div class="card">
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo paso de limpieza</h2>
-        <p class="text-muted-color mt-1">Agrega un paso al programa de limpieza</p>
+    <div class="flex items-center gap-3 mb-6">
+        <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" (onClick)="volver()" />
+        <div>
+            <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo paso de limpieza</h2>
+            <p class="text-muted-color mt-1">Agrega un paso al programa de limpieza</p>
+            <div class="flex items-center gap-2 mt-3 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-sm">
+                <i class="pi pi-info-circle shrink-0"></i>
+                <span>Podrás agregar el producto químico asociado al paso después de crearlo.</span>
+            </div>
+        </div>
     </div>
 
     <app-paso-limpieza-form
         [programaLimpiezaId]="programaId"
-        (formSubmit)="onFormSubmit($any($event))" />
+        (formSubmit)="onFormSubmit($any($event))"
+        (cancelar)="volver()" />
 </div>

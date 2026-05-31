@@ -1,7 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { RegistroLimpiezaService } from '../../services/registro-limpieza.service';
 import { RegistroLimpiezaFormComponent } from '../../components/registro-limpieza-form/registro-limpieza-form.component';
@@ -11,7 +13,7 @@ import { UpdateRegistroLimpiezaDto } from '../../models/update-registro-limpieza
 @Component({
     selector: 'app-registro-limpieza-edit',
     standalone: true,
-    imports: [RegistroLimpiezaFormComponent, ToastModule],
+    imports: [RegistroLimpiezaFormComponent, ButtonModule, ToastModule],
     providers: [MessageService],
     templateUrl: './registro-limpieza-edit.component.html',
     styleUrls: ['./registro-limpieza-edit.component.scss']
@@ -19,12 +21,15 @@ import { UpdateRegistroLimpiezaDto } from '../../models/update-registro-limpieza
 export class RegistroLimpiezaEditComponent implements OnInit {
     private service = inject(RegistroLimpiezaService);
     private router = inject(Router);
+    private location = inject(Location);
     private route = inject(ActivatedRoute);
     private messageService = inject(MessageService);
 
     registro = signal<RegistroLimpieza | undefined>(undefined);
     programaId = this.route.snapshot.paramMap.get('programaId')!;
     private id = this.route.snapshot.paramMap.get('id')!;
+
+    volver(): void { this.location.back(); }
 
     async ngOnInit(): Promise<void> {
         try {

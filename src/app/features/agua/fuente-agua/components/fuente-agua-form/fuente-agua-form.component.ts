@@ -55,9 +55,9 @@ export class FuenteAguaFormComponent implements OnInit, OnChanges, HasUnsavedCha
     }
 
     onSubmit() {
-        const { programaAguaId, nombre, tipo } = this.model;
+        const { programaAguaId, nombre, tipo, proveedor, ubicacion, requiereTanque, estado, municipio, departamento, concesion, tratamiento, evidenciaFoto } = this.model;
         if (!programaAguaId || !nombre || !tipo) return;
-        const data = { ...this.model };
+        const data = { programaAguaId, nombre, tipo, proveedor, ubicacion, requiereTanque, estado, municipio, departamento, concesion, tratamiento, evidenciaFoto };
 
         this.formSubmit.emit(data);
     }

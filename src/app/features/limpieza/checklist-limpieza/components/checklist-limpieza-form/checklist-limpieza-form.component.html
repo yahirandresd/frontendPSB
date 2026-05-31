@@ -1,21 +1,72 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
     <div class="flex flex-col gap-1">
-        <label class="font-medium text-sm">ID del paso <span class="text-red-500">*</span></label>
-        <input pInputText formControlName="pasoId" placeholder="ID del paso de limpieza" [attr.disabled]="item ? true : null" />
+        <label class="font-medium text-sm">Paso de limpieza <span class="text-red-500">*</span></label>
+        <p-select formControlName="pasoLimpiezaId" [options]="pasos()" optionLabel="label" optionValue="value"
+            placeholder="Selecciona un paso" />
     </div>
 
-    <div class="flex items-center gap-2">
-        <p-checkbox formControlName="completado" [binary]="true" inputId="completado" />
-        <label for="completado" class="font-medium text-sm cursor-pointer">Paso completado</label>
+    <p-divider />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="flex items-center gap-2">
+            <p-checkbox formControlName="productoCorrecto" [binary]="true" inputId="productoCorrecto" />
+            <label for="productoCorrecto" class="font-medium text-sm cursor-pointer">Producto correcto</label>
+        </div>
+        <div class="flex items-center gap-2">
+            <p-checkbox formControlName="concentracionCorrecta" [binary]="true" inputId="concentracionCorrecta" />
+            <label for="concentracionCorrecta" class="font-medium text-sm cursor-pointer">Concentración correcta</label>
+        </div>
+        <div class="flex items-center gap-2">
+            <p-checkbox formControlName="superficieCubierta" [binary]="true" inputId="superficieCubierta" />
+            <label for="superficieCubierta" class="font-medium text-sm cursor-pointer">Superficie cubierta</label>
+        </div>
+        <div class="flex items-center gap-2">
+            <p-checkbox formControlName="tiempoCumplido" [binary]="true" inputId="tiempoCumplido" />
+            <label for="tiempoCumplido" class="font-medium text-sm cursor-pointer">Tiempo cumplido</label>
+        </div>
+    </div>
+
+    <p-divider />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Estado</label>
+            <p-select formControlName="estado" [options]="estadoOpciones" optionLabel="label" optionValue="value"
+                placeholder="Selecciona estado" [showClear]="true" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Producto químico</label>
+            <p-select formControlName="productoQuimicoId" [options]="productos()" optionLabel="label" optionValue="value"
+                placeholder="Selecciona producto" [showClear]="true" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Lote usado</label>
+            <input pInputText formControlName="loteUsado" placeholder="Nro. de lote" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Concentración real</label>
+            <p-inputnumber formControlName="concentracionReal" [minFractionDigits]="0" [maxFractionDigits]="4"
+                placeholder="Ej: 0.5" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="font-medium text-sm">Volumen preparado (L)</label>
+            <p-inputnumber formControlName="volumenPreparadoLitros" [minFractionDigits]="0" [maxFractionDigits]="3"
+                placeholder="Ej: 10.5" />
+        </div>
     </div>
 
     <div class="flex flex-col gap-1">
-        <label class="font-medium text-sm">Observaciones</label>
-        <textarea pTextarea formControlName="observaciones" rows="3" placeholder="Observaciones del paso..."></textarea>
+        <label class="font-medium text-sm">Observación</label>
+        <textarea pTextarea formControlName="observacion" rows="3" placeholder="Observaciones..."></textarea>
     </div>
 
     <div class="flex justify-end gap-2 mt-2">
+        <p-button type="button" label="Cancelar" severity="secondary" (onClick)="cancelar.emit()" />
         <p-button
             type="submit"
             [label]="item ? 'Actualizar' : 'Guardar'"

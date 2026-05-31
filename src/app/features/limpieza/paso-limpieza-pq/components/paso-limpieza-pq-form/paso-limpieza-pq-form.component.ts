@@ -1,41 +1,46 @@
 import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
 import { PasoLimpiezaPq } from '../../models/paso-limpieza-pq.interface';
-import { CreatePasoLimpiezaPqDto } from '../../models/create-paso-limpieza-pq.dto';
+import { CreatePasoLimpiezaPqDto, ConcentracionUnidad } from '../../models/create-paso-limpieza-pq.dto';
 import { UpdatePasoLimpiezaPqDto } from '../../models/update-paso-limpieza-pq.dto';
 
 @Component({
     selector: 'app-paso-limpieza-pq-form',
     standalone: true,
-    imports: [ReactiveFormsModule, ButtonModule, InputTextModule, TextareaModule],
+    imports: [ReactiveFormsModule, ButtonModule, InputNumberModule, SelectModule],
     templateUrl: './paso-limpieza-pq-form.component.html',
     styleUrls: ['./paso-limpieza-pq-form.component.scss']
 })
 export class PasoLimpiezaPqFormComponent implements OnInit {
     @Input() pq?: PasoLimpiezaPq;
-    @Input() pasoId!: string;
+    @Input() pasoLimpiezaId!: string;
+    @Input() productoQuimicoId!: string;
     @Output() formSubmit = new EventEmitter<CreatePasoLimpiezaPqDto | UpdatePasoLimpiezaPqDto>();
 
     private fb = inject(FormBuilder);
 
+    unidadOptions: { label: string; value: ConcentracionUnidad }[] = [
+        { label: 'ppm',  value: 'ppm'  },
+        { label: '%',    value: '%'    },
+        { label: 'mL/L', value: 'mL/L' },
+    ];
+
     form = this.fb.group({
-        pasoId:         ['', Validators.required],
-        nombreProducto: ['', Validators.required],
-        concentracion:  [''],
-        dosis:          [''],
-        unidadMedida:   [''],
-        tiempoContacto: ['']
+        concentracionValor:  [null as number | null, [Validators.required, Validators.min(0)]],
+        concentracionUnidad: [null as ConcentracionUnidad | null, Validators.required],
+        tiempoContactoMin:   [null as number | null, [Validators.required, Validators.min(1)]],
     });
 
     ngOnInit(): void {
-        this.form.patchValue({ pasoId: this.pasoId });
-        this.form.get('pasoId')!.disable();
-
         if (this.pq) {
-            this.form.patchValue(this.pq);
+            this.form.patchValue({
+                concentracionValor:  this.pq.concentracionValor,
+                concentracionUnidad: this.pq.concentracionUnidad,
+                tiempoContactoMin:   this.pq.tiempoContactoMin,
+            });
         }
     }
 
@@ -45,21 +50,18 @@ export class PasoLimpiezaPqFormComponent implements OnInit {
 
         if (this.pq) {
             const dto: UpdatePasoLimpiezaPqDto = {
-                nombreProducto: raw.nombreProducto ?? undefined,
-                concentracion:  raw.concentracion  || undefined,
-                dosis:          raw.dosis          || undefined,
-                unidadMedida:   raw.unidadMedida   || undefined,
-                tiempoContacto: raw.tiempoContacto || undefined
+                concentracionValor:  raw.concentracionValor  ?? undefined,
+                concentracionUnidad: raw.concentracionUnidad ?? undefined,
+                tiempoContactoMin:   raw.tiempoContactoMin   ?? undefined,
             };
             this.formSubmit.emit(dto);
         } else {
             const dto: CreatePasoLimpiezaPqDto = {
-                pasoId:         raw.pasoId!,
-                nombreProducto: raw.nombreProducto!,
-                concentracion:  raw.concentracion  || undefined,
-                dosis:          raw.dosis          || undefined,
-                unidadMedida:   raw.unidadMedida   || undefined,
-                tiempoContacto: raw.tiempoContacto || undefined
+                pasoLimpiezaId:      this.pasoLimpiezaId,
+                productoQuimicoId:   this.productoQuimicoId,
+                concentracionValor:  raw.concentracionValor!,
+                concentracionUnidad: raw.concentracionUnidad!,
+                tiempoContactoMin:   raw.tiempoContactoMin!,
             };
             this.formSubmit.emit(dto);
         }

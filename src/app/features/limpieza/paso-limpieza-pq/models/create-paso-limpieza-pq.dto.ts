@@ -1,8 +1,9 @@
+export type ConcentracionUnidad = 'ppm' | '%' | 'mL/L';
+
 export interface CreatePasoLimpiezaPqDto {
-    pasoId: string;
-    nombreProducto: string;
-    concentracion?: string;
-    dosis?: string;
-    unidadMedida?: string;
-    tiempoContacto?: string;
+    pasoLimpiezaId: string;
+    productoQuimicoId: string;
+    concentracionValor: number;
+    concentracionUnidad: ConcentracionUnidad;
+    tiempoContactoMin: number;
 }

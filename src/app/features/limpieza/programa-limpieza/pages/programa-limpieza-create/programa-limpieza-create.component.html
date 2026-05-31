@@ -1,10 +1,15 @@
 <p-toast />
 
 <div class="card">
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo programa de limpieza</h2>
-        <p class="text-muted-color mt-1">Completa los campos para registrar un nuevo programa</p>
+    <div class="flex items-center gap-3 mb-6">
+        <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" (onClick)="volver()" />
+        <div>
+            <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">Nuevo programa de limpieza</h2>
+            <p class="text-muted-color mt-1">Completa los campos para registrar un nuevo programa</p>
+        </div>
     </div>
 
-    <app-programa-limpieza-form (formSubmit)="onFormSubmit($any($event))" />
+    <app-programa-limpieza-form
+        (formSubmit)="onFormSubmit($any($event))"
+        (cancelar)="volver()" />
 </div>

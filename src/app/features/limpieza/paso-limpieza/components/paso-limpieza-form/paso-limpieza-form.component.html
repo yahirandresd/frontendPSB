@@ -40,22 +40,17 @@
             <label class="font-medium text-surface-900 dark:text-surface-0">
                 Frecuencia <span class="text-red-500">*</span>
             </label>
-            <input pInputText formControlName="frecuencia" placeholder="Ej: Diaria, Semanal, Mensual" class="w-full" />
+            <p-select
+                formControlName="frecuencia"
+                [options]="frecuenciaOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona la frecuencia"
+                class="w-full"
+            />
             @if (f['frecuencia'].touched && f['frecuencia'].errors?.['required']) {
                 <small class="text-red-500">La frecuencia es obligatoria</small>
             }
-        </div>
-
-        <!-- Concentración -->
-        <div class="flex flex-col gap-1">
-            <label class="font-medium text-surface-900 dark:text-surface-0">Concentración</label>
-            <input pInputText formControlName="concentracion" placeholder="Ej: 200 ppm (opcional)" class="w-full" />
-        </div>
-
-        <!-- Tiempo de contacto -->
-        <div class="flex flex-col gap-1">
-            <label class="font-medium text-surface-900 dark:text-surface-0">Tiempo de contacto</label>
-            <input pInputText formControlName="tiempoContacto" placeholder="Ej: 10 min (opcional)" class="w-full" />
         </div>
 
         <!-- Temperatura mínima -->
@@ -79,6 +74,7 @@
     </div>
 
     <div class="flex justify-end gap-2 mt-2">
+        <p-button type="button" label="Cancelar" severity="secondary" (onClick)="cancelar.emit()" />
         <button pButton type="submit" [label]="paso ? 'Guardar cambios' : 'Crear paso'" icon="pi pi-check"></button>
     </div>
 

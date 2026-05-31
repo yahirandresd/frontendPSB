@@ -11,9 +11,8 @@ export class ChecklistLimpiezaService {
     private http = inject(HttpClient);
     private readonly url = `${environment.apiUrl}/checklist-limpieza`;
 
-    getAll(): Observable<ChecklistLimpieza[]>                                           { return this.http.get<ChecklistLimpieza[]>(this.url); }
+    getByRegistro(registroLimpiezaId: string): Observable<ChecklistLimpieza[]>          { return this.http.get<ChecklistLimpieza[]>(`${this.url}/por-registro-limpieza/${registroLimpiezaId}`); }
     getById(id: string): Observable<ChecklistLimpieza>                                  { return this.http.get<ChecklistLimpieza>(`${this.url}/${id}`); }
-    getByRegistro(registroId: string): Observable<ChecklistLimpieza[]>                 { return this.http.get<ChecklistLimpieza[]>(`${this.url}/por-registro/${registroId}`); }
     create(dto: CreateChecklistLimpiezaDto): Observable<ChecklistLimpieza>              { return this.http.post<ChecklistLimpieza>(this.url, dto); }
     update(id: string, dto: UpdateChecklistLimpiezaDto): Observable<ChecklistLimpieza>  { return this.http.patch<ChecklistLimpieza>(`${this.url}/${id}`, dto); }
     delete(id: string): Observable<void>                                                { return this.http.delete<void>(`${this.url}/${id}`); }

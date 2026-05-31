@@ -8,6 +8,7 @@ export type EstadoPlan = 'ACTIVO' | 'BORRADOR' | 'VENCIDO' | 'EN_REVISION';
 export interface PlanPsb {
     id: string;
     nombre: string;
+    descripcion: string;
     version: string;
     estado: string;
     nivel_riesgo: string;

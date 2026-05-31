@@ -85,15 +85,17 @@ export class AnalisisLaboratorioFormComponent implements OnInit, OnChanges, HasU
     }
 
     onSubmit() {
-        const { fuenteAguaId, numeroCertificado, laboratorioCertificado, fechaMuestreo, responsableMuestra, puntoMuestreo, cloroResidual, ph, turbiedad, colorAparente } = this.model;
+        const { fuenteAguaId, numeroCertificado, laboratorioCertificado, fechaMuestreo, fechaEntregaResultado, responsableMuestra, puntoMuestreo, cloroResidual, ph, turbiedad, colorAparente, coliformesTotalesPresentes, eColiPresente, mesofilos, linkDocumentoPdf, fotoEvidencia, concepto, coliformesTotalesUfc, eColiUfc, conductividad, durezaTotal, nitritos, nitratos, hierroTotal, cloruros, sulfatos, fluoruros, calcio, magnesio, alcalinidad, carbonoOrganicoTotal, tensoactivos } = this.model;
         if (!fuenteAguaId || !numeroCertificado || !laboratorioCertificado || !fechaMuestreo || !responsableMuestra || !puntoMuestreo) return;
         if (cloroResidual === undefined || cloroResidual === null) return;
         if (ph === undefined || ph === null) return;
         if (turbiedad === undefined || turbiedad === null) return;
         if (colorAparente === undefined || colorAparente === null) return;
-        const data = { ...this.model };
-        if (data.fechaMuestreo instanceof Date) data.fechaMuestreo = data.fechaMuestreo.toISOString();
-        if (data.fechaEntregaResultado instanceof Date) data.fechaEntregaResultado = data.fechaEntregaResultado.toISOString();
+        const data = {
+            fuenteAguaId, numeroCertificado, laboratorioCertificado, responsableMuestra, puntoMuestreo, cloroResidual, ph, turbiedad, colorAparente, coliformesTotalesPresentes, eColiPresente, mesofilos, linkDocumentoPdf, fotoEvidencia, concepto, coliformesTotalesUfc, eColiUfc, conductividad, durezaTotal, nitritos, nitratos, hierroTotal, cloruros, sulfatos, fluoruros, calcio, magnesio, alcalinidad, carbonoOrganicoTotal, tensoactivos,
+            fechaMuestreo: fechaMuestreo instanceof Date ? fechaMuestreo.toISOString() : fechaMuestreo,
+            fechaEntregaResultado: fechaEntregaResultado instanceof Date ? fechaEntregaResultado.toISOString() : fechaEntregaResultado,
+        };
         this.formSubmit.emit(data);
     }
 

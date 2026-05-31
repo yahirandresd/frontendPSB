@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -12,7 +12,7 @@ import { ProgramaLimpieza } from '../../models/programa-limpieza.interface';
 @Component({
     selector: 'app-programa-limpieza-detail',
     standalone: true,
-    imports: [ButtonModule, CardModule, TagModule, ProgressSpinnerModule, DatePipe],
+    imports: [ButtonModule, CardModule, TagModule, ProgressSpinnerModule, DatePipe, RouterModule],
     templateUrl: './programa-limpieza-detail.component.html',
     styleUrls: ['./programa-limpieza-detail.component.scss']
 })

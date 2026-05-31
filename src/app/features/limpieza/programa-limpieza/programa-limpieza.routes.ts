@@ -9,6 +9,7 @@ export default [
     { path: 'crear',      component: ProgramaLimpiezaCreateComponent },
     { path: ':id',        component: ProgramaLimpiezaDetailComponent },
     { path: ':id/editar', component: ProgramaLimpiezaEditComponent   },
-    { path: ':programaId/pasos',      loadChildren: () => import('../paso-limpieza/paso-limpieza.routes')       },
-    { path: ':programaId/registros',  loadChildren: () => import('../registro-limpieza/registro-limpieza.routes') }
+    { path: ':programaId/pasos',      loadChildren: () => import('../paso-limpieza/paso-limpieza.routes')           },
+    { path: ':programaId/checklists', loadChildren: () => import('../checklist-limpieza/checklist-limpieza.routes') },
+    { path: ':programaId/registros',  loadChildren: () => import('../registro-limpieza/registro-limpieza.routes')   }
 ] as Routes;

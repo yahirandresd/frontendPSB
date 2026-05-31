@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
 import { PasoLimpieza } from '../../models/paso-limpieza.interface';
 import { CreatePasoLimpiezaDto } from '../../models/create-paso-limpieza.dto';
 import { UpdatePasoLimpiezaDto } from '../../models/update-paso-limpieza.dto';
@@ -11,7 +12,7 @@ import { UpdatePasoLimpiezaDto } from '../../models/update-paso-limpieza.dto';
 @Component({
     selector: 'app-paso-limpieza-form',
     standalone: true,
-    imports: [ReactiveFormsModule, InputTextModule, InputNumberModule, TextareaModule, ButtonModule],
+    imports: [ReactiveFormsModule, InputTextModule, InputNumberModule, TextareaModule, SelectModule, ButtonModule],
     templateUrl: './paso-limpieza-form.component.html',
     styleUrls: ['./paso-limpieza-form.component.scss']
 })
@@ -19,6 +20,7 @@ export class PasoLimpiezaFormComponent implements OnInit {
     @Input() paso?: PasoLimpieza;
     @Input() programaLimpiezaId!: string;
     @Output() formSubmit = new EventEmitter<CreatePasoLimpiezaDto | UpdatePasoLimpiezaDto>();
+    @Output() cancelar = new EventEmitter<void>();
 
     private fb = inject(FormBuilder);
 
@@ -27,12 +29,17 @@ export class PasoLimpiezaFormComponent implements OnInit {
         descripcion:            ['', Validators.required],
         tipoAccion:             ['', Validators.required],
         frecuencia:             ['', Validators.required],
-        concentracion:          [''],
-        tiempoContacto:         [''],
         observaciones:          [''],
         temperaturaAguaMinima:  [null],
         temperaturaAguaMaxima:  [null]
     });
+
+    frecuenciaOptions = [
+        { label: 'Diario',    value: 'Diario'    },
+        { label: 'Semanal',   value: 'Semanal'   },
+        { label: 'Quincenal', value: 'Quincenal' },
+        { label: 'Mensual',   value: 'Mensual'   },
+    ];
 
     get f() { return this.form.controls; }
 
@@ -53,8 +60,6 @@ export class PasoLimpiezaFormComponent implements OnInit {
             descripcion: raw.descripcion,
             tipoAccion: raw.tipoAccion,
             frecuencia: raw.frecuencia,
-            concentracion: raw.concentracion || undefined,
-            tiempoContacto: raw.tiempoContacto || undefined,
             observaciones: raw.observaciones || undefined,
             temperaturaAguaMinima: raw.temperaturaAguaMinima ?? undefined,
             temperaturaAguaMaxima: raw.temperaturaAguaMaxima ?? undefined

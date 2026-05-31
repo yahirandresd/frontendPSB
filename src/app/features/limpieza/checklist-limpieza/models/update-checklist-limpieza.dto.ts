@@ -1,4 +1,14 @@
+import { EstadoChecklist } from './checklist-limpieza.interface';
+
 export interface UpdateChecklistLimpiezaDto {
-    completado?: boolean;
-    observaciones?: string;
+    productoCorrecto?: boolean;
+    concentracionCorrecta?: boolean;
+    superficieCubierta?: boolean;
+    tiempoCumplido?: boolean;
+    estado?: EstadoChecklist;
+    observacion?: string;
+    productoQuimicoId?: string;
+    loteUsado?: string;
+    concentracionReal?: number;
+    volumenPreparadoLitros?: number;
 }

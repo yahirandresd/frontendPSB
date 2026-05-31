@@ -6,10 +6,11 @@ export interface Programa {
     id: string;
     planPsbId: string;
     tipo: TipoPrograma;
-    nombre: string;
-    responsable: string;
-    frecuencia: FrecuenciaPrograma;
-    descripcion?: string;
+    nombre: string | null;
+    responsable: string | null;
+    frecuencia: FrecuenciaPrograma | null;
+    descripcion?: string | null;
+    planPsb?: { id: string; nombre: string };
     createdAt: string;
     updatedAt: string;
 }

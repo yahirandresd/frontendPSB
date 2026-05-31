@@ -1,33 +1,45 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { SlicePipe } from '@angular/common';
+import { Location, SlicePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { PasoLimpiezaService } from '../../services/paso-limpieza.service';
 import { PasoLimpieza } from '../../models/paso-limpieza.interface';
+import { PasoLimpiezaPqService } from '@/app/features/limpieza/paso-limpieza-pq/services/paso-limpieza-pq.service';
+import { PasoLimpiezaPq } from '@/app/features/limpieza/paso-limpieza-pq/models/paso-limpieza-pq.interface';
+import { ProductoQuimicoService } from '@/app/features/limpieza/producto-quimico/services/producto-quimico.service';
+import { ProductoQuimico } from '@/app/features/limpieza/producto-quimico/models/producto-quimico.interface';
 
 @Component({
     selector: 'app-paso-limpieza-list',
     standalone: true,
-    imports: [TableModule, ButtonModule, ConfirmDialogModule, ToastModule, SlicePipe],
+    imports: [TableModule, ButtonModule, TagModule, ConfirmDialogModule, ToastModule, TooltipModule, SlicePipe],
     providers: [ConfirmationService, MessageService],
     templateUrl: './paso-limpieza-list.component.html',
     styleUrls: ['./paso-limpieza-list.component.scss']
 })
 export class PasoLimpiezaListComponent implements OnInit {
-    private service = inject(PasoLimpiezaService);
-    private router = inject(Router);
-    private route = inject(ActivatedRoute);
+    private service         = inject(PasoLimpiezaService);
+    private pqService       = inject(PasoLimpiezaPqService);
+    private productoService = inject(ProductoQuimicoService);
+    private router          = inject(Router);
+    private route           = inject(ActivatedRoute);
     private confirmationService = inject(ConfirmationService);
-    private messageService = inject(MessageService);
+    private messageService      = inject(MessageService);
+    private location            = inject(Location);
 
     programaId = this.route.snapshot.paramMap.get('programaId')!;
-    pasos = signal<PasoLimpieza[]>([]);
-    cargando = signal(true);
+    pasos      = signal<PasoLimpieza[]>([]);
+    catalogo   = signal<ProductoQuimico[]>([]);
+    cargando   = signal(true);
+
+    private pqMap = new Map<string, PasoLimpiezaPq[]>();
 
     async ngOnInit(): Promise<void> {
         await this.cargar();
@@ -36,11 +48,32 @@ export class PasoLimpiezaListComponent implements OnInit {
     async cargar(): Promise<void> {
         this.cargando.set(true);
         try {
-            this.pasos.set(await firstValueFrom(this.service.getByPrograma(this.programaId)));
+            const [pasos, catalogo] = await Promise.all([
+                firstValueFrom(this.service.getByPrograma(this.programaId)),
+                firstValueFrom(this.productoService.getAll()).catch(() => [] as ProductoQuimico[]),
+            ]);
+            this.catalogo.set(catalogo);
+
+            const pqsLists = await Promise.all(
+                pasos.map(p => firstValueFrom(this.pqService.getByPaso(p.id)).catch(() => [] as PasoLimpiezaPq[]))
+            );
+            this.pqMap.clear();
+            pasos.forEach((p, i) => this.pqMap.set(p.id, pqsLists[i]));
+            this.pasos.set(pasos);
         } finally {
             this.cargando.set(false);
         }
     }
+
+    productosDelPaso(pasoId: string): PasoLimpiezaPq[] {
+        return this.pqMap.get(pasoId) ?? [];
+    }
+
+    nombreProducto(pq: PasoLimpiezaPq): string {
+        return this.catalogo().find(p => p.id === pq.productoQuimicoId)?.nombre ?? '—';
+    }
+
+    volver(): void { this.location.back(); }
 
     irACrear(): void {
         this.router.navigate(['crear'], { relativeTo: this.route });

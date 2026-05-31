@@ -61,12 +61,14 @@ export class MantenimientoLavadoFormComponent implements OnInit, OnChanges, HasU
     }
 
     onSubmit() {
-        const { fuenteAguaId, fechaProgramada, metodoLimpieza } = this.model;
+        const { fuenteAguaId, registroAguaId, fechaProgramada, fechaEjecucion, metodoLimpieza, observaciones, estado, evidenciaFoto, tipoLimpieza, productoUtilizado, concentracionProducto, tiempoContacto, volumenAgua, proceso, responsable, proximaLimpieza, cumple } = this.model;
         if (!fuenteAguaId || !fechaProgramada || !metodoLimpieza) return;
-        const data = { ...this.model };
-        if (data.fechaProgramada instanceof Date) data.fechaProgramada = data.fechaProgramada.toISOString();
-        if (data.fechaEjecucion instanceof Date) data.fechaEjecucion = data.fechaEjecucion.toISOString();
-        if (data.proximaLimpieza instanceof Date) data.proximaLimpieza = data.proximaLimpieza.toISOString();
+        const data = {
+            fuenteAguaId, registroAguaId, metodoLimpieza, observaciones, estado, evidenciaFoto, tipoLimpieza, productoUtilizado, concentracionProducto, tiempoContacto, volumenAgua, proceso, responsable, cumple,
+            fechaProgramada: fechaProgramada instanceof Date ? fechaProgramada.toISOString() : fechaProgramada,
+            fechaEjecucion: fechaEjecucion instanceof Date ? fechaEjecucion.toISOString() : fechaEjecucion,
+            proximaLimpieza: proximaLimpieza instanceof Date ? proximaLimpieza.toISOString() : proximaLimpieza,
+        };
         this.formSubmit.emit(data);
     }
 
