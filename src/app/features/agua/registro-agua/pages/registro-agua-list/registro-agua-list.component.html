@@ -1,6 +1,9 @@
 <div class="card">
     <div class="flex justify-between items-center mb-6">
-        <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">Registro Agua</div>
+        <div class="flex items-center gap-3">
+            <p-button icon="pi pi-arrow-left" severity="secondary" rounded routerLink="/programa-agua" />
+            <div class="text-surface-900 dark:text-surface-0 text-2xl font-semibold">Registro Agua</div>
+        </div>
         <p-button label="Nuevo" icon="pi pi-plus" routerLink="crear" />
     </div>
     <p-table [value]="items()" [loading]="loading()" [paginator]="true" [rows]="10" stripedRows dataKey="id">
