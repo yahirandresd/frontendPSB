@@ -59,11 +59,13 @@ export class AccionCorrectivaAguaFormComponent implements OnInit, OnChanges, Has
     }
 
     onSubmit() {
-        const { fuenteAguaId, descripcionDesviacion, medidaTomada, fecha, responsable } = this.model;
+        const { fuenteAguaId, registroAguaId, descripcionDesviacion, medidaTomada, resultadoVerificacion, fecha, responsable, estado, evidenciaFoto, parametroIncumplido, valorMedido, valorEsperado, causaRaiz, accionInmediata, accionCorrectiva, fechaLimite, verificacionEficacia, eficaz, origen } = this.model;
         if (!fuenteAguaId || !descripcionDesviacion || !medidaTomada || !fecha || !responsable) return;
-        const data = { ...this.model };
-        if (data.fecha instanceof Date) data.fecha = data.fecha.toISOString();
-        if (data.fechaLimite instanceof Date) data.fechaLimite = data.fechaLimite.toISOString();
+        const data = {
+            fuenteAguaId, registroAguaId, descripcionDesviacion, medidaTomada, resultadoVerificacion, responsable, estado, evidenciaFoto, parametroIncumplido, valorMedido, valorEsperado, causaRaiz, accionInmediata, accionCorrectiva, verificacionEficacia, eficaz, origen,
+            fecha: fecha instanceof Date ? fecha.toISOString() : fecha,
+            fechaLimite: fechaLimite instanceof Date ? fechaLimite.toISOString() : fechaLimite,
+        };
         this.formSubmit.emit(data);
     }
 

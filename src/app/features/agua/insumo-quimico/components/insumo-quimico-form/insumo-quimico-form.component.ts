@@ -48,10 +48,12 @@ export class InsumoQuimicoFormComponent implements OnInit, OnChanges, HasUnsaved
     }
 
     onSubmit() {
-        const { mantenimientoId, nombre } = this.model;
+        const { mantenimientoId, nombre, registroSanitarioInvima, lote, fechaVencimiento, concentracion, fabricante, uso, stock, unidad, fichaTecnica, condicionesAlmacenamiento } = this.model;
         if (!mantenimientoId || !nombre) return;
-        const data = { ...this.model };
-        if (data.fechaVencimiento instanceof Date) data.fechaVencimiento = data.fechaVencimiento.toISOString();
+        const data = {
+            mantenimientoId, nombre, registroSanitarioInvima, lote, concentracion, fabricante, uso, stock, unidad, fichaTecnica, condicionesAlmacenamiento,
+            fechaVencimiento: fechaVencimiento instanceof Date ? fechaVencimiento.toISOString() : fechaVencimiento,
+        };
         this.formSubmit.emit(data);
     }
 

@@ -54,10 +54,12 @@ export class RegistroAguaFormComponent implements OnInit, OnChanges, HasUnsavedC
     }
 
     onSubmit() {
-        const { registroId, programaAguaId, tipoActividad } = this.model;
+        const { registroId, programaAguaId, tipoActividad, resultadoGeneral, periodo, responsable, porcentajeCumplimiento, reporte, fechaCierre } = this.model;
         if (!registroId || !programaAguaId || !tipoActividad) return;
-        const data = { ...this.model };
-        if (data.fechaCierre instanceof Date) data.fechaCierre = data.fechaCierre.toISOString();
+        const data = {
+            registroId, programaAguaId, tipoActividad, resultadoGeneral, periodo, responsable, porcentajeCumplimiento, reporte,
+            fechaCierre: fechaCierre instanceof Date ? fechaCierre.toISOString() : fechaCierre,
+        };
         this.formSubmit.emit(data);
     }
 
