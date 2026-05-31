@@ -6,8 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { RegistroAguaService } from '../../services/registro-agua.service';
 import { RegistroAgua } from '../../models/registro-agua.interface';
 import { ProgramaAguaService } from '../../../programa-agua/services/programa-agua.service';
@@ -15,10 +14,10 @@ import { ProgramaAguaService } from '../../../programa-agua/services/programa-ag
 @Component({
     selector: 'app-registro-agua-list',
     standalone: true,
-    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule, TooltipModule],
+    imports: [CommonModule, RouterModule, TableModule, ButtonModule, ToastModule, TooltipModule],
     templateUrl: './registro-agua-list.component.html',
     styleUrls: ['./registro-agua-list.component.scss'],
-    providers: [ConfirmationService, MessageService],
+    providers: [MessageService],
 })
 export class RegistroAguaListComponent implements OnInit {
     private service = inject(RegistroAguaService);
@@ -27,7 +26,6 @@ export class RegistroAguaListComponent implements OnInit {
     items = signal<RegistroAgua[]>([]);
     programaMap = signal<Map<string, string>>(new Map());
     loading = signal(false);
-    private confirmationService = inject(ConfirmationService);
     ngOnInit() { this.cargar(); }
     async cargar() {
         this.loading.set(true);
@@ -41,23 +39,5 @@ export class RegistroAguaListComponent implements OnInit {
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar' }); }
         finally { this.loading.set(false); }
     }
-    confirmarEliminar(item: RegistroAgua) {
-        this.confirmationService.confirm({
-            message: '¿Estás seguro de eliminar este registro de agua?',
-            header: 'Confirmar eliminación',
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Eliminar',
-            rejectLabel: 'Cancelar',
-            acceptButtonStyleClass: 'p-button-danger',
-            accept: async () => {
-                try {
-                    await firstValueFrom(this.service.delete(item.id));
-                    this.items.update(list => list.filter(i => i.id !== item.id));
-                    this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Registro de agua eliminado correctamente' });
-                } catch {
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar el registro de agua' });
-                }
-            },
-        });
-    }
+
 }

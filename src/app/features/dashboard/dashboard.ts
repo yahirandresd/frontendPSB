@@ -1,11 +1,14 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 import { PsbStatsWidget } from './components/psb-stats-widget';
 import { PsbCumplimientoWidget } from './components/psb-cumplimiento-widget';
 import { PsbAlertasWidget } from './components/psb-alertas-widget';
 import { PsbPlanesWidget } from './components/psb-planes-widget';
 import { PsbActividadWidget } from './components/psb-actividad-widget';
 import { PsbTendenciaWidget } from './components/psb-tendencia-widget';
+import { DashboardService } from './services/dashboard.service';
+import { DashboardStore } from './services/dashboard.store';
 
 @Component({
     selector: 'app-dashboard',
@@ -69,7 +72,10 @@ import { PsbTendenciaWidget } from './components/psb-tendencia-widget';
         </div>
     `
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
+    private dashboardService = inject(DashboardService);
+    private store = inject(DashboardStore);
+
     readonly nombreAdmin = signal('Carlos Arbeláez');
     readonly nombreEmpresa = signal('Lácteos del Eje S.A.S.');
     readonly fechaHoy = signal(
@@ -80,4 +86,13 @@ export class Dashboard {
             day: 'numeric',
         })
     );
+
+    async ngOnInit() {
+        try {
+            const data = await firstValueFrom(this.dashboardService.getDashboard());
+            this.store.data.set(data);
+        } catch {
+            // Silently fail — widgets will show empty/fallback state
+        }
+    }
 }

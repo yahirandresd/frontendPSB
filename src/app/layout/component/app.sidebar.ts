@@ -48,9 +48,10 @@ import { RippleModule } from 'primeng/ripple';
                 <button
                     pButton
                     pRipple
-                    label="Nuevo Registro"
+                    label="Nuevo Plan de Saneamiento"
                     icon="pi pi-plus-circle"
                     class="new-button p-button-rounded"
+                    routerLink="/planes/crear"
                 ></button>
             </div>
 

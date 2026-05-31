@@ -1,25 +1,17 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { DashboardStore } from '../services/dashboard.store';
 
 type RiesgoNivel = 'ALTO' | 'MEDIO' | 'BAJO';
 type PlanEstado = 'ACTIVO' | 'BORRADOR' | 'VENCIDO' | 'EN_REVISION';
 
-interface PlanResumen {
-    id: string;
-    nombre: string;
-    version: string;
-    nivelRiesgo: RiesgoNivel;
-    estado: PlanEstado;
-    cumplimiento: number;
-    vencimiento: string;
-}
-
 @Component({
     standalone: true,
     selector: 'app-psb-planes-widget',
-    imports: [CommonModule, ButtonModule, TagModule],
+    imports: [CommonModule, RouterModule, ButtonModule, TagModule],
     template: `
         <div class="card mb-8!">
             <div class="flex items-center justify-between mb-6">
@@ -28,7 +20,7 @@ interface PlanResumen {
                     <p class="text-muted-color text-sm mt-1">Historial de versiones y estado</p>
                 </div>
                 <button pButton type="button" label="Nuevo plan" icon="pi pi-plus"
-                    class="p-button-sm p-button-outlined"></button>
+                    class="p-button-sm p-button-outlined" routerLink="/planes/crear"></button>
             </div>
 
             <div class="overflow-x-auto">
@@ -38,7 +30,6 @@ interface PlanResumen {
                             <th class="text-left text-muted-color font-medium pb-3 pr-4">Plan / Versión</th>
                             <th class="text-left text-muted-color font-medium pb-3 pr-4">Riesgo</th>
                             <th class="text-left text-muted-color font-medium pb-3 pr-4">Estado</th>
-                            <th class="text-left text-muted-color font-medium pb-3 pr-4">Cumplimiento</th>
                             <th class="text-left text-muted-color font-medium pb-3 pr-4">Vence</th>
                             <th class="text-left text-muted-color font-medium pb-3"></th>
                         </tr>
@@ -67,34 +58,12 @@ interface PlanResumen {
                                     />
                                 </td>
                                 <td class="py-3 pr-4">
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex-1 bg-surface-200 dark:bg-surface-700 rounded-full h-1.5 min-w-16">
-                                            <div
-                                                class="h-1.5 rounded-full transition-all"
-                                                [style.width.%]="plan.cumplimiento"
-                                                [ngClass]="{
-                                                    'bg-emerald-500': plan.cumplimiento >= 80,
-                                                    'bg-orange-400': plan.cumplimiento >= 60 && plan.cumplimiento < 80,
-                                                    'bg-red-500': plan.cumplimiento < 60
-                                                }"
-                                            ></div>
-                                        </div>
-                                        <span class="text-xs font-medium text-surface-700 dark:text-surface-200 min-w-8">{{ plan.cumplimiento }}%</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 pr-4">
-                                    <span
-                                        class="text-xs"
-                                        [ngClass]="{
-                                            'text-red-500 font-medium': esProximoAVencer(plan.vencimiento),
-                                            'text-muted-color': !esProximoAVencer(plan.vencimiento)
-                                        }"
-                                    >{{ plan.vencimiento }}</span>
+                                    <span class="text-xs text-muted-color">{{ plan.vencimiento }}</span>
                                 </td>
                                 <td class="py-3">
                                     <button pButton type="button" icon="pi pi-eye"
                                         class="p-button-rounded p-button-text p-button-plain p-button-sm"
-                                        pTooltip="Ver plan"></button>
+                                        pTooltip="Ver plan" [routerLink]="['/planes', plan.id]"></button>
                                 </td>
                             </tr>
                         }
@@ -105,67 +74,27 @@ interface PlanResumen {
     `
 })
 export class PsbPlanesWidget {
-    planes = signal<PlanResumen[]>([
-        {
-            id: '1',
-            nombre: 'PSB Lácteos del Eje',
-            version: 'v2.1 · vigente',
-            nivelRiesgo: 'ALTO',
-            estado: 'ACTIVO',
-            cumplimiento: 78,
-            vencimiento: '11 may 2026'
-        },
-        {
-            id: '2',
-            nombre: 'PSB Lácteos del Eje',
-            version: 'v2.0 · anterior',
-            nivelRiesgo: 'ALTO',
-            estado: 'VENCIDO',
-            cumplimiento: 85,
-            vencimiento: '11 may 2025'
-        },
-        {
-            id: '3',
-            nombre: 'PSB Punto de Venta Manizales',
-            version: 'v1.0 · borrador',
-            nivelRiesgo: 'MEDIO',
-            estado: 'BORRADOR',
-            cumplimiento: 0,
-            vencimiento: 'Sin fecha'
-        },
-        {
-            id: '4',
-            nombre: 'PSB Distribución Bogotá',
-            version: 'v1.2 · en revisión',
-            nivelRiesgo: 'BAJO',
-            estado: 'EN_REVISION',
-            cumplimiento: 62,
-            vencimiento: '30 jun 2026'
-        }
-    ]);
+    private store = inject(DashboardStore);
 
-    estadoLabel(estado: PlanEstado): string {
-        const labels: Record<PlanEstado, string> = {
+    planes = computed(() => this.store.data()?.planes ?? []);
+
+    estadoLabel(estado: string): string {
+        const labels: Record<string, string> = {
             ACTIVO: 'Activo',
             BORRADOR: 'Borrador',
             VENCIDO: 'Vencido',
             EN_REVISION: 'En revisión'
         };
-        return labels[estado];
+        return labels[estado] ?? estado;
     }
 
-    estadoSeverity(estado: PlanEstado): 'success' | 'danger' | 'secondary' | 'warn' {
-        const map: Record<PlanEstado, 'success' | 'danger' | 'secondary' | 'warn'> = {
+    estadoSeverity(estado: string): 'success' | 'danger' | 'secondary' | 'warn' {
+        const map: Record<string, 'success' | 'danger' | 'secondary' | 'warn'> = {
             ACTIVO: 'success',
             BORRADOR: 'secondary',
             VENCIDO: 'danger',
             EN_REVISION: 'warn'
         };
-        return map[estado];
-    }
-
-    esProximoAVencer(fecha: string): boolean {
-        // Marca en rojo fechas que incluyan "may 2026" como dato mock representativo
-        return fecha.includes('may 2026');
+        return map[estado] ?? 'secondary';
     }
 }
