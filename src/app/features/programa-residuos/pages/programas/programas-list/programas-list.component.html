@@ -2,14 +2,6 @@
 <p-confirmdialog />
 
 <div class="card">
-    <p-toolbar styleClass="mb-4">
-        <ng-template #start>
-            <p-button label="Nuevo programa" icon="pi pi-plus" routerLink="/programa-residuos/programas/crear" />
-        </ng-template>
-        <ng-template #end>
-            <p-button label="Exportar CSV" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
-        </ng-template>
-    </p-toolbar>
 
     <div class="flex flex-wrap gap-3 mb-4">
         <p-iconfield iconPosition="left" class="flex-1 min-w-64">
