@@ -28,9 +28,21 @@ export class MantenimientoLavadoCreateComponent implements HasUnsavedChanges {
     async onSubmit(data: any) {
         this.saving.set(true);
         try {
-            await firstValueFrom(this.service.create(data));
-            this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
-            setTimeout(() => this.router.navigate(['/programa-agua/mantenimiento-lavado']), 1000);
+            const creado = await firstValueFrom(this.service.create(data));
+            if (creado.estado === 'programado' && new Date(creado.fechaProgramada) < new Date()) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Mantenimiento no ejecutado',
+                    detail: `El mantenimiento programado para ${creado.fechaProgramada} no ha sido ejecutado.`
+                });
+                setTimeout(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
+                    setTimeout(() => this.router.navigate(['/programa-agua/mantenimiento-lavado']), 1000);
+                }, 800);
+            } else {
+                this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
+                setTimeout(() => this.router.navigate(['/programa-agua/mantenimiento-lavado']), 1000);
+            }
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear' }); }
         finally { this.saving.set(false); }
     }

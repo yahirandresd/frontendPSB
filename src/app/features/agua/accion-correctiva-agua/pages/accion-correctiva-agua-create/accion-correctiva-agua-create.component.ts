@@ -28,9 +28,21 @@ export class AccionCorrectivaAguaCreateComponent implements HasUnsavedChanges {
     async onSubmit(data: any) {
         this.saving.set(true);
         try {
-            await firstValueFrom(this.service.create(data));
-            this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
-            setTimeout(() => this.router.navigate(['/programa-agua/accion-correctiva-agua']), 1000);
+            const creado = await firstValueFrom(this.service.create(data));
+            if (creado.fechaLimite && new Date(creado.fechaLimite) < new Date() && (creado.estado === 'pendiente' || creado.estado === 'en_proceso')) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Acción correctiva vencida',
+                    detail: `La acción correctiva del ${creado.fecha} superó su fecha límite (${creado.fechaLimite}) y sigue en estado ${creado.estado}.`
+                });
+                setTimeout(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
+                    setTimeout(() => this.router.navigate(['/programa-agua/accion-correctiva-agua']), 1000);
+                }, 800);
+            } else {
+                this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
+                setTimeout(() => this.router.navigate(['/programa-agua/accion-correctiva-agua']), 1000);
+            }
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear' }); }
         finally { this.saving.set(false); }
     }

@@ -40,9 +40,21 @@ export class MantenimientoLavadoEditComponent implements OnInit, HasUnsavedChang
         if (!id) return;
         this.saving.set(true);
         try {
-            await firstValueFrom(this.service.update(id, data));
-            this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
-            setTimeout(() => this.router.navigate(['/programa-agua/mantenimiento-lavado']), 1000);
+            const actualizado = await firstValueFrom(this.service.update(id, data));
+            if (actualizado.estado === 'programado' && new Date(actualizado.fechaProgramada) < new Date()) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Mantenimiento no ejecutado',
+                    detail: `El mantenimiento programado para ${actualizado.fechaProgramada} no ha sido ejecutado.`
+                });
+                setTimeout(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
+                    setTimeout(() => this.router.navigate(['/programa-agua/mantenimiento-lavado']), 1000);
+                }, 800);
+            } else {
+                this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
+                setTimeout(() => this.router.navigate(['/programa-agua/mantenimiento-lavado']), 1000);
+            }
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }

@@ -28,9 +28,21 @@ export class AnalisisLaboratorioCreateComponent implements HasUnsavedChanges {
     async onSubmit(data: any) {
         this.saving.set(true);
         try {
-            await firstValueFrom(this.service.create(data));
-            this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
-            setTimeout(() => this.router.navigate(['/programa-agua/analisis-laboratorio']), 1000);
+            const creado = await firstValueFrom(this.service.create(data));
+            if (!creado.cumpleNormaGeneral) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Análisis de laboratorio no conforme',
+                    detail: `IRCA: ${creado.irca}% · Nivel de riesgo: ${creado.nivelRiesgo}. Se requiere acción correctiva.`
+                });
+                setTimeout(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
+                    setTimeout(() => this.router.navigate(['/programa-agua/analisis-laboratorio']), 1000);
+                }, 800);
+            } else {
+                this.messageService.add({ severity: 'success', summary: 'Creado', detail: 'Creado correctamente' });
+                setTimeout(() => this.router.navigate(['/programa-agua/analisis-laboratorio']), 1000);
+            }
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear' }); }
         finally { this.saving.set(false); }
     }

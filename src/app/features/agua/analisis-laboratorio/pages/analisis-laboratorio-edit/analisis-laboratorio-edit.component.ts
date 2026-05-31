@@ -40,9 +40,21 @@ export class AnalisisLaboratorioEditComponent implements OnInit, HasUnsavedChang
         if (!id) return;
         this.saving.set(true);
         try {
-            await firstValueFrom(this.service.update(id, data));
-            this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
-            setTimeout(() => this.router.navigate(['/programa-agua/analisis-laboratorio']), 1000);
+            const actualizado = await firstValueFrom(this.service.update(id, data));
+            if (!actualizado.cumpleNormaGeneral) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Análisis de laboratorio no conforme',
+                    detail: `IRCA: ${actualizado.irca}% · Nivel de riesgo: ${actualizado.nivelRiesgo}. Se requiere acción correctiva.`
+                });
+                setTimeout(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
+                    setTimeout(() => this.router.navigate(['/programa-agua/analisis-laboratorio']), 1000);
+                }, 800);
+            } else {
+                this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
+                setTimeout(() => this.router.navigate(['/programa-agua/analisis-laboratorio']), 1000);
+            }
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }

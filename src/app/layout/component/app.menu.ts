@@ -15,6 +15,13 @@ import { RouterModule } from '@angular/router';
             </li>
 
             <li>
+                <a routerLink="/notificaciones" routerLinkActive="active">
+                    <i class="pi pi-bell"></i>
+                    <span>Notificaciones</span>
+                </a>
+            </li>
+
+            <li>
                 <a routerLink="/configuracion-inicial" routerLinkActive="active">
                     <i class="pi pi-cog"></i>
                     <span>Configuración Inicial</span>

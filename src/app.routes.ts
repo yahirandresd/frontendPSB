@@ -69,6 +69,14 @@ export const appRoutes: Routes = [
                         (m) => m.TIPO_RESIDUO_ROUTES
                     )
             },
+            // ── Notificaciones ──
+            {
+                path: 'notificaciones',
+                loadChildren: () =>
+                    import('./app/features/notificaciones/notificaciones.routes').then(
+                        m => m.NOTIFICACIONES_ROUTES
+                    )
+            },
         ]
     },
     {

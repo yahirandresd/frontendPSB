@@ -1,16 +1,21 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
+import { BadgeModule } from 'primeng/badge';
+import { TooltipModule } from 'primeng/tooltip';
+import { interval, Subscription, firstValueFrom } from 'rxjs';
 import { AppConfigurator } from './app.configurator';
 import { AppUserDrop } from './app.user-drop.component';
 import { LayoutService } from '@/app/layout/service/layout.service';
+import { AuthService } from '@/app/features/auth/services/auth.service';
+import { NotificacionService } from '@/app/features/notificaciones/services/notificacion.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppUserDrop],
+    imports: [RouterModule, CommonModule, StyleClassModule, BadgeModule, TooltipModule, AppUserDrop],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -107,21 +112,17 @@ import { LayoutService } from '@/app/layout/service/layout.service';
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                     <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
-                <!-- <div class="relative">
-                    <button
-                        class="layout-topbar-action layout-topbar-action-highlight"
-                        pStyleClass="@next"
-                        enterFromClass="hidden"
-                        enterActiveClass="animate-scalein"
-                        leaveToClass="hidden"
-                        leaveActiveClass="animate-fadeout"
-                        [hideOnOutsideClick]="true"
-                    >
-                        <i class="pi pi-palette"></i>
-                    </button>
-                    <app-configurator />
-                </div> -->
             </div>
+
+            <button type="button" class="layout-topbar-action relative" (click)="irANotificaciones()"
+                pTooltip="Notificaciones" tooltipPosition="bottom">
+                <i class="pi pi-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] !flex items-center justify-center px-1 leading-none shadow-md"
+                    [class.bg-red-500]="noLeidas() > 0"
+                    [class.bg-surface-400]="noLeidas() === 0">
+                    {{ noLeidas() > 99 ? '99+' : noLeidas() }}
+                </span>
+            </button>
 
             <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
                 <i class="pi pi-ellipsis-v"></i>
@@ -129,24 +130,48 @@ import { LayoutService } from '@/app/layout/service/layout.service';
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-calendar"></i>
-                        <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
                     <app-user-drop />
                 </div>
             </div>
         </div>
     </div>`
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit, OnDestroy {
     items!: MenuItem[];
 
     layoutService = inject(LayoutService);
+    private auth = inject(AuthService);
+    private notificacionService = inject(NotificacionService);
+    private router = inject(Router);
+
+    noLeidas = signal(0);
+    private userId: string | undefined;
+    private pollingSub?: Subscription;
+
+    async ngOnInit() {
+        const { data } = await this.auth.getSession();
+        this.userId = data.session?.user?.id;
+        if (this.userId) {
+            await this.actualizarContador();
+            this.pollingSub = interval(30000).subscribe(() => this.actualizarContador());
+        }
+    }
+
+    ngOnDestroy() {
+        this.pollingSub?.unsubscribe();
+    }
+
+    async actualizarContador() {
+        if (!this.userId) return;
+        try {
+            const notis = await firstValueFrom(this.notificacionService.getNoLeidas(this.userId));
+            this.noLeidas.set((notis ?? []).filter(n => !n.leida).length);
+        } catch { }
+    }
+
+    irANotificaciones() {
+        this.router.navigate(['/notificaciones']);
+    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({

@@ -40,9 +40,21 @@ export class AccionCorrectivaAguaEditComponent implements OnInit, HasUnsavedChan
         if (!id) return;
         this.saving.set(true);
         try {
-            await firstValueFrom(this.service.update(id, data));
-            this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
-            setTimeout(() => this.router.navigate(['/programa-agua/accion-correctiva-agua']), 1000);
+            const actualizado = await firstValueFrom(this.service.update(id, data));
+            if (actualizado.fechaLimite && new Date(actualizado.fechaLimite) < new Date() && (actualizado.estado === 'pendiente' || actualizado.estado === 'en_proceso')) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Acción correctiva vencida',
+                    detail: `La acción correctiva del ${actualizado.fecha} superó su fecha límite (${actualizado.fechaLimite}) y sigue en estado ${actualizado.estado}.`
+                });
+                setTimeout(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
+                    setTimeout(() => this.router.navigate(['/programa-agua/accion-correctiva-agua']), 1000);
+                }, 800);
+            } else {
+                this.messageService.add({ severity: 'success', summary: 'Actualizado', detail: 'Actualizado correctamente' });
+                setTimeout(() => this.router.navigate(['/programa-agua/accion-correctiva-agua']), 1000);
+            }
         } catch { this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar' }); }
         finally { this.saving.set(false); }
     }

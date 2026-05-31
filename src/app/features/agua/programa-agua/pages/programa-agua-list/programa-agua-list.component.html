@@ -23,9 +23,6 @@
             <span class="font-semibold">Programas de Agua</span>
         </p-accordion-header>
         <p-accordion-content>
-            <div class="flex justify-end mb-4">
-                <p-button label="Nuevo Programa" icon="pi pi-plus" routerLink="crear" />
-            </div>
             <p-table
                 [value]="programasAgua()"
                 [loading]="loading()"
@@ -51,7 +48,6 @@
                             <div class="flex gap-2">
                                 <p-button icon="pi pi-eye" severity="info" rounded pTooltip="Ver detalle" tooltipPosition="top" [routerLink]="[item.id]" />
                                 <p-button icon="pi pi-pencil" severity="secondary" rounded [routerLink]="[item.id, 'editar']" />
-                                <p-button icon="pi pi-trash" severity="danger" rounded (onClick)="confirmarEliminar(item)" />
                             </div>
                         </td>
                     </tr>
